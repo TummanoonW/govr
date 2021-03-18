@@ -60,6 +60,11 @@
 				</div>
 
 				<form class="login100-form ">
+					<div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="isError">
+						<i class="far fa-times-circle"></i>
+						<span class="ml-2">{{error}}</span>
+					</div>
+
 					<div class="wrap-input100  m-b-26">
 						<span class="label-input100">Email</span>
 						<input v-model="email" class="input100" type="email" name="email" placeholder="Enter email" required>
@@ -74,14 +79,18 @@
 
 					<div class="flex-sb-m w-full p-b-30">
 						<div class="contact100-form-checkbox">
-							<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+							<div class="text-primary" v-if="isLoading">
+								<div class="spinner-grow" role="status"></div>
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							<!--<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
 							<label class="label-checkbox100" for="ckb1">
 								Remember me
-							</label>
+							</label>-->
 						</div>
 
 						<div>
-							<a href="register.html" class="txt1">
+							<a v-bind:href="PAGES.REGISTER" class="txt1">
 								Create account?
 							</a>
 						</div>
@@ -115,7 +124,7 @@
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
 
-
+	<script src="js/apis.js"></script>
 	<script src="js/login.js"></script>
 
 </body>

@@ -255,8 +255,8 @@ h6 {
 }
 
 .btn-group .btn {
-  max-width: 50px;
-  max-height: 50px;
+  max-width: 60px;
+  max-height: 52px;
 }
 .btn-group .btn img{
   width: 100%;
@@ -684,5 +684,28 @@ h6 {
   .footer-bottom .copyright,
   .footer-bottom .template-by {
     text-align: center;
+  }
+}
+
+.profile-h{
+  height: 52px;
+}
+
+.profile-w{
+  max-width: 96px;
+}
+
+.profile-r{
+  border-radius: 100%;
+}
+
+.dropdown-menu {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+
+@media only screen and (max-width: 512px) {
+  #social {
+      display: none;
   }
 }

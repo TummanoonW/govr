@@ -24,7 +24,8 @@
 
 
 //Get uer from local storage
-let user = localStorage.getItem(DB.AUTH);
+let auth = JSON.parse(localStorage.getItem(DB.AUTH));
+let user = JSON.parse(localStorage.getItem(DB.USER));
 //Get category from local storage
 let category = localStorage.getItem(DB.CATEGORY);
 
@@ -34,9 +35,13 @@ var app = new Vue({
     contents: [],
     categories: [],
     name: "Hi from data",
+    auth: auth,
     user: user,
     contentCat: [],
-    cont: ''
+    cont: '',
+    isLoading: false,
+    isError: false,
+    error: ""
   },
   methods: {
     toLogin: function () {
@@ -83,17 +88,24 @@ var app = new Vue({
 });
 
 initData();
+
 function initData() {
-   apis.allCategories().then(data => {
+  app.isLoading = true;
+
+  apis.allCategories().then(data => {
     app.categories = data;
+  }).catch(error => {
+    app.isError = true;
+    app.error = error
   });
 
-   apis.getNewestContent().then(data => {
+  apis.getNewestContent().then(data => {
     app.contents = data;
-  })
-
-   apis.getContentByCategory(category).then(data => {
-    app.contentCat = data;
-  })
-
+    app.isLoading = false;
+    app.isError = false;
+  }).catch(error => {
+    app.isLoading = false;
+    app.isError = true;
+    app.error = error
+  });
 }

@@ -60,9 +60,14 @@
 				</div>
 
 				<form class="login100-form ">
+					<div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="isError">
+						<i class="far fa-times-circle"></i>
+						<span class="ml-2">{{error}}</span>
+					</div>
+					
 					<div class="wrap-input100 m-b-26">
 						<span class="label-input100">Username</span>
-						<input v-model="username" class="input100" type="username" name="username"
+						<input v-model="username" minlength="4" maxlength="20" class="input100" type="username" name="username"
 							placeholder="Enter username" required>
 						<span class="focus-input100"></span>
 					</div>
@@ -76,18 +81,21 @@
 
 					<div class="wrap-input100  m-b-18" required>
 						<span class="label-input100">Password</span>
-						<input v-model="password" class="input100" type="password" name="pass"
+						<input v-model="password" minlength="6" maxlength="12" class="input100" type="password" name="pass"
 							placeholder="Enter password" required>
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="flex-sb-m w-full p-b-30">
 						<div class="contact100-form-checkbox">
-
+							<div class="text-primary" v-if="isLoading">
+								<div class="spinner-grow" role="status"></div>
+								<span class="visually-hidden">Loading...</span>
+							</div>
 						</div>
 
 						<div>
-							<a href="login.html" class="txt1">
+							<a v-bind:href="PAGES.LOGIN" class="txt1">
 								Already a member?
 							</a>
 						</div>
@@ -122,8 +130,8 @@
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
 
-
-	<script src="js/login.js"></script>
+	<script src="js/apis.js"></script>
+	<script src="js/register.js"></script>
 
 </body>
 
