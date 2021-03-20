@@ -8,36 +8,55 @@
     <title>webxr</title>
     <script src="//aframe.io/releases/0.4.0/aframe.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
-    <style>
-        .row{
-            height: 95vh;
-        }
-        .tes{
-            width: 100%;
-            height: 100%;
-            background-color: antiquewhite;
+    <link href="css/webxr.css" rel="stylesheet" />
 
-        }
-        .tes2{
-            background: brown;
-        }
-    </style>
 </head>
 
 <body>
-    <div id="app">
+    <div>
         <div>
             <div class="row">
-                <div class="tes col-md-9">
+                <div class="tes col-md-10">
                     <a-scene>
-                        <a-sky src="https://l13.alamy.com/360/T258GN/full-seamless-spherical-panorama-360-degrees-angle-view-on-bank-of-wide-river-in-front-of-bridge-in-city-center-360-panorama-in-equirectangular-proje-T258GN.jpg"></a-sky>
+                        <a-sky id="img360" :src="img360"></a-sky>
                     </a-scene>
+                    <div  class="row  align-items-end">
+                        <div class="scene col-6 col-md-12">
+                            <div id="scene" class="sceneTitle">
+                                <h3>{{ content.title }}</h3>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="tes2 col-6 col-md-3">.col-6 .col-md-4</div>
-              </div>
+                <div id="app" class="info col-md-2">
+                    <div class="tn">
+                        <img id="thumbnail" alt="thumbnail">
+                    </div>
+                    <div class="detail ">
+                        <input type="text" name="title" :value=content360.title>
+                    </div>
+                    <div class="detail">
+                        <input type="text" name="Locations" placeholder="Locations">
+                    </div>
+                    <div class="detail">
+                        <label for="description" >Description</label><br>
+                        <textarea name="description" id="description" cols="69" rows="10" :value=content360.description></textarea>
+                    </div>
+                    <div class="detail">
+                        <input v-model='cate' type="text" name="category" disabled>
+                    </div>
+                    <div class="detail">
+                        <input v-model="date" type="text" name="date" disabled>
+                    </div>
+                    <div class="detail">
+                        <input type="text" name="link" value="contentLink" disabled>
+                    </div>
+
+
+
+                </div>
+            </div>
         </div>
-
-
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -60,7 +79,8 @@
     <script src="vendor/category.js"></script>
     <script src="vendor/firebase-config.js"></script>
 
-    <!--<script src="js/webxr.js"></script>-->
+    <script src="js/apis.js"></script>
+    <script src="js/webxr.js"></script>
 </body>
 
 </html>

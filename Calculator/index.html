@@ -129,9 +129,9 @@
         <div class="row">
           <div class="col-md-3" v-for="content in contents ">
             <div v-model="cont" class="mn-img" @click="toWebXR(content)">
-              <img :src="content.image360" />
+              <img id="img360" :src="content.image360" />
               <div class="mn-title">
-                <a href="webxr.html">{{content.title}}</a>
+                <a @click="toWebXR(content)">{{content.title}}</a>
               </div>
             </div>
           </div>
