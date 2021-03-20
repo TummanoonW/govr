@@ -99,7 +99,7 @@ function initData() {
     app.error = error
   });
 
-  apis.getNewestContent().then(data => {
+  apis.getContentsNewest().then(data => {
     app.contents = data;
     app.isLoading = false;
     app.isError = false;
