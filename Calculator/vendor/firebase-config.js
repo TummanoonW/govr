@@ -31,8 +31,8 @@ const DB = [
   USER = 'USER',
   AUTH = 'AUTH',
   USERINFO = 'UESRINFO',
-  CONTENT = 'Content',
-  CATEGORY = 'Category'
+  CONTENT = 'CONTENT',
+  CATEGORY = 'CATEGORY'
 ];
 
 const PAGES = {

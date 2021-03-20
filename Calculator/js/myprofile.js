@@ -26,8 +26,6 @@
 //Get uer from local storage
 let auth = JSON.parse(localStorage.getItem(DB.AUTH));
 let user = JSON.parse(localStorage.getItem(DB.USER));
-//Get category from local storage
-let category = localStorage.getItem(DB.CATEGORY);
 
 var app = new Vue({
   el: "#app",
@@ -39,6 +37,15 @@ var app = new Vue({
     user: user,
     contentCat: [],
     cont: '',
+    deleteC: {
+      isLoading: false,
+      isError: false
+    },
+    info: {
+      author: {},
+      cat: {},
+      location: {}
+    },
     link: {
       isLoading: false,
       isCopied: false
@@ -67,11 +74,44 @@ var app = new Vue({
       const result = copyToClipboard(this.link.url)
       console.log(result, this.link.url)
     },
-    info: function (id) {
-
+    infoContent: function (content) {
+      this.info = content;
+      this.info.author = this.user;
+      this.info.updated = new Date(this.info.date._seconds * 1000)
+      console.log(this.info)
+      $('#infoModal').modal()
     },
-    delete: function (id) {
-
+    deleteContent: function (content) {
+      this.deleteC = content
+      $('#deleteModal').modal()
+    },
+    deleteNow: function(){
+      this.deleteC.isLoading = true
+      this.deleteC.isError = false
+      apis.deleteContent(this.deleteC.id).then(() => {
+        this.deleteC.isLoading = false
+        this.deleteC.isError = false
+        this.contents.forEach((item, index) => {
+          if(item.id === this.deleteC.id){
+            this.contents.splice(index, 1)
+          }
+        })
+      }).catch(error => {
+        this.deleteC.isLoading = false
+        this.deleteC.isError = true
+        this.deleteC.error = error
+      })
+    },
+    displayPrivacy: function(info){
+      let str = ''
+      if(info.published){
+        str = 'Public'
+      }else if(!info.published && !info.private){
+        str = 'Only people with link'
+      }else{
+        str = 'Private'
+      }
+      return str
     },
     logout: () => {
       firebase

@@ -1,3 +1,8 @@
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const label = urlParams.get('label');
+
+
 (function ($) {
   // Sticky Navbar
   $(window).scroll(function () {
@@ -34,6 +39,7 @@ var app = new Vue({
   data: {
     contents: [],
     categories: [],
+    category: {},
     name: "Hi from data",
     auth: auth,
     user: user,
@@ -79,8 +85,9 @@ var app = new Vue({
           console.log(err.message);
         });
     },
-    goToCat: (cat) => {
-      window.location.href = PAGES.CATEGORY + `?label=${cat.label}`;
+    getCat: (cat) => {
+      localStorage.setItem(DB.CATEGORY, cat);
+      window.location.href = PAGES.CATEGORY;
     }
   },
 });
@@ -97,8 +104,18 @@ function initData() {
     app.error = error
   });
 
-  apis.getContentsNewest().then(data => {
+  apis.getCategoryByLabel(label).then(data => {
+    this.category = data;
+    document.getElementById("cTitle").innerHTML = data.title;
+    console.log(this.category)
+  }).catch(error => {
+    app.isError = true;
+    app.error = error;
+  })
+
+  apis.getContentsByCategory(label).then(data => {
     app.contents = data
+    console.log(data)
     app.isLoading = false;
     app.isError = false;
   }).catch(error => {

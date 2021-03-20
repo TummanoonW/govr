@@ -20,17 +20,17 @@
 
 <body>
   <div id="app">
-      <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
-        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-          <span class="visually-hidden"></span>
-        </div>
-        <span class="text-primary">Loading...</span>
+    <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
+      <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden"></span>
       </div>
+      <span class="text-primary">Loading...</span>
+    </div>
 
-      <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert" >
-        <i class="far fa-times-circle"></i>
-        <span class="ml-2">{{error}}</span>
-      </div>
+    <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
+      <i class="far fa-times-circle"></i>
+      <span class="ml-2">{{error}}</span>
+    </div>
 
     <!-- Brand Start -->
     <div class="brand">
@@ -82,7 +82,8 @@
               <div class="btn-group profile-h">
                 <a class="btn btn-primary profile-w" type="button" :href="PAGES.MYPROFILE">
                   <div>
-                    <img v-if="user.photoURL == null || user.photoURL == ''" src="assets/images/user.svg" class="profile-r" />
+                    <img v-if="user.photoURL == null || user.photoURL == ''" src="assets/images/user.svg"
+                      class="profile-r" />
                     <img v-else :src="user.photoURL" class="profile-r" />
                   </div>
                 </a>
@@ -111,8 +112,10 @@
               </div>
             </div>
             <div class="social ml-auto d-grid gap-2 d-md-block" v-else>
-              <button v-on:click="window.location.href = PAGES.LOGIN" class="btn btn-primary" type="button">Log in</button>
-              <button v-on:click="window.location.href = PAGES.REGISTER" class="btn btn-primary" type="button">Register</button>
+              <button v-on:click="window.location.href = PAGES.LOGIN" class="btn btn-primary" type="button">Log
+                in</button>
+              <button v-on:click="window.location.href = PAGES.REGISTER" class="btn btn-primary"
+                type="button">Register</button>
             </div>
           </div>
         </nav>
@@ -124,8 +127,8 @@
     <div class="main-news">
       <div class="container">
         <div class="row">
-          <div class="col-md-3" v-for="content in contents ">
-            <div v-model="cont" class="mn-img" @click="toWebXR(content)">
+          <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents ">
+            <div class="mn-img" v-on:click="toWebXR(content)">
               <img :src="content.image360" />
               <div class="mn-title">
                 <a href="webxr.html">{{content.title}}</a>
@@ -138,7 +141,7 @@
         <!-- Category Start-->
         <div class="row category">
           <div class="col-md-4" v-for="category in categories ">
-            <button v-on:click="getCat(category.label)" class="btn btn-cate" type="submit">{{category.title}}</button>
+            <button v-on:click="goToCat(category)" class="btn btn-cate" type="submit">{{category.title}}</button>
           </div>
         </div>
         <!-- Category End-->

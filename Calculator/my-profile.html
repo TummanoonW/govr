@@ -139,7 +139,6 @@
     <!-- Nav Bar End -->
 
     <!-- Get Link Modal -->
-    <!-- Modal -->
     <div class="modal fade" id="linkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -178,6 +177,121 @@
       </div>
     </div>
     <!-- Get Link Modal-->
+
+    <!-- Info Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalLabel">
+              <i class="fas fa-info-circle"></i>
+              <span class="ml-1">{{info.title}}' Info</span>
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row mb-4">
+                <div class="col-3 text-right text-secondary">
+                  Title
+                </div>
+                <div class="col-9 text-left">
+                  {{info.title}}
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-3 text-right text-secondary">
+                  Author
+                </div>
+                <div class="col-9 text-left">
+                  {{info.author.displayName}}
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-3 text-right text-secondary">
+                  Location
+                </div>
+                <div class="col-9 text-left">
+                  <a target="_blank" :href="`https://www.google.com/maps/@${info.location._latitude},${info.location._longitude}`">
+                    @{{info.location._latitude}},{{info.location._longitude}}
+                  </a>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-3 text-right text-secondary">
+                  Category
+                </div>
+                <div class="col-9 text-left">
+                  {{info.category}}
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-3 text-right text-secondary">
+                  Updated
+                </div>
+                <div class="col-9 text-left">
+                  {{info.updated}}
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-3 text-right text-secondary">
+                  Privacy
+                </div>
+                <div class="col-9 text-left">
+                  <span>{{displayPrivacy(info)}}</span> 
+                  <span v-if="info.published">( <i class="far fa-eye"></i> )</span>
+                  <span v-if="!info.published && !info.private">( <i class="fas fa-unlock-alt"></i> )</span>
+                  <span v-if="info.private">( <i class="fas fa-lock"></i> )</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Info Modal -->
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-danger" id="exampleModalLabel">
+              <i class="fas fa-exclamation-triangle"></i>
+              <span class="ml-1">Warning!</span>
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <span v-if="!deleteC.isLoading">Are you sure to delete this item?</span>
+            <div v-if="deleteC.isLoading">
+              <div class="spinner-grow text-danger" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden"></span>
+              </div>
+              <span class="text-primary">Deleting...</span>
+            </div>
+            <div v-if="deleteC.isError" class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
+              <i class="far fa-times-circle"></i>
+              <span class="ml-2">{{error}}</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button v-if="!deleteC.isLoading" v-on:click="deleteNow" type="button" class="btn btn-danger">Proceed to delete!</button>
+            <button v-if="!deleteC.isLoading" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Delete Modal -->
 
 
     <div class="content">
@@ -245,11 +359,11 @@
                             <i class="far fa-edit"></i>
                             <span class="ml-1">Edit</span>
                           </a>
-                          <button class="dropdown-item" v-on:click="info(content.id)">
+                          <button class="dropdown-item" v-on:click="infoContent(content)">
                             <i class="fas fa-info-circle"></i>
                             <span class="ml-1">Info</span>
                           </button>
-                          <button class="dropdown-item" v-on:click="delete(content.id)">
+                          <button class="dropdown-item" v-on:click="deleteContent(content)">
                             <i class="far fa-trash-alt"></i>
                             <span class="ml-1">Delete</span>
                           </button>
