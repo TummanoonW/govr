@@ -62,7 +62,6 @@ var app = new Vue({
     toWebXR: function (content) {
       window.location.href = PAGES.WEBXR + `?id=${content.id}`;   
     },
-
     logout: () => {
       firebase
         .auth()
@@ -97,9 +96,8 @@ function initData() {
   });
 
   apis.getContentsNewest().then(data => {
-    getThumbnail(data)
     app.contents = data
-
+    app.isLoading = false;
     app.isError = false;
   }).catch(error => {
     app.isLoading = false;
@@ -107,38 +105,5 @@ function initData() {
     app.error = error
   });
 
-}
-
-
-async function getThumbnail(data){
-  for (let i = 0; i < data.length; i++) {
-    var img360 = imgRef.child(data[i].image360);
-    await download360(img360)
-  }
-}
-
-function download360(img360){
-  img360
-    .getDownloadURL()
-    .then((url) => {
-      // This can be downloaded directly:
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = "blob";
-      xhr.onload = (event) => {
-        var blob = xhr.response;
-      };
-      xhr.open("GET", url);
-      xhr.send();
-
-      // Or inserted into an <img> element
-      var img = document.getElementById("img360");
-      img.setAttribute("src", url);
-      console.log("success");
-      app.isLoading = false;
-    })
-    .catch((error) => {
-      // Handle any errors
-      console.log(error.message);
-    });
 }
 

@@ -2,385 +2,439 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <title>My Profile</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="Bootstrap News Template - Free HTML Templates" name="keywords" />
-    <meta content="Bootstrap News Template - Free HTML Templates" name="description" />
+  <meta charset="utf-8" />
+  <title>My Profile</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="Bootstrap News Template - Free HTML Templates" name="keywords" />
+  <meta content="Bootstrap News Template - Free HTML Templates" name="description" />
 
-    <!-- Favicon -->
-    <link href="./assets/favicon.svg" rel="icon" />
+  <!-- Favicon -->
+  <link href="./assets/favicon.svg" rel="icon" />
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet" />
 
-    <!-- CSS Libraries -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous" />
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+  <!-- CSS Libraries -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
 
-    <!-- Template Stylesheet -->
-    <link href="css/main.css" rel="stylesheet" />
-    <link href="css/profile.css" rel="stylesheet" />
-    <!-- Additional CSS Files -->
+  <!-- Template Stylesheet -->
+  <link href="css/main.css" rel="stylesheet" />
+  <link href="css/profile.css" rel="stylesheet" />
+  <!-- Additional CSS Files -->
 
-    <style>
-        .box {
-            width: 100%;
-            height: 85vh;
-        }
-    </style>
+  <style>
+    .box {
+      width: 100%;
+      height: 85vh;
+    }
+  </style>
 </head>
 
 <body>
-    <div id="app">
-        <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
-            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-              <span class="visually-hidden"></span>
+  <div id="app">
+    <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
+      <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden"></span>
+      </div>
+      <span class="text-primary">Loading...</span>
+    </div>
+
+    <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
+      <i class="far fa-times-circle"></i>
+      <span class="ml-2">{{error}}</span>
+    </div>
+
+    <!-- Brand Start -->
+    <div class="brand">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-3 col-md-5">
+            <div class="b-logo">
+              <a v-bind:href="PAGES.INDEX">
+                <img v-bind:src="ASSETS.LOGO512" alt="Logo">
+              </a>
             </div>
-            <span class="text-primary">Loading...</span>
           </div>
-    
-          <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert" >
-            <i class="far fa-times-circle"></i>
-            <span class="ml-2">{{error}}</span>
-          </div>
-    
-        <!-- Brand Start -->
-        <div class="brand">
-          <div class="container">
-            <div class="row align-items-center">
-              <div class="col-lg-3 col-md-5">
-                <div class="b-logo">
-                  <a v-bind:href="PAGES.INDEX">
-                    <img src="assets/images/govr-logo-512.png" alt="Logo">
-                  </a>
-                </div>
-              </div>
-              <!--<div class="col-lg-6 col-md-3">
-                <div class="b-ads">
-                  <a href="https://htmlcodex.com">
-                    <img src="../img/ads-1.jpg" alt="Ads">
-                  </a>
-                </div>
-              </div>-->
-              <div class="col-lg-9 col-md-7" id="social">
-                <div class="text-right">
-                  <a href="" class="ml-3"><i class="fab fa-twitter"></i></a>
-                  <a href="" class="ml-3"><i class="fab fa-facebook-f"></i></a>
-                  <a href="" class="ml-3"><i class="fab fa-linkedin-in"></i></a>
-                  <a href="" class="ml-3"><i class="fab fa-instagram"></i></a>
-                  <a href="" class="ml-3"><i class="fab fa-youtube"></i></a>
-                </div>
-              </div>
+          <!--<div class="col-lg-6 col-md-3">
+            <div class="b-ads">
+              <a href="https://htmlcodex.com">
+                <img src="../img/ads-1.jpg" alt="Ads">
+              </a>
+            </div>
+          </div>-->
+          <div class="col-lg-9 col-md-7" id="social">
+            <div class="text-right">
+              <a v-bind:href="LINKS.TWITTER" class="ml-3"><i class="fab fa-twitter"></i></a>
+              <a v-bind:href="LINKS.FACEBOOK" class="ml-3"><i class="fab fa-facebook-f"></i></a>
+              <a v-bind:href="LINKS.LINKEDIN" class="ml-3"><i class="fab fa-linkedin-in"></i></a>
+              <a v-bind:href="LINKS.INSTAGRAM" class="ml-3"><i class="fab fa-instagram"></i></a>
+              <a v-bind:href="LINKS.YOUTUBE" class="ml-3"><i class="fab fa-youtube"></i></a>
             </div>
           </div>
         </div>
-        <!-- Brand End -->
-    
-        <!-- Nav Bar Start -->
-        <div class="nav-bar">
-          <div class="container">
-            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-              <a href="#" class="navbar-brand">MENU</a>
-              <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-    
-              <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                <div class="navbar-nav mr-auto">
-                  <a v-bind:href="PAGES.INDEX" class="nav-item nav-link active">Home</a>
-                  <a v-bind:href="PAGES.MYPROFILE" class="nav-item nav-link">My Profile</a>
-                </div>
-                <div class="d-grid gap-2" v-if="user !== null">
-                  <div class="btn-group profile-h">
-                    <button class="btn btn-primary profile-w" type="button" v-on:click="toProfile">
-                      <div>
-                        <img v-if="user.imageURL == null" src="assets/images/user.svg" class="profile-r" />
-                        <img v-else :src=user.imageUR class="profile-r" />
+      </div>
+    </div>
+    <!-- Brand End -->
+
+    <!-- Nav Bar Start -->
+    <div class="nav-bar">
+      <div class="container">
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+          <a href="#" class="navbar-brand">MENU</a>
+          <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+            <div class="navbar-nav mr-auto">
+              <a v-bind:href="PAGES.INDEX" class="nav-item nav-link">Home</a>
+              <a v-bind:href="PAGES.MYPROFILE" class="nav-item nav-link active">My Profile</a>
+            </div>
+            <div class="d-grid gap-2" v-if="user !== null">
+              <div class="btn-group profile-h">
+                <a class="btn btn-primary profile-w" type="button" :href="PAGES.MYPROFILE">
+                  <div>
+                    <img v-if="user.photoURL == null || user.photoURL == ''" src="assets/images/user.svg"
+                      class="profile-r" />
+                    <img v-else :src="user.photoURL" class="profile-r" />
+                  </div>
+                </a>
+
+                <button type="button" class="btn btn-primary dropdown-toggle " data-toggle="dropdown"
+                  aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" type="button" :href="PAGES.UPLOAD">
+                      <i class="fas fa-plus"></i>
+                      <span class="ml-1">Add Upload</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" type="button" :href="PAGES.MYPROFILE">
+                      My Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" type="button" :href="PAGES.LOGOUT">
+                      Log Out
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="social ml-auto d-grid gap-2 d-md-block" v-else>
+              <button v-on:click="window.location.href = PAGES.LOGIN" class="btn btn-primary" type="button">Log
+                in</button>
+              <button v-on:click="window.location.href = PAGES.REGISTER" class="btn btn-primary"
+                type="button">Register</button>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <!-- Nav Bar End -->
+
+    <!-- Get Link Modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="linkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Anyone with link can see {{link.title}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div v-if="!link.isLoading">
+              <i class="fas fa-link"></i>
+              <span class="ml-1">Your link for '{{link.title}}' is: </span>
+              <p>
+                <input id="link-url" :value="link.url" style="width: 100%;">
+              </p>
+              <p v-if="link.isCopied">
+                Link is copied!
+              </p>
+            </div>
+            <div v-if="link.isLoading">
+              <div class="spinner-grow text-accent" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden"></span>
+              </div>
+              <span class="text-primary">Getting link...</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button v-if="!link.isLoading" v-on:click="copyLink" type="button" class="btn btn-primary">
+              <i class="far fa-clipboard"></i>
+              <span class="ml-1">Copy Link</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Get Link Modal-->
+
+
+    <div class="content">
+      <div v-if="user !== null" class="row px-4 bg-primary">
+        <div class="col-xl-2 col-lg-3 col-md-4">
+          <div class="">
+            <div class="detail">
+              <div class="pic">
+                <img v-if="user.photoURL == null || user.photoURL == ''" src="assets/images/user.svg"
+                  class="profile-r" />
+                <img v-else :src="user.photoURL" class="profile-r" />
+              </div>
+              <div class="name">Guest</div>
+            </div>
+            <div id="list-example" class="tabs">
+              <a class="my-upload" href="#list-item-1">My Uploads</a>
+              <a class="my-add" href="#list-item-2">My Address</a>
+              <a class="my-pay" href="#list-item-3">Payment</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-10 col-lg-9 col-md-8">
+          <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0" class="scrollspy-example">
+            <div id="list-item-1" class="list-item col" data-bs-target=".my-upload">
+              <h4>My Uploads</h4>
+              <div class="main-news">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-xl-3 col-lg-4 col-md-6 p-1">
+                      <div class="card" style="align-self: center;  height: 250px;">
+                        <button v-on:click="window.location.href = PAGES.UPLOAD" class="btn btn-cate"
+                          style="height: 100%;"> + Add</button>
                       </div>
-                    </button>
-    
-                    <button type="button" class="btn btn-primary dropdown-toggle " data-toggle="dropdown"
-                      aria-expanded="false">
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <button class="dropdown-item" type="button" v-on:click="toUpload">
-                          <i class="fas fa-plus"></i>
-                          <span class="ml-1">Add Upload</span>
-                        </button>
-                      </li>
-                      <li>
-                        <button class="dropdown-item" type="button" v-on:click="toProfile">
-                          My Profile
-                        </button>
-                      </li>
-                      <li>
-                        <button class="dropdown-item" type="button" v-on:click="logout">
-                          Log Out
-                        </button>
-                      </li>
-                    </ul>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents ">
+                      <div class="card">
+                        <div class="mn-img" :id="'dropdown-' + content.id" data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">
+                          <img :src="content.image360" />
+                          <div class="mn-title">
+                            <a href="">{{content.title}}</a>
+                            <div class="dropdown">
+                              <button class="btn text-light" type="button" :id="'dropdown-' + content.id"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i v-if="content.published" class="far fa-eye"></i>
+                                <i v-if="!content.private && !content.published" class="fas fa-unlock-alt"></i>
+                                <i v-if="content.private" class="fas fa-lock"></i>
+                                <i v-if="content.disabled" class="far fa-eye-slash"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="dropdown-menu" :aria-labelledby="'dropdown-' + content.id">
+                          <a v-if="!content.disabled" class="dropdown-item text-success"
+                            :href="PAGES.WEBXR + `?id=${content.id}`">
+                            <i class="far fa-eye"></i>
+                            <span class="ml-1">View</span>
+                          </a>
+                          <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
+                            class="dropdown-item text-accent">
+                            <i class="fas fa-link"></i>
+                            <span class="ml-1">Get shared link</span>
+                          </button>
+                          <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
+                            <i class="far fa-edit"></i>
+                            <span class="ml-1">Edit</span>
+                          </a>
+                          <button class="dropdown-item" v-on:click="info(content.id)">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="ml-1">Info</span>
+                          </button>
+                          <button class="dropdown-item" v-on:click="delete(content.id)">
+                            <i class="far fa-trash-alt"></i>
+                            <span class="ml-1">Delete</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="social ml-auto d-grid gap-2 d-md-block" v-else>
-                  <button v-on:click="toLogin" class="btn btn-outline-primary" type="button">Log in</button>
-                  <button v-on:click="toRegister" class="btn btn-primary" type="button">Register</button>
-                </div>
-                <!--<div class="social ml-auto">
+              </div>
+            </div>
+            <div id="list-item-2" class="list-item col" data-bs-target=".my-add">
+              <h4>My address</h4>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
+                illo incidunt consectetur, voluptas possimus dolor distinctio
+                aliquid itaque fuga. Fugiat adipisci velit quod praesentium
+                est, amet obcaecati earum deserunt soluta? Lorem ipsum dolor
+                sit amet consectetur adipisicing elit. Quas molestiae officia
+                praesentium vel numquam culpa, odit voluptatibus? Ab quos
+                aliquam aut est nesciunt autem repudiandae, harum amet, odit
+                voluptatibus ut? Lorem ipsum dolor sit amet, consectetur
+                adipisicing elit. Iste perferendis sequi neque veniam sed aut
+                quas voluptates nemo sit impedit repellat dignissimos, atque
+                similique labore officia adipisci autem, ab rem. Lorem ipsum
+                dolor sit amet consectetur adipisicing elit. Provident,
+                sapiente consectetur? Adipisci quia delectus dolores nesciunt,
+                dolorum ea voluptatum atque deleniti totam sunt commodi.
+                Corrupti fuga excepturi facilis aperiam laboriosam?
+              </p>
+            </div>
+            <div id="list-item-3" class="list-item col" data-bs-target=".my-pay">
+              <h4>Payment</h4>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
+                illo incidunt consectetur, voluptas possimus dolor distinctio
+                aliquid itaque fuga. Fugiat adipisci velit quod praesentium
+                est, amet obcaecati earum deserunt soluta? Lorem ipsum dolor
+                sit amet consectetur adipisicing elit. Quas molestiae officia
+                praesentium vel numquam culpa, odit voluptatibus? Ab quos
+                aliquam aut est nesciunt autem repudiandae, harum amet, odit
+                voluptatibus ut? Lorem ipsum dolor sit amet, consectetur
+                adipisicing elit. Iste perferendis sequi neque veniam sed aut
+                quas voluptates nemo sit impedit repellat dignissimos, atque
+                similique labore officia adipisci autem, ab rem. Lorem ipsum
+                dolor sit amet consectetur adipisicing elit. Provident,
+                sapiente consectetur? Adipisci quia delectus dolores nesciunt,
+                dolorum ea voluptatum atque deleniti totam sunt commodi.
+                Corrupti fuga excepturi facilis aperiam laboriosam?
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Start -->
+    <div class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-widget">
+              <h3 class="title">Get in Touch</h3>
+              <div class="contact-info">
+                <p>
+                  <i class="fa fa-map-marker"></i>123 News Street, NY, USA
+                </p>
+                <p><i class="fa fa-envelope"></i>info@example.com</p>
+                <p><i class="fa fa-phone"></i>+123-456-7890</p>
+                <div class="social">
                   <a href=""><i class="fab fa-twitter"></i></a>
                   <a href=""><i class="fab fa-facebook-f"></i></a>
                   <a href=""><i class="fab fa-linkedin-in"></i></a>
                   <a href=""><i class="fab fa-instagram"></i></a>
                   <a href=""><i class="fab fa-youtube"></i></a>
-                </div>-->
+                </div>
               </div>
-            </nav>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-widget">
+              <h3 class="title">Useful Links</h3>
+              <ul>
+                <li><a href="#">Lorem ipsum</a></li>
+                <li><a href="#">Pellentesque</a></li>
+                <li><a href="#">Aenean vulputate</a></li>
+                <li><a href="#">Vestibulum sit amet</a></li>
+                <li><a href="#">Nam dignissim</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-widget">
+              <h3 class="title">Quick Links</h3>
+              <ul>
+                <li><a href="#">Lorem ipsum</a></li>
+                <li><a href="#">Pellentesque</a></li>
+                <li><a href="#">Aenean vulputate</a></li>
+                <li><a href="#">Vestibulum sit amet</a></li>
+                <li><a href="#">Nam dignissim</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-widget">
+              <h3 class="title">Newsletter</h3>
+              <div class="newsletter">
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Vivamus sed porta dui. Class aptent taciti sociosqu
+                </p>
+                <form>
+                  <input class="form-control" type="email" placeholder="Your email here" />
+                  <button class="btn">Submit</button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
-        <!-- Nav Bar End -->
-
-        <div class="profile" v-if="user !== null">
-            <div class="row">
-                <div class="col-md-3 offset-2">
-                    <div class="pro-nav">
-                        <div class="detail">
-                            <div class="pic">
-                                <img src="assets/icons/calculator.png" />
-                            </div>
-                            <div class="name">Guest</div>
-                        </div>
-                        <div id="list-example" class="tabs">
-                            <a class="my-upload" href="#list-item-1">My Uploads</a>
-                            <a class="my-add" href="#list-item-2">My Address</a>
-                            <a class="my-pay" href="#list-item-3">Payment</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro-body col-md-5">
-                    <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0"
-                        class="scrollspy-example">
-                        <div id="list-item-1" class="list-item col" data-bs-target=".my-upload">
-                            <h4>My uploads</h4>
-                            <div class="main-news">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-lg-6" v-for="content in contents ">
-                                            <div class="mn-img" @click="toWebXR(content)">
-                                                <img :src="content.image360" />
-                                                <div class="mn-title">
-                                                    <a href="">{{content.title}}</a>
-
-                                                    <button type="button"
-                                                        class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                        
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-
-                                                        <li>
-                                                            <button class="dropdown-item" type="button"
-                                                                v-on:click="toProfile">
-                                                                My Profile
-                                                            </button>
-                                                        </li>
-                                                        <li>
-                                                            <button class="dropdown-item" type="button"
-                                                                v-on:click="logout">
-                                                                log out
-                                                            </button>
-                                                        </li>
-
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="list-item-2" class="list-item col" data-bs-target=".my-add">
-                            <h4>My address</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
-                                illo incidunt consectetur, voluptas possimus dolor distinctio
-                                aliquid itaque fuga. Fugiat adipisci velit quod praesentium
-                                est, amet obcaecati earum deserunt soluta? Lorem ipsum dolor
-                                sit amet consectetur adipisicing elit. Quas molestiae officia
-                                praesentium vel numquam culpa, odit voluptatibus? Ab quos
-                                aliquam aut est nesciunt autem repudiandae, harum amet, odit
-                                voluptatibus ut? Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Iste perferendis sequi neque veniam sed aut
-                                quas voluptates nemo sit impedit repellat dignissimos, atque
-                                similique labore officia adipisci autem, ab rem. Lorem ipsum
-                                dolor sit amet consectetur adipisicing elit. Provident,
-                                sapiente consectetur? Adipisci quia delectus dolores nesciunt,
-                                dolorum ea voluptatum atque deleniti totam sunt commodi.
-                                Corrupti fuga excepturi facilis aperiam laboriosam?
-                            </p>
-                        </div>
-                        <div id="list-item-3" class="list-item col" data-bs-target=".my-pay">
-                            <h4>Payment</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
-                                illo incidunt consectetur, voluptas possimus dolor distinctio
-                                aliquid itaque fuga. Fugiat adipisci velit quod praesentium
-                                est, amet obcaecati earum deserunt soluta? Lorem ipsum dolor
-                                sit amet consectetur adipisicing elit. Quas molestiae officia
-                                praesentium vel numquam culpa, odit voluptatibus? Ab quos
-                                aliquam aut est nesciunt autem repudiandae, harum amet, odit
-                                voluptatibus ut? Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Iste perferendis sequi neque veniam sed aut
-                                quas voluptates nemo sit impedit repellat dignissimos, atque
-                                similique labore officia adipisci autem, ab rem. Lorem ipsum
-                                dolor sit amet consectetur adipisicing elit. Provident,
-                                sapiente consectetur? Adipisci quia delectus dolores nesciunt,
-                                dolorum ea voluptatum atque deleniti totam sunt commodi.
-                                Corrupti fuga excepturi facilis aperiam laboriosam?
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="profile" style="text-align: center; padding: 90px; height: 70vh" v-else>
-            <h1>You're not signed in</h1>
-        </div>
-
-        <!-- Footer Start -->
-        <div class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="footer-widget">
-                            <h3 class="title">Get in Touch</h3>
-                            <div class="contact-info">
-                                <p>
-                                    <i class="fa fa-map-marker"></i>123 News Street, NY, USA
-                                </p>
-                                <p><i class="fa fa-envelope"></i>info@example.com</p>
-                                <p><i class="fa fa-phone"></i>+123-456-7890</p>
-                                <div class="social">
-                                    <a href=""><i class="fab fa-twitter"></i></a>
-                                    <a href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a href=""><i class="fab fa-linkedin-in"></i></a>
-                                    <a href=""><i class="fab fa-instagram"></i></a>
-                                    <a href=""><i class="fab fa-youtube"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6">
-                        <div class="footer-widget">
-                            <h3 class="title">Useful Links</h3>
-                            <ul>
-                                <li><a href="#">Lorem ipsum</a></li>
-                                <li><a href="#">Pellentesque</a></li>
-                                <li><a href="#">Aenean vulputate</a></li>
-                                <li><a href="#">Vestibulum sit amet</a></li>
-                                <li><a href="#">Nam dignissim</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6">
-                        <div class="footer-widget">
-                            <h3 class="title">Quick Links</h3>
-                            <ul>
-                                <li><a href="#">Lorem ipsum</a></li>
-                                <li><a href="#">Pellentesque</a></li>
-                                <li><a href="#">Aenean vulputate</a></li>
-                                <li><a href="#">Vestibulum sit amet</a></li>
-                                <li><a href="#">Nam dignissim</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6">
-                        <div class="footer-widget">
-                            <h3 class="title">Newsletter</h3>
-                            <div class="newsletter">
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                    Vivamus sed porta dui. Class aptent taciti sociosqu
-                                </p>
-                                <form>
-                                    <input class="form-control" type="email" placeholder="Your email here" />
-                                    <button class="btn">Submit</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Footer End -->
-
-        <!-- Footer Menu Start -->
-        <div class="footer-menu">
-            <div class="container">
-                <div class="f-menu">
-                    <a href="">Terms of use</a>
-                    <a href="">Privacy policy</a>
-                    <a href="">Cookies</a>
-                    <a href="">Accessibility help</a>
-                    <a href="">Advertise with us</a>
-                    <a href="">Contact us</a>
-                </div>
-            </div>
-        </div>
-        <!-- Footer Menu End -->
-
-        <!-- Footer Bottom Start -->
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 copyright">
-                        <p>
-                            Copyright &copy; <a href="https://htmlcodex.com">HTML Codex</a>.
-                            All Rights Reserved
-                        </p>
-                    </div>
-
-                    <div class="col-md-6 template-by">
-                        <p>Template By <a href="https://htmlcodex.com">HTML Codex</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Footer Bottom End -->
-
-        <!-- Back to Top -->
-        <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+      </div>
     </div>
+    <!-- Footer End -->
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <!--//REQUIRED SCRIPTS-->
-    <script src="vendor/fontawesome.js"></script>
-    <script src="vendor/vue.js"></script>
-    <script src="vendor/vue-router.js"></script>
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
-    <!-- TODO: Add SDKs for Firebase products that you want to use
+    <!-- Footer Menu Start -->
+    <div class="footer-menu">
+      <div class="container">
+        <div class="f-menu">
+          <a href="">Terms of use</a>
+          <a href="">Privacy policy</a>
+          <a href="">Cookies</a>
+          <a href="">Accessibility help</a>
+          <a href="">Advertise with us</a>
+          <a href="">Contact us</a>
+        </div>
+      </div>
+    </div>
+    <!-- Footer Menu End -->
+
+    <!-- Footer Bottom Start -->
+    <div class="footer-bottom">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 copyright">
+            <p>
+              Copyright &copy; <a href="https://htmlcodex.com">HTML Codex</a>.
+              All Rights Reserved
+            </p>
+          </div>
+
+          <div class="col-md-6 template-by">
+            <p>Template By <a href="https://htmlcodex.com">HTML Codex</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Footer Bottom End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  </div>
+
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <!--//REQUIRED SCRIPTS-->
+  <script src="vendor/fontawesome.js"></script>
+  <script src="vendor/vue.js"></script>
+  <script src="vendor/vue-router.js"></script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
    https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
-    <!-- Add Firebase products that you want to use -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
-    <!--REQUIRED SCRIPTS//-->
-    <script src="vendor/contents.js"></script>
-    <script src="vendor/category.js"></script>
-    <script src="vendor/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
+  <!--REQUIRED SCRIPTS//-->
+  <script src="vendor/firebase-config.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="js/apis.js"></script>
-    <script src="js/main.js"></script>
+  <!-- Template Javascript -->
+  <script src="js/apis.js"></script>
+  <script src="js/myprofile.js"></script>
 </body>
 
 </html>

@@ -6,54 +6,48 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>webxr</title>
-    <script src="//aframe.io/releases/0.4.0/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/0.4.0/aframe.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/webxr.css" rel="stylesheet" />
-
 </head>
 
 <body>
-    <div>
-        <div>
-            <div class="row">
-                <div class="tes col-md-10">
-                    <a-scene>
-                        <a-sky id="img360" :src="img360"></a-sky>
-                    </a-scene>
-                    <div  class="row  align-items-end">
-                        <div class="scene col-6 col-md-12">
-                            <div id="scene" class="sceneTitle">
-                                <h3>{{ content.title }}</h3>
-                            </div>
+    <div id="app">
+        <div class="row">
+            <div class="tes col-xl-9 col-lg-8 col-md-12">
+                <a-scene>
+                    <a-sky id="img360" :src="content.image360"></a-sky>
+                </a-scene>
+                <div class="row  align-items-end">
+                    <div class="scene col-6 col-md-12">
+                        <div id="scene" class="sceneTitle">
+                            <h3>{{ content.title }}</h3>
                         </div>
                     </div>
                 </div>
-                <div id="app" class="info col-md-2">
-                    <div class="tn">
-                        <img id="thumbnail" alt="thumbnail">
-                    </div>
-                    <div class="detail ">
-                        <input type="text" name="title" :value=content360.title>
-                    </div>
-                    <div class="detail">
-                        <input type="text" name="Locations" placeholder="Locations">
-                    </div>
-                    <div class="detail">
-                        <label for="description" >Description</label><br>
-                        <textarea name="description" id="description" cols="69" rows="10" :value=content360.description></textarea>
-                    </div>
-                    <div class="detail">
-                        <input v-model='cate' type="text" name="category" disabled>
-                    </div>
-                    <div class="detail">
-                        <input v-model="date" type="text" name="date" disabled>
-                    </div>
-                    <div class="detail">
-                        <input type="text" name="link" value="contentLink" disabled>
-                    </div>
-
-
-
+            </div>
+            <div class="info col-xl-3 col-lg-4 col-md-12">
+                <div class="tn">
+                    <img id="thumbnail" :src='content.thumbnail' alt="thumbnail">
+                </div>
+                <div class="detail">
+                    <input type="text" name="title" :value=content.title>
+                </div>
+                <div class="detail">
+                    <input type="text" name="Locations" placeholder="Locations">
+                </div>
+                <div class="detail">
+                    <label for="description">Description</label><br>
+                    <textarea name="description" id="description" rows="10":value=content.description></textarea>
+                </div>
+                <div class="detail">
+                    <input v-model='cate' type="text" name="category" disabled>
+                </div>
+                <div class="detail">
+                    <input v-model="date" type="text" name="date" disabled>
+                </div>
+                <div class="detail">
+                    <input type="text" name="link" value="contentLink" disabled>
                 </div>
             </div>
         </div>

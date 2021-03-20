@@ -78,3 +78,7 @@ label{
 h3{
    margin-top:  30px;
 }
+
+.detail textarea{
+    width: 100%;
+}

@@ -80,47 +80,40 @@
             </div>
             <div class="d-grid gap-2" v-if="user !== null">
               <div class="btn-group profile-h">
-                <button class="btn btn-primary profile-w" type="button" v-on:click="toProfile">
+                <a class="btn btn-primary profile-w" type="button" :href="PAGES.MYPROFILE">
                   <div>
-                    <img v-if="user.imageURL == null" src="assets/images/user.svg" class="profile-r" />
-                    <img v-else :src=user.imageUR class="profile-r" />
+                    <img v-if="user.photoURL == null || user.photoURL == ''" src="assets/images/user.svg" class="profile-r" />
+                    <img v-else :src="user.photoURL" class="profile-r" />
                   </div>
-                </button>
+                </a>
 
                 <button type="button" class="btn btn-primary dropdown-toggle " data-toggle="dropdown"
                   aria-expanded="false">
                 </button>
                 <ul class="dropdown-menu">
                   <li>
-                    <button class="dropdown-item" type="button" v-on:click="toUpload">
+                    <a class="dropdown-item" type="button" :href="PAGES.UPLOAD">
                       <i class="fas fa-plus"></i>
                       <span class="ml-1">Add Upload</span>
-                    </button>
+                    </a>
                   </li>
                   <li>
-                    <button class="dropdown-item" type="button" v-on:click="toProfile">
+                    <a class="dropdown-item" type="button" :href="PAGES.MYPROFILE">
                       My Profile
-                    </button>
+                    </a>
                   </li>
                   <li>
-                    <button class="dropdown-item" type="button" v-on:click="logout">
+                    <a class="dropdown-item" type="button" :href="PAGES.LOGOUT">
                       Log Out
-                    </button>
+                    </a>
                   </li>
                 </ul>
               </div>
             </div>
             <div class="social ml-auto d-grid gap-2 d-md-block" v-else>
-              <button v-on:click="toLogin" class="btn btn-outline-primary" type="button">Log in</button>
-              <button v-on:click="toRegister" class="btn btn-primary" type="button">Register</button>
+              <button v-on:click="window.location.href = PAGES.LOGIN" class="btn btn-primary" type="button">Log in</button>
+              <button v-on:click="window.location.href = PAGES.REGISTER" class="btn btn-primary" type="button">Register</button>
             </div>
-            <!--<div class="social ml-auto">
-              <a href=""><i class="fab fa-twitter"></i></a>
-              <a href=""><i class="fab fa-facebook-f"></i></a>
-              <a href=""><i class="fab fa-linkedin-in"></i></a>
-              <a href=""><i class="fab fa-instagram"></i></a>
-              <a href=""><i class="fab fa-youtube"></i></a>
-            </div>-->
           </div>
         </nav>
       </div>
@@ -139,9 +132,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-3" style="align-self: center;  height: 250px;">
-            <button v-on:click="toUpload" class="btn btn-cate" style="height: 100%;"> + Add</button>
-          </div>
+
         </div>
 
         <!-- Category Start-->
@@ -276,8 +267,6 @@
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
   <!--REQUIRED SCRIPTS//-->
-  <script src="vendor/contents.js"></script>
-  <script src="vendor/category.js"></script>
   <script src="vendor/firebase-config.js"></script>
 
   <!-- Template Javascript -->

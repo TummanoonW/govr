@@ -39,12 +39,14 @@ const PAGES = {
   INDEX: "index.html",
   CALCULATOR: "calculator.html",
   LOGIN: "login.html",
+  LOGOUT: "logout.html",
   REGISTER: "register.html",
   MAIN: "main.html",
   MYPROFILE: "my-profile.html",
   CATEGORY: "category.html",
   UPLOAD: "upload.html",
-  WEBXR: "webxr.html"
+  WEBXR: "webxr.html",
+  EDIT: "edit.html"
 };
 
 const LINKS = {

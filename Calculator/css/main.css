@@ -709,3 +709,19 @@ h6 {
       display: none;
   }
 }
+
+.text-primary{
+  color: #082c44 !important;
+}
+
+.text-accent{
+  color: #fe2c89 !important;
+}
+
+.text-fourth{
+  color: #ffa94c !important;
+}
+
+.bg-primary{
+  background-color: #082c44 !important;
+}
