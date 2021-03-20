@@ -5,10 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home</title>
+
+  <!-- Favicon -->
+  <link href="./assets/favicon.svg" rel="icon" />
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet" />
   <!-- CSS Libraries -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+
   <!-- Template Stylesheet -->
   <link href="css/main.css" rel="stylesheet" />
 
@@ -35,7 +39,7 @@
           <div class="col-lg-3 col-md-5">
             <div class="b-logo">
               <a v-bind:href="PAGES.INDEX">
-                <img src="assets/images/govr-logo-512.png" alt="Logo">
+                <img v-bind:src="ASSETS.LOGO512" alt="Logo">
               </a>
             </div>
           </div>
@@ -48,11 +52,11 @@
           </div>-->
           <div class="col-lg-9 col-md-7" id="social">
             <div class="text-right">
-              <a href="" class="ml-3"><i class="fab fa-twitter"></i></a>
-              <a href="" class="ml-3"><i class="fab fa-facebook-f"></i></a>
-              <a href="" class="ml-3"><i class="fab fa-linkedin-in"></i></a>
-              <a href="" class="ml-3"><i class="fab fa-instagram"></i></a>
-              <a href="" class="ml-3"><i class="fab fa-youtube"></i></a>
+              <a v-bind:href="LINKS.TWITTER" class="ml-3"><i class="fab fa-twitter"></i></a>
+              <a v-bind:href="LINKS.FACEBOOK" class="ml-3"><i class="fab fa-facebook-f"></i></a>
+              <a v-bind:href="LINKS.LINKEDIN" class="ml-3"><i class="fab fa-linkedin-in"></i></a>
+              <a v-bind:href="LINKS.INSTAGRAM" class="ml-3"><i class="fab fa-instagram"></i></a>
+              <a v-bind:href="LINKS.YOUTUBE" class="ml-3"><i class="fab fa-youtube"></i></a>
             </div>
           </div>
         </div>

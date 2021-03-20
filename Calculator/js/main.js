@@ -96,7 +96,7 @@ function initData() {
     app.error = error
   });
 
-  apis.getNewestContent().then(data => {
+  apis.getContentsNewest().then(data => {
     getThumbnail(data)
     app.contents = data
 

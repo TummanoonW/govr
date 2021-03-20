@@ -24,8 +24,3 @@ var app = new Vue({
         }
     }
 })
-
-
-$.get( 'https://us-central1-govr-42c7d.cloudfunctions.net/api/users', function( data ) {
-  console.log(JSON.stringify(data))
-});

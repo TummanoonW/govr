@@ -46,3 +46,15 @@ const PAGES = {
   UPLOAD: "upload.html",
   WEBXR: "webxr.html"
 };
+
+const LINKS = {
+  TWITTER: 'twitter.com',
+  FACEBOOK: 'facebook.com',
+  LINKEDIN: 'linkedin.com',
+  INSTAGRAM: 'instagram.com',
+  YOUTUBE: 'youtube.com'
+}
+
+const ASSETS = {
+  LOGO512: 'assets/images/govr-logo-512.png'
+}
