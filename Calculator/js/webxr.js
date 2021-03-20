@@ -6,6 +6,8 @@ const id = urlParams.get('id')
   let auth = JSON.parse(localStorage.getItem(DB.AUTH));
   let user = JSON.parse(localStorage.getItem(DB.USER));
 
+//var img360 = imgRef.child(content.image360);
+
 var app = new Vue({
   el: '#app',
   data: {
@@ -17,6 +19,7 @@ var app = new Vue({
     isError: false,
     error: ""
   }
+  
 })
 
 ContentById(id)
@@ -35,10 +38,8 @@ function intialApp(img360) {
       xhr.send();
 
       // Or inserted into an <img> element
-      const img = document.getElementById("img360");
-      const thumb = document.getElementById("thumbnail");
+      var img = document.getElementById("img360");
       img.setAttribute("src", url);
-      thumb.setAttribute("src", url);
       console.log("success");
 
 

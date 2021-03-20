@@ -28,16 +28,10 @@
 
 .tn{
     width: 100%;
-    height: 200px;
+    height: 150px;
     background: gray;
-
-    padding: 0;
-}
-.tn img{
-    width: 100%;
-    height: 100%;
     opacity: 60%;
-    object-fit: cover;
+    padding: 0;
 }
 .detail{
     width:85%;

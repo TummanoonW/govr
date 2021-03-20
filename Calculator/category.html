@@ -120,15 +120,15 @@
 
 
     <!-- Main News Start--->
-    <div style="text-align: center; margin:20px 500px; font-size:30px; font-weight:bold; border-bottom: 1px solid black; width: 500px;">{{ label }}</div>
+    <div style="text-align: center; margin:20px 500px; font-size:30px; font-weight:bold; border-bottom: 1px solid black; width: 500px;">{{ category }}</div>
     <div class="main-news">
       <div class="container">
         <div class="row">
-          <div class="col-md-3" v-for="content in contentByCat">
-            <div class="mn-img" @click="toWebXR(content)">
-              <img id="img360" :src="content.image360" />
+          <div class="col-md-3" v-for="content in contentCat">
+            <div class="mn-img">
+              <img :src="content.image360" />
               <div class="mn-title">
-                <a @click="toWebXR(content)">{{content.title}}</a>
+                <a href="webxr.html">{{content.title}}</a>
               </div>
             </div>
 
@@ -275,7 +275,7 @@
 
   <!-- Template Javascript -->
   <script src="js/apis.js"></script>
-  <script src="js/category.js"></script>
+  <script src="js/main.js"></script>
 
 </body>
 

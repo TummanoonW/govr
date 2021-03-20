@@ -60,7 +60,9 @@ var app = new Vue({
       window.location.href = PAGES.UPLOAD;
     },
     toWebXR: function (content) {
-      window.location.href = PAGES.WEBXR + `?id=${content.id}`;   
+      localStorage.setItem(DB.CONTENT, JSON.stringify(content))
+      window.location.href = PAGES.WEBXR + `?id=${content.id}`;
+      
     },
     logout: () => {
       firebase
@@ -78,7 +80,8 @@ var app = new Vue({
         });
     },
     getCat: (cat) => {
-      window.location.href = PAGES.CATEGORY + `?label=${cat}`;
+      localStorage.setItem(DB.CATEGORY, cat);
+      window.location.href = PAGES.CATEGORY;
     }
   },
 });
