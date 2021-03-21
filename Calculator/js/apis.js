@@ -1,4 +1,3 @@
-
 var apis = {
     // <USER CMS FUNCTIONS>
     registerUser: function (user, userInfo) {

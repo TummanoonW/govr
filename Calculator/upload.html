@@ -8,185 +8,28 @@
     <title>Upload</title>
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <script src="vendor/jquery.min.js"></script>
 
-    <style>
-        #app {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            margin-top: 200px;
-        }
-
-        .dropzone {
-            cursor: pointer;
-            border: 2px dashed #0087F7;
-            border-radius: 5px;
-            background: white;
-            min-height: 200px;
-            box-sizing: border-box;
-            padding: 54px 54px;
-            text-align: center;
-        }
-
-        .dz-button {
-            background: transparent;
-            border: none;
-        }
-
-        .img,
-        .detail {
-            padding: 5px;
-            background: white;
-            width: 500px;
-        }
-        .img2{
-            width: 300px;
-            height: 100px;
-        }
-
-        .btn-form {
-            margin-left: 310px;
-        }
-
-        .modal {
-            display: none;
-            /* Hidden by default */
-            position: fixed;
-            /* Stay in place */
-            z-index: 1;
-            /* Sit on top */
-            padding-top: 100px;
-            /* Location of the box */
-            left: 0;
-            top: 0;
-            width: 100%;
-            /* Full width */
-            height: 100%;
-            /* Full height */
-            overflow: auto;
-            /* Enable scroll if needed */
-            background-color: rgb(0, 0, 0);
-            /* Fallback color */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black w/ opacity */
-        }
-
-        .modal2 {
-            display: none;
-            /* Hidden by default */
-            position: fixed;
-            /* Stay in place */
-            z-index: 1;
-            /* Sit on top */
-            padding-top: 100px;
-            /* Location of the box */
-            left: 0;
-            top: 0;
-            width: 100%;
-            /* Full width */
-            height: 100%;
-            /* Full height */
-            overflow: auto;
-            /* Enable scroll if needed */
-            background-color: rgb(0, 0, 0);
-            /* Fallback color */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black w/ opacity */
-        }
-        .modal3 {
-            display: none;
-            /* Hidden by default */
-            position: fixed;
-            /* Stay in place */
-            z-index: 1;
-            /* Sit on top */
-            padding-top: 350px;
-            /* Location of the box */
-            left: 0;
-            top: 0;
-            width: 100%;
-            /* Full width */
-            height: 100%;
-            /* Full height */
-            overflow: auto;
-            /* Enable scroll if needed */
-            background-color: rgb(0, 0, 0);
-            /* Fallback color */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black w/ opacity */
-        }
-
-        /* Modal Content */
-        .modal-content {
-
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            height: 600px;
-        }
-        .modal-content-progress{
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-
-        }
-
-        /* The Close Button */
-        .close,
-        .close2 {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close2:hover,
-        .close:focus,
-        .close2:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .search {
-            margin: auto;
-        }
-        .back,
-        .continue{
-            margin-top: 15px;
-            padding: 5px;
-            width: 100%;
-        }
-        .back2,
-        .continue2{
-            margin-top: 15px;
-            padding: 5px;
-            width: 100%;
-        }
-
-        .thumpnail{
-            display: flex;
-            height: 400px;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-        }
-        #upload{
-            margin-top: -45px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/upload.css">
 </head>
 
 <body>
     <div id="app">
+        <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
+            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden"></span>
+            </div>
+            <span class="text-primary">Loading...</span>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
+            <i class="far fa-times-circle"></i>
+            <span class="ml-2">{{error}}</span>
+        </div>
+
         <div class="img">
             <form action="/upload" class="dropzone needsclick dz-clickable" id="demo-upload">
                 <div class="dz-message needsclick">
@@ -198,17 +41,18 @@
         <div class="detail">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
-                <input v-model="title" type="text" class="form-control" id="title" name="title" placeholder="Untitled">
+                <input v-model="content.title" type="text" class="form-control" id="title" name="title"
+                    placeholder="Untitled">
             </div>
             <div class="mb-3">
-                <textarea v-model="description" class="form-control " id="description" name="description" rows="6"
-                    placeholder="Description"></textarea>
+                <textarea v-model="content.description" class="form-control " id="description" name="description"
+                    rows="6" placeholder="Description"></textarea>
             </div>
             <div class="mb-3">
-                <input v-model="category" class="form-control" list="datalistOptions" id="category" name="category"
-                    placeholder="Category">
+                <input v-model="content.category" class="form-control" list="datalistOptions" id="category"
+                    name="category" placeholder="Category">
                 <datalist id="datalistOptions">
-                    <option v-for="category in categories" :value=category.label>
+                    <option v-for="category in categories" :value=category.label>{{category.title}}</option>
                 </datalist>
             </div>
 
@@ -216,7 +60,8 @@
             <div class="btn-form">
                 <button v-on:click="toHome" type="button" class="btn btn-outline-primary">Cancle</button>
 
-                <button id="myBtn" type="button" class="btn btn-primary">Create</button>
+                <button v-on:click="setContent(title,description,category)" id="myBtn" type="button"
+                    class="btn btn-primary">Create</button>
                 <!-- v-on:click="create(title, description, category)" -->
             </div>
 
@@ -237,7 +82,8 @@
                 <nav class="navbar navbar-light bg-light">
                     <div class="container-fluid">
                         <form class="search d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <input id="loc" name="loc" class="form-control me-2" type="search" placeholder="Search"
+                                aria-label="Search">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
                     </div>
@@ -255,6 +101,8 @@
                         var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
                     }
                 </script>
+                <script
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdJYPHvhaFuT1i2DyAlnuNOdSWHZCcaj4&callback=myMap"></script>
                 <!-- Map -->
                 <div class="control-container">
                     <div class="row">
@@ -262,10 +110,11 @@
                             <button type="button" id="back" class="back btn btn-outline-primary">back</button>
                         </div>
                         <div class="col-7">
-                            
+
                         </div>
                         <div class="col">
-                            <button type="button" id="continue" class="continue btn btn-outline-primary">continue</button>
+                            <button @click="setLocation(content.loc)" type="button" id="continue"
+                                class="continue btn btn-outline-primary">continue</button>
                         </div>
                     </div>
                 </div>
@@ -279,8 +128,8 @@
             <div class="modal-content">
                 <span class="close2">&times;</span>
                 <nav class="navbar navbar-light bg-light">
-                    <div class="container-fluid"   style="justify-content: center;">
-                        <a>Plese select your thumpnail</a>
+                    <div class="container-fluid" style="justify-content: center;">
+                        <a>Plese select your thumbnail</a>
                     </div>
                 </nav>
                 <div class="thumpnail">
@@ -293,25 +142,26 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label for="inputState">Select content privacy</label>
-                        <select id="inputState" class="form-control">
-                          <option selected>Choose...</option>
-                          <option>Public</option>
-                          <option>Only links</option>
-                          <option>Private</option>
+                        <select v-model="content.privacy" id="privacy" class="privacy form-control">
+                            <option selected>Choose...</option>
+                            <option value="published">Public</option>
+                            <option value="link">Only people with link</option>
+                            <option value="private">Private</option>
                         </select>
-                      </div>
+                    </div>
                 </div>
-                
+
                 <div class="control-container">
                     <div class="row">
                         <div class="col">
                             <button type="button" id="back" class="back2 btn btn-outline-primary">back</button>
                         </div>
                         <div class="col-7">
-                            
+
                         </div>
                         <div class="col">
-                            <button type="button" id="continue" class="continue2 btn btn-outline-primary">continue</button>
+                            <button @click="setThumbnail" type="button" id="continue"
+                                class="continue2 btn btn-outline-primary">continue</button>
                         </div>
                     </div>
                 </div>
@@ -323,11 +173,11 @@
             <!-- Modal content -->
             <div class="modal-content-progress">
                 <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
-                  </div>
+                    <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated"
+                        role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
 
             </div>
-           
         </div>
 
     </div>
@@ -355,6 +205,7 @@
 <script src="vendor/category.js"></script>
 <script src="vendor/firebase-config.js"></script>
 
-<script src="js/edit.js"></script>
+<script src="js/apis.js"></script>
+<script src="js/upload.js"></script>
 
 </html>

@@ -22,19 +22,14 @@
   });
 })(jQuery);
 
-
-//Get uer from local storage
-let auth = JSON.parse(localStorage.getItem(DB.AUTH));
-let user = JSON.parse(localStorage.getItem(DB.USER));
-
 var app = new Vue({
   el: "#app",
   data: {
     contents: [],
     categories: [],
     name: "Hi from data",
-    auth: auth,
-    user: user,
+    auth: {},
+    user: {},
     contentCat: [],
     cont: '',
     deleteC: {
@@ -113,21 +108,6 @@ var app = new Vue({
       }
       return str
     },
-    logout: () => {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          localStorage.removeItem(DB.USER);
-          localStorage.removeItem(DB.AUTH);
-          localStorage.removeItem(DB.USERINFO);
-
-          window.location.href = PAGES.INDEX;
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    },
     getCat: (cat) => {
       localStorage.setItem(DB.CATEGORY, cat);
       window.location.href = PAGES.CATEGORY;
@@ -135,7 +115,14 @@ var app = new Vue({
   },
 });
 
-initData();
+init();
+async function init(){
+  //Get uer from local storage
+  app.auth = await JSON.parse(localStorage.getItem(DB.AUTH));
+  app.user = await JSON.parse(localStorage.getItem(DB.USER));
+
+  initData();
+}
 
 function initData() {
   app.isLoading = true;
@@ -147,7 +134,8 @@ function initData() {
     app.error = error
   });
 
-  apis.getContentsNewest().then(data => {
+  apis.getContentsByUid(app.auth.uid).then(data => {
+    console.log(data)
     app.contents = data;
     app.isLoading = false;
     app.isError = false;

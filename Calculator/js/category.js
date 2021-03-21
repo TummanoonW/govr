@@ -27,13 +27,6 @@ const label = urlParams.get('label');
   });
 })(jQuery);
 
-
-//Get uer from local storage
-let auth = JSON.parse(localStorage.getItem(DB.AUTH));
-let user = JSON.parse(localStorage.getItem(DB.USER));
-//Get category from local storage
-let category = localStorage.getItem(DB.CATEGORY);
-
 var app = new Vue({
   el: "#app",
   data: {
@@ -41,8 +34,8 @@ var app = new Vue({
     categories: [],
     category: {},
     name: "Hi from data",
-    auth: auth,
-    user: user,
+    auth: {},
+    user: {},
     contentCat: [],
     cont: '',
     isLoading: false,
@@ -68,7 +61,7 @@ var app = new Vue({
     toWebXR: function (content) {
       localStorage.setItem(DB.CONTENT, JSON.stringify(content))
       window.location.href = PAGES.WEBXR + `?id=${content.id}`;
-      
+
     },
     logout: () => {
       firebase
@@ -92,7 +85,14 @@ var app = new Vue({
   },
 });
 
-initData();
+init();
+async function init() {
+  //Get uer from local storage
+  app.auth = JSON.parse(localStorage.getItem(DB.AUTH));
+  app.user = JSON.parse(localStorage.getItem(DB.USER));
+
+  initData();
+}
 
 function initData() {
   app.isLoading = true;

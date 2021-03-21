@@ -1,6 +1,7 @@
 var app = new Vue({
   el: "#app",
   data: {
+    auth: {},
     username: "",
     email: "",
     password: "",
@@ -42,6 +43,14 @@ var app = new Vue({
   },
 });
 
+init();
+async function init(){
+  app.auth = await JSON.parse(localStorage.getItem(DB.AUTH));
+
+  if(app.auth != null){
+    window.location.href = PAGES.INDEX;
+  }
+}
 
 
 

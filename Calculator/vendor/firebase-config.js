@@ -27,13 +27,13 @@ const imgRef = storage.ref().child('360');
 const thumpRef = storage.ref().child('thumpnail');
 
 
-const DB = [
-  USER = 'USER',
-  AUTH = 'AUTH',
-  USERINFO = 'UESRINFO',
-  CONTENT = 'CONTENT',
-  CATEGORY = 'CATEGORY'
-];
+const DB = {
+  USER: 'USER',
+  AUTH: 'AUTH',
+  USERINFO: 'UESRINFO',
+  CONTENT: 'CONTENT',
+  CATEGORY: 'CATEGORY'
+};
 
 const PAGES = {
   INDEX: "index.html",

@@ -1,0 +1,170 @@
+#app {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 200px;
+}
+
+.dropzone {
+    cursor: pointer;
+    border: 2px dashed #0087F7;
+    border-radius: 5px;
+    background: white;
+    min-height: 200px;
+    box-sizing: border-box;
+    padding: 54px 54px;
+    text-align: center;
+}
+
+.dz-button {
+    background: transparent;
+    border: none;
+}
+
+.img,
+.detail {
+    padding: 5px;
+    background: white;
+    width: 500px;
+}
+.img2{
+    width: 300px;
+    height: 100px;
+}
+
+.btn-form {
+    margin-left: 310px;
+}
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+.modal2 {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+.modal3 {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 350px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    height: 600px;
+}
+.modal-content-progress{
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+
+}
+
+/* The Close Button */
+.close,
+.close2 {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close2:hover,
+.close:focus,
+.close2:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.search {
+    margin: auto;
+}
+.back,
+.continue{
+    margin-top: 15px;
+    padding: 5px;
+    width: 100%;
+}
+.back2,
+.continue2{
+    margin-top: 15px;
+    padding: 5px;
+    width: 100%;
+}
+
+.thumpnail{
+    display: flex;
+    height: 400px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+#upload{
+    margin-top: -45px;
+}

@@ -2,15 +2,13 @@ const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const id = urlParams.get('id')
 
-  //Get uer from local storage
-  let auth = JSON.parse(localStorage.getItem(DB.AUTH));
-  let user = JSON.parse(localStorage.getItem(DB.USER));
-
 //var img360 = imgRef.child(content.image360);
 
 var app = new Vue({
   el: '#app',
   data: {
+    auth: {},
+    user: {},
     content: {},
     date: '',
     cate: '',
@@ -19,10 +17,23 @@ var app = new Vue({
     isError: false,
     error: ""
   }
-  
 })
 
-ContentById(id)
+var scene = new Vue({
+  el: '#scene',
+  data: {
+    content: {}
+  }
+})
+
+init();
+async function init(){
+  //Get uer from local storage
+  app.auth = await JSON.parse(localStorage.getItem(DB.AUTH));
+  app.user = await JSON.parse(localStorage.getItem(DB.USER));
+
+  ContentById(id)
+}
 
 function intialApp(img360) {
   img360
@@ -58,17 +69,15 @@ function ContentById(id) {
     this.isError = false
 
     app.content = data
+    scene.content = data
     app.cate = data.cat.title
-    //console.log( app.date =new Date(data.date['_seconds']*1000))
-    //const img360 = imgRef.child(data.image360);
-    //intialApp(img360)
+    app.date =new Date(data.date['_seconds']*1000)
+    var storage = firebase.storage();
+    const img360 = storage.refFromURL(data.image360);   
+    intialApp(img360)
   }).catch(error => {
     this.isLoading = false
     this.isError = true
     this.error = error
   });
 }
-
-
-
-
