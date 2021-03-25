@@ -66,10 +66,12 @@
                     <option v-for="category in categories" :value=category.label>
                 </datalist>
             </div>
-            <div class="btn-form">
+            <div class="text-right">
                 <button v-on:click="toHome" type="button" class="btn btn-outline-primary">Cancle</button>
-                <button v-on:click="setContent(title,description,category)" id="myBtn" type="button"
-                    class="btn btn-primary">Create</button>
+                <button v-on:click="setContent(title,description,category)" id="myBtn" type="button"class="btn btn-primary">
+                    <span class="mr-1">Create</span>
+                    <i class="fas fa-plus"></i>
+                </button>
                 <!-- v-on:click="create(title, description, category)" -->
             </div>
         </div>
@@ -83,32 +85,34 @@
                 <span class="close">&times;</span>
                 <nav class="navbar navbar-light bg-light">
                     <div class="container-fluid">
-                        <form class="search d-flex">
-                            <input id="loc" name="loc" class="form-control me-2" type="search" placeholder="Search"
-                                aria-label="Search">
-
-                            <button @click="getLocation" class="btn btn-outline-success" type="button">Search</button>
-                        </form>
+                        <div class="search d-flex">
+                            <input v-on:keyup.enter="searchPlace(query)" v-model="query" id="loc" name="loc" class="form-control me-2" type="search" style="height: 50px" placeholder="Search" aria-label="Search">
+                            <button v-on:click="searchPlace(query)" class="ml-2 btn btn-outline-success" style="height: 50px" type="button">
+                                <i class="fas fa-search"></i>
+                                Search
+                            </button>
+                        </div>
                     </div>
                 </nav>
-
+    
                 <!-- Map -->
                 <div id="googleMap" style="width:100%;height:400px; background: #888;"></div>
-
-
-                latitude: {{ loc.latitude }}<br>
-                longitude: {{ loc.longitude }}
+                Latitude: {{ content.place.location.lat }}<br>
+                Longitude: {{ content.place.location.lng }}
                 <!-- Map -->
+    
                 <div class="control-container">
                     <div class="row">
-                        <div class="col">
-                            <button type="button" id="back" class="back btn btn-outline-primary">back</button>
+                        <div class="col-3">
+                            <button type="button" id="back" class="back btn btn-outline-primary">Back</button>
                         </div>
-                        <div class="col-7">
+                        <div class="col-4">
                         </div>
-                        <div class="col">
-                            <button @click="setLocation(loc)" type="button" id="continue"
-                                class="continue btn btn-outline-primary">continue</button>
+                        <div class="col-5">
+                            <button type="button" id="continue" class="continue btn btn-primary">
+                                <span class="mr-1">Continue</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -136,22 +140,27 @@
                         <label for="inputState">Select content privacy</label>
                         <select v-model="privacy" id="privacy" class="privacy form-control">
                             <option selected>Choose...</option>
-                            <option value="published">Public</option>
-                            <option value="link">Only people with link</option>
+                            <option value="public">Public</option>
+                            <option value="only-link">Only people with link</option>
                             <option value="private">Private</option>
                         </select>
                     </div>
                 </div>
                 <div class="control-container">
                     <div class="row">
-                        <div class="col">
-                            <button type="button" id="back" class="back2 btn btn-outline-primary">back</button>
+                        <div class="col-3">
+                            <button type="button" id="back" class="back2 btn btn-outline-primary">Back</button>
                         </div>
-                        <div class="col-7">
+                        <div class="col-4">
                         </div>
-                        <div class="col">
-                            <button @click="setThumbnail(privacy)" type="button" id="continue"
-                                class="continue2 btn btn-outline-primary">continue</button>
+                        <div class="col-5">
+                            <button v-if="content.private == false" @click="setThumbnail(privacy)" type="button" id="continue" class="continue2 btn btn-primary">
+                                <span class="mr-1">Save & Share</span>
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                            <button v-if="content.private == true" @click="setThumbnail(privacy)" type="button" id="continue" class="continue3 btn btn-primary">
+                                <span>Save</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -187,9 +196,17 @@
 <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
 <!--REQUIRED SCRIPTS//-->
+
+<!-- //GOOGLE MAP & PLACE APIs -->
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdJYPHvhaFuT1i2DyAlnuNOdSWHZCcaj4&libraries=places&callback=initMap" type="text/javascript">
+
+</script>
+<!-- GOOGLE MAP & PLACE APIs// -->
+
 <script src="vendor/contents.js"></script>
 <script src="vendor/category.js"></script>
 <script src="vendor/firebase-config.js"></script>
+<script src="js/apis.js"></script>
 <script src="js/upload.js"></script>
 
 </html>

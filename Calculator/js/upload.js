@@ -1,31 +1,47 @@
 let user = JSON.parse(localStorage.getItem(DB.USER));
-let data = {
-    uid: "",
-    image360: "",
-    location: [],
-    title: "",
-    description: "",
-    category: "",
-    date: new Date(),
-    private: false,
-    published: false,
-    disabled: false,
-    thumbnail: "",
-};
+let map;
+let service;
+let infowindow;
+
 let files = {
     name: "",
     i360: "",
     iThumbnail: "",
 };
+
+
 var app = new Vue({
     el: "#app",
     data: {
+        categories: [],
+        query: "",
+        privacy: "",
         title: "",
         description: "",
         category: "",
-        categories: [],
-        image360: "",
-        loc: '',
+        content: {
+            uid: "",
+            image360: "",
+            place: {
+                title: '',
+                location: {lat:0, lng:0}
+            },
+            title: "",
+            description: "",
+            category: "",
+            date: new Date(),
+            private: false,
+            published: false,
+            disabled: false,
+            thumbnail: "",
+        },
+    },
+    created: function(){
+        apis.allCategories().then(data => {
+            app.categories = data;
+        }).catch(error => {
+            console.error(error)
+        });
     },
     methods: {
         toHome: function () {
@@ -33,56 +49,95 @@ var app = new Vue({
         },
         setContent: async (title, des, cat) => {
             try {
-                data.uid = user.uid;
-                data.title = title;
-                data.description = des;
-                data.category = cat;
+                app.content.uid = user.uid;
+                app.content.title = title;
+                app.content.description = des;
+                app.content.category = cat;
                 let i = Dropzone.forElement("#demo-upload");
                 var message = i.files[0].dataURL;
-                let name = fileName(data.uid);
+                let name = fileName(app.content.uid);
                 files.name = name;
                 files.i360 = message;
             } catch (err) {
                 console.log(err.message);
             }
         },
-        setLocation: async (loc) => {
-            data.location = [loc.latitude, loc.longitude];
-        },
         setThumbnail: async (privacy) => {
             let i = Dropzone.forElement("#upload");
             var message = i.files[0].dataURL;
             files.iThumbnail = message;
-            data[privacy] = true;
+
+            switch(privacy){
+                case 'public':
+                    app.content.published = true;
+                    app.content.private = false;
+                    break;
+                case 'only-link':
+                    app.content.published = false;
+                    app.content.private = false;
+                    break;
+                case 'private':
+                    app.content.published = false;
+                    app.content.private = true;
+                    break;
+                default:
+                    app.content.published = false;
+                    app.content.private = true;
+            }
+
             console.log(files);
             uploadContent();
         },
-        getLocation: function () {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(this.showPosition);
-            } else {
-                this.loc = "Geolocation is not supported by this browser."
-            }
-        },
-        showPosition: function showPosition(position) {
-            this.loc = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude
-            }
-        }
     },
 });
 
-initData();
-function initData() {
-    $.get(
-        "https://us-central1-govr-42c7d.cloudfunctions.net/api/categories/all",
-        function (data) {
-            app.categories = data;
-        }
+function initMap() {
+    infowindow = new google.maps.InfoWindow();
+
+    const example = {
+        title: 'Dhurakij Pundit University',
+        location: { lat: 13.8707137, lng: 100.5484985 }
+    };
+    map = new google.maps.Map(
+        document.getElementById('googleMap'), 
+        { center: example.location, zoom: 15 }
     );
+    createMarker(example);
 }
-console.log(user);
+
+function searchPlace(query){
+    service = new google.maps.places.PlacesService(map)
+
+    const request = {
+        query: query,
+        fields: ['name', 'geometry'],
+    };
+
+    service.findPlaceFromQuery(request, function (results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+                const place = {
+                    title: results[i].name,
+                    location: results[i].geometry.location
+                }
+                console.log(place)
+                createMarker(place);
+            }
+            map.setCenter(results[0].geometry.location);
+        }
+    });
+}
+
+function createMarker(place){
+    app.query = place.title;
+    app.content.place = place
+    const marker = new google.maps.Marker({
+        position: place.location,
+        title: place.title,
+        map: map,
+    });
+}
+
 function fileName(uid) {
     let date = new Date();
     let name =
@@ -102,6 +157,7 @@ function fileName(uid) {
         ".jpg";
     return name;
 }
+
 async function uploadContent() {
     let ref = imgRef.child(files.name);
     let thRef = thumpRef.child(files.name);
@@ -112,7 +168,7 @@ async function uploadContent() {
         await ref.put(blob).then(async function (snapshot) {
             await snapshot.ref.getDownloadURL().then((url) => {
                 pg.setAttribute("style", "width:30%");
-                data.image360 = url;
+                app.content.image360 = url;
             });
         });
     });
@@ -120,13 +176,13 @@ async function uploadContent() {
         await thRef.put(blob).then(async function (snapshot) {
             await snapshot.ref.getDownloadURL().then((url) => {
                 pg.setAttribute("style", "width: 60%");
-                data.thumbnail = url;
+                app.content.thumbnail = url;
             });
         });
     });
     await contentsRef
         .doc()
-        .set(data)
+        .set(app.content)
         .then(() => {
             setTimeout(() => {
                 pg.setAttribute("style", "width: 100%");
@@ -134,7 +190,7 @@ async function uploadContent() {
             setTimeout(() => {
                 window.location.href = PAGES.INDEX
             }, 1500);
-    })
+        })
 }
 
 
@@ -162,6 +218,7 @@ var back = document.getElementsByClassName("back")[0];
 var back2 = document.getElementsByClassName("back2")[0];
 var con = document.getElementsByClassName("continue")[0];
 var con2 = document.getElementsByClassName("continue2")[0];
+var con3 = document.getElementsByClassName("continue3")[0];
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 var span2 = document.getElementsByClassName("close2")[0];
@@ -188,6 +245,10 @@ back2.onclick = function () {
     modal2.style.display = "none";
 };
 con2.onclick = function () {
+    modal2.style.display = "none";
+    modal3.style.display = "block";
+};
+con3.onclick = function () {
     modal2.style.display = "none";
     modal3.style.display = "block";
 };
