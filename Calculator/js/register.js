@@ -1,6 +1,7 @@
 var app = new Vue({
     el: "#app",
     data: {
+        lang: {name: "", code: ""},
         username: "",
         email: "",
         password: "",
@@ -10,7 +11,22 @@ var app = new Vue({
         isError: false,
         error: ""
     },
+    created: function () {
+        langs.getSelected()
+            .then(lang => {
+                this.lang = lang;
+                document.title = lang.REGISTER
+            });
+    },
     methods: {
+        selectLang: function () {
+            langs.selectLanguage(this.lang.code);
+            langs.getSelected()
+                .then(lang => {
+                    this.lang = lang;
+                    document.title = lang.REGISTER
+                });
+        },
         register: function () {
             this.isLoading = true
             const username = this.username;

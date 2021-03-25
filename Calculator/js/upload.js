@@ -63,6 +63,9 @@ var app = new Vue({
             }
         },
         setThumbnail: async (privacy) => {
+            modal2.style.display = "none";
+            modal3.style.display = "block";
+
             let i = Dropzone.forElement("#upload");
             var message = i.files[0].dataURL;
             files.iThumbnail = message;
@@ -217,8 +220,6 @@ var btn = document.getElementById("myBtn");
 var back = document.getElementsByClassName("back")[0];
 var back2 = document.getElementsByClassName("back2")[0];
 var con = document.getElementsByClassName("continue")[0];
-var con2 = document.getElementsByClassName("continue2")[0];
-var con3 = document.getElementsByClassName("continue3")[0];
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 var span2 = document.getElementsByClassName("close2")[0];
@@ -244,14 +245,7 @@ back2.onclick = function () {
     modal.style.display = "block";
     modal2.style.display = "none";
 };
-con2.onclick = function () {
-    modal2.style.display = "none";
-    modal3.style.display = "block";
-};
-con3.onclick = function () {
-    modal2.style.display = "none";
-    modal3.style.display = "block";
-};
+
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
     if (event.target == modal) {

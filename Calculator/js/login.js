@@ -1,6 +1,7 @@
 var app = new Vue({
   el: "#app",
   data: {
+    lang: { name: "", code: "" },
     auth: {},
     username: "",
     email: "",
@@ -11,7 +12,28 @@ var app = new Vue({
     isError: false,
     error: ""
   },
+  created: async function () {
+    langs.getSelected()
+      .then(lang => {
+        this.lang = lang;
+        document.title = lang.LOG_IN
+      });
+
+    this.auth = await JSON.parse(localStorage.getItem(DB.AUTH));
+
+    if (this.auth != null) {
+      window.location.href = PAGES.INDEX;
+    }
+  },
   methods: {
+    selectLang: function () {
+      langs.selectLanguage(this.lang.code);
+      langs.getSelected()
+        .then(lang => {
+          this.lang = lang;
+          document.title = lang.LOG_IN
+        });
+    },
     login: function () {
       this.isLoading = true
       firebase
@@ -24,7 +46,7 @@ var app = new Vue({
           apis.getUser(auth.uid).then(data => {
             localStorage.setItem(DB.AUTH, JSON.stringify(auth));
             localStorage.setItem(DB.USER, JSON.stringify(data));
-            
+
             this.isLoading = false
             this.isError = false
 
@@ -42,15 +64,6 @@ var app = new Vue({
     },
   },
 });
-
-init();
-async function init(){
-  app.auth = await JSON.parse(localStorage.getItem(DB.AUTH));
-
-  if(app.auth != null){
-    window.location.href = PAGES.INDEX;
-  }
-}
 
 
 

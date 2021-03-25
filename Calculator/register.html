@@ -23,95 +23,95 @@
 <body scroll="no" style="overflow: hidden">
 	<div id="app">
 		<!-- Nav Bar Start -->
-	<div class="nav-bar">
-		<div class="container">
-			<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-				<a href="#" class="navbar-brand">MENU</a>
-				<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-					<span class="navbar-toggler-icon"></span>
-				</button>
+		<div class="nav-bar">
+			<div class="container">
+				<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+					<a href="#" class="navbar-brand text-uppercase">{lang.MENU}}</a>
+					<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+						<span class="navbar-toggler-icon"></span>
+					</button>
 
-				<div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-					<div class="navbar-nav mr-auto">
-						<a href="index.html" class="nav-item nav-link">Home</a>
+					<div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+						<div class="navbar-nav mr-auto">
+							<a href="index.html" class="nav-item nav-link">{{lang.HOME}}</a>
 
-						<a href="my-profile.html" class="nav-item nav-link">My Profile</a>
+							<a href="my-profile.html" class="nav-item nav-link">{{lang.MY_PROFILE}}</a>
+						</div>
+						<div class="ml-auto">
+							<i class="fas fa-language text-light"></i>
+							<select id="langOption" class="form-control form-select" v-model="lang.code" v-on:change="selectLang">
+							  <option value="en">English</option>
+							  <option value="th">ไทย</option>
+							</select>
+						</div>
 					</div>
-					<div class="social ml-auto">
-						<a href=""><i class="fab fa-twitter"></i></a>
-						<a href=""><i class="fab fa-facebook-f"></i></a>
-						<a href=""><i class="fab fa-linkedin-in"></i></a>
-						<a href=""><i class="fab fa-instagram"></i></a>
-						<a href=""><i class="fab fa-youtube"></i></a>
-					</div>
-				</div>
-			</nav>
+				</nav>
+			</div>
 		</div>
-	</div>
-	<!-- Nav Bar End -->
+		<!-- Nav Bar End -->
 
-	<div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100">
-				<div class="login100-form-title">
-					<span class="login100-form-title-1">
-						Sign up
-					</span>
-				</div>
-
-				<form class="login100-form ">
-					<div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="isError">
-						<i class="far fa-times-circle"></i>
-						<span class="ml-2">{{error}}</span>
-					</div>
-					
-					<div class="wrap-input100 m-b-26">
-						<span class="label-input100">Username</span>
-						<input v-model="username" minlength="4" maxlength="20" class="input100" type="username" name="username"
-							placeholder="Enter username" required>
-						<span class="focus-input100"></span>
+		<div class="limiter">
+			<div class="container-login100">
+				<div class="wrap-login100">
+					<div class="login100-form-title">
+						<span class="login100-form-title-1">
+							{{lang.REGISTER}}
+						</span>
 					</div>
 
-					<div class="wrap-input100  m-b-26">
-						<span class="label-input100">Email</span>
-						<input v-model="email" class="input100" type="email" name="email" placeholder="Enter email"
-							required>
-						<span class="focus-input100"></span>
-					</div>
+					<form class="login100-form ">
+						<div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="isError">
+							<i class="far fa-times-circle"></i>
+							<span class="ml-2">{{error}}</span>
+						</div>
 
-					<div class="wrap-input100  m-b-18" required>
-						<span class="label-input100">Password</span>
-						<input v-model="password" minlength="6" maxlength="12" class="input100" type="password" name="pass"
-							placeholder="Enter password" required>
-						<span class="focus-input100"></span>
-					</div>
+						<div class="wrap-input100 m-b-26">
+							<span class="label-input100">{{lang.USERNAME}}</span>
+							<input v-model="username" minlength="4" maxlength="20" class="input100" type="username"
+								name="username" :placeholder="lang.ENTER_USERNAME" required>
+							<span class="focus-input100"></span>
+						</div>
 
-					<div class="flex-sb-m w-full p-b-30">
-						<div class="contact100-form-checkbox">
-							<div class="text-primary" v-if="isLoading">
-								<div class="spinner-grow" role="status"></div>
-								<span class="visually-hidden">Loading...</span>
+						<div class="wrap-input100  m-b-26">
+							<span class="label-input100">{{lang.EMAIL}}</span>
+							<input v-model="email" class="input100" type="email" name="email" :placeholder="lang.ENTER_EMAIL"
+								required>
+							<span class="focus-input100"></span>
+						</div>
+
+						<div class="wrap-input100  m-b-18" required>
+							<span class="label-input100">{{lang.PASSWORD}}</span>
+							<input v-model="password" minlength="6" maxlength="12" class="input100" type="password"
+								name="pass" :placeholder="lang.ENTER_PASSWORD" required>
+							<span class="focus-input100"></span>
+						</div>
+
+						<div class="flex-sb-m w-full p-b-30">
+							<div class="contact100-form-checkbox">
+								<div class="text-primary" v-if="isLoading">
+									<div class="spinner-grow" role="status"></div>
+									<span class="visually-hidden">{{lang.LOADING}}...</span>
+								</div>
+							</div>
+
+							<div>
+								<a v-bind:href="PAGES.LOGIN" class="txt1">
+									{{lang.ALREADY_A_MEMBER}}?
+								</a>
 							</div>
 						</div>
 
-						<div>
-							<a v-bind:href="PAGES.LOGIN" class="txt1">
-								Already a member?
-							</a>
+						<div class="container-login100-form-btn">
+							<button v-on:click="register" class="btn regis-btn" type="button">{{lang.REGISTER}}</button>
 						</div>
-					</div>
 
-					<div class="container-login100-form-btn">
-						<button v-on:click="register" class="btn regis-btn" type="button">Sign up</button>
-					</div>
-
-				</form>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
-	</div>
-	
 
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<!-- The core Firebase JS SDK is always required and must be listed first -->
 	<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
 	<!-- TODO: Add SDKs for Firebase products that you want to use
@@ -126,11 +126,9 @@
 	<script src="vendor/fontawesome.js"></script>
 	<script src="vendor/vue.js"></script>
 	<script src="vendor/vue-router.js"></script>
+	<script src="vendor/apis.js"></script>
+	<script src="vendor/langs.js"></script>
 
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-
-
-	<script src="js/apis.js"></script>
 	<script src="js/register.js"></script>
 
 </body>

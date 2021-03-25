@@ -25,6 +25,7 @@
 var app = new Vue({
   el: "#app",
   data: {
+    lang: { name: "", code: "" },
     contents: [],
     categories: [],
     name: "Hi from data",
@@ -36,7 +37,20 @@ var app = new Vue({
     isError: false,
     error: ""
   },
+  created: function () {
+    langs.getSelected()
+      .then(lang => {
+        this.lang = lang;
+      });
+  },
   methods: {
+    selectLang: function () {
+      langs.selectLanguage(this.lang.code);
+      langs.getSelected()
+        .then(lang => {
+          this.lang = lang;
+        });
+    },
     toLogin: function () {
       window.location.href = PAGES.LOGIN;
     },

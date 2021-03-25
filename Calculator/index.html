@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en-x-mtfrom-fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,7 +23,7 @@
       <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
         <span class="visually-hidden"></span>
       </div>
-      <span class="text-primary">Loading...</span>
+      <span class="text-primary">{{lang.LOADING}}...</span>
     </div>
 
     <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
@@ -43,21 +42,26 @@
               </a>
             </div>
           </div>
-          <!--<div class="col-lg-6 col-md-3">
-            <div class="b-ads">
+          <div class="col-lg-7 col-md-4">
+            <!--<div class="b-ads">
               <a href="https://htmlcodex.com">
                 <img src="../img/ads-1.jpg" alt="Ads">
               </a>
-            </div>
-          </div>-->
-          <div class="col-lg-9 col-md-7" id="social">
-            <div class="text-right">
+            </div>-->
+          </div>
+          <div class="col-lg-2 col-md-3">
+            <i class="fas fa-language"></i>
+            <select id="langOption" class="form-control form-select" v-model="lang.code" v-on:change="selectLang">
+              <option value="en">English</option>
+              <option value="th">ไทย</option>
+            </select>
+            <!--<div class="text-right">
               <a v-bind:href="LINKS.TWITTER" class="ml-3"><i class="fab fa-twitter"></i></a>
               <a v-bind:href="LINKS.FACEBOOK" class="ml-3"><i class="fab fa-facebook-f"></i></a>
               <a v-bind:href="LINKS.LINKEDIN" class="ml-3"><i class="fab fa-linkedin-in"></i></a>
               <a v-bind:href="LINKS.INSTAGRAM" class="ml-3"><i class="fab fa-instagram"></i></a>
               <a v-bind:href="LINKS.YOUTUBE" class="ml-3"><i class="fab fa-youtube"></i></a>
-            </div>
+            </div>-->
           </div>
         </div>
       </div>
@@ -68,15 +72,15 @@
     <div class="nav-bar">
       <div class="container">
         <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-          <a href="#" class="navbar-brand">MENU</a>
+          <a href="#" class="navbar-brand text-uppercase">{{lang.MENU}}</a>
           <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
           </button>
 
           <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
             <div class="navbar-nav mr-auto">
-              <a v-bind:href="PAGES.INDEX" class="nav-item nav-link active">Home</a>
-              <a v-bind:href="PAGES.MYPROFILE" class="nav-item nav-link">My Profile</a>
+              <a v-bind:href="PAGES.INDEX" class="nav-item nav-link active">{{lang.HOME}}</a>
+              <a v-bind:href="PAGES.MYPROFILE" class="nav-item nav-link">{{lang.MY_PROFILE}}</a>
             </div>
             <div class="d-grid gap-2" v-if="user !== null">
               <div class="btn-group profile-h">
@@ -95,27 +99,25 @@
                   <li>
                     <a class="dropdown-item" type="button" :href="PAGES.UPLOAD">
                       <i class="fas fa-plus"></i>
-                      <span class="ml-1">Add Upload</span>
+                      <span class="ml-1">{{lang.ADD_UPLOAD}}</span>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item" type="button" :href="PAGES.MYPROFILE">
-                      My Profile
+                      {{lang.MY_PROFILE}}
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item" type="button" :href="PAGES.LOGOUT">
-                      Log Out
+                      {{lang.LOG_OUT}}
                     </a>
                   </li>
                 </ul>
               </div>
             </div>
             <div class="ml-auto d-grid gap-2 d-md-block" v-else>
-              <button v-on:click="window.location.href = PAGES.LOGIN" class="btn btn-primary" type="button">Log
-                in</button>
-              <button v-on:click="window.location.href = PAGES.REGISTER" class="btn btn-primary"
-                type="button">Register</button>
+              <button v-on:click="window.location.href = PAGES.LOGIN" class="btn btn-primary" type="button">{{lang.LOG_IN}}</button>
+              <button v-on:click="window.location.href = PAGES.REGISTER" class="btn btn-primary"type="button">{{lang.REGISTER}}</button>
             </div>
           </div>
         </nav>
@@ -271,9 +273,10 @@
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
   <!--REQUIRED SCRIPTS//-->
   <script src="vendor/firebase-config.js"></script>
+  <script src="vendor/apis.js"></script>
+  <script src="vendor/langs.js"></script>
 
   <!-- Template Javascript -->
-  <script src="js/apis.js"></script>
   <script src="js/main.js"></script>
 
 

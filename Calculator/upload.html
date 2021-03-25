@@ -154,11 +154,11 @@
                         <div class="col-4">
                         </div>
                         <div class="col-5">
-                            <button v-if="content.private == false" @click="setThumbnail(privacy)" type="button" id="continue" class="continue2 btn btn-primary">
+                            <button v-if="privacy !== 'private'" @click="setThumbnail(privacy)" type="button" id="continue" class="continue2 btn btn-primary">
                                 <span class="mr-1">Save & Share</span>
                                 <i class="fas fa-share-alt"></i>
                             </button>
-                            <button v-if="content.private == true" @click="setThumbnail(privacy)" type="button" id="continue" class="continue3 btn btn-primary">
+                            <button v-if="privacy === 'private'" @click="setThumbnail(privacy)" type="button" id="continue" class="continue3 btn btn-primary">
                                 <span>Save</span>
                             </button>
                         </div>
@@ -198,15 +198,14 @@
 <!--REQUIRED SCRIPTS//-->
 
 <!-- //GOOGLE MAP & PLACE APIs -->
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdJYPHvhaFuT1i2DyAlnuNOdSWHZCcaj4&libraries=places&callback=initMap" type="text/javascript">
-
-</script>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdJYPHvhaFuT1i2DyAlnuNOdSWHZCcaj4&libraries=places&callback=initMap" type="text/javascript"></script>
 <!-- GOOGLE MAP & PLACE APIs// -->
 
 <script src="vendor/contents.js"></script>
 <script src="vendor/category.js"></script>
 <script src="vendor/firebase-config.js"></script>
-<script src="js/apis.js"></script>
+<script src="vendor/apis.js"></script>
+
 <script src="js/upload.js"></script>
 
 </html>
