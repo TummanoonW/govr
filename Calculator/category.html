@@ -131,7 +131,7 @@
             <div class="mn-img" v-on:click="toWebXR(content)">
               <img :src="content.image360" />
               <div class="mn-title">
-                <a href="webxr.html">{{content.title}}</a>
+                <a v-on:click="toWebXR(content)">{{content.title}}</a>
               </div>
             </div>
           </div>
@@ -139,7 +139,7 @@
         <!-- Category Start-->
         <div class="row category">
           <div class="col-md-4" v-for="category in categories ">
-            <button v-on:click="goToCat(category)" class="btn btn-cate" type="submit">{{category.title}}</button>
+            <button v-on:click="getCat(category)" class="btn btn-cate" type="submit">{{category.title}}</button>
           </div>
         </div>
         <!-- Category End-->

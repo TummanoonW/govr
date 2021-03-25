@@ -131,7 +131,7 @@
             <div class="mn-img" v-on:click="toWebXR(content)">
               <img :src="content.image360" />
               <div class="mn-title">
-                <a href="webxr.html">{{content.title}}</a>
+                <a v-on:click="toWebXR(content)">{{content.title}}</a>
               </div>
             </div>
           </div>

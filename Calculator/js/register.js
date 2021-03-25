@@ -27,9 +27,9 @@ var app = new Vue({
                     //User
                     const user = {
                         displayName: username,
-                        email: user.email,
+                        email: auth.email,
                         photoURL: null,
-                        uid: user.uid,
+                        uid: auth.uid,
                     };
                     //UserInfo
                     const userInfo = {
@@ -47,9 +47,10 @@ var app = new Vue({
                         limitUploads: 5
                     }
 
-                    apis.registerUser(localUser, userInfo).then(data => {
+                    apis.registerUser(user, userInfo).then(data => {
                         this.isLoading = false
                         this.isError = false
+                        console.log(data)
 
                         let user = data.u
                         let userInfo = data.uinfo
@@ -60,11 +61,14 @@ var app = new Vue({
 
                         window.location.href = PAGES.INDEX;
                     }).catch(error => {
+                        console.log(error.message)
                         this.isLoading = false
                         this.error = error
                         this.isError = true
                     }) //save user to firebase
                 }).catch((error) => {
+                    console.log(error.message)
+
                     this.isLoading = false
                     this.error = error
                     this.isError = true

@@ -79,8 +79,8 @@ var app = new Vue({
         });
     },
     getCat: (cat) => {
-      localStorage.setItem(DB.CATEGORY, cat);
-      window.location.href = PAGES.CATEGORY;
+
+      window.location.href = PAGES.CATEGORY + `?label=${cat.label}`;
     }
   },
 });

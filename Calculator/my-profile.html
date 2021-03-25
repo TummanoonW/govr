@@ -25,12 +25,6 @@
   <link href="css/profile.css" rel="stylesheet" />
   <!-- Additional CSS Files -->
 
-  <style>
-    .box {
-      width: 100%;
-      height: 85vh;
-    }
-  </style>
 </head>
 
 <body>
@@ -215,7 +209,8 @@
                   Location
                 </div>
                 <div class="col-9 text-left">
-                  <a target="_blank" :href="`https://www.google.com/maps/@${info.location._latitude},${info.location._longitude}`">
+                  <a target="_blank"
+                    :href="`https://www.google.com/maps/@${info.location._latitude},${info.location._longitude}`">
                     @{{info.location._latitude}},{{info.location._longitude}}
                   </a>
                 </div>
@@ -241,7 +236,7 @@
                   Privacy
                 </div>
                 <div class="col-9 text-left">
-                  <span>{{displayPrivacy(info)}}</span> 
+                  <span>{{displayPrivacy(info)}}</span>
                   <span v-if="info.published">( <i class="far fa-eye"></i> )</span>
                   <span v-if="!info.published && !info.private">( <i class="fas fa-unlock-alt"></i> )</span>
                   <span v-if="info.private">( <i class="fas fa-lock"></i> )</span>
@@ -279,19 +274,34 @@
               </div>
               <span class="text-primary">Deleting...</span>
             </div>
-            <div v-if="deleteC.isError" class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
+            <div v-if="deleteC.isError" class="alert alert-danger alert-dismissible fade show" v-if="isError"
+              role="alert">
               <i class="far fa-times-circle"></i>
               <span class="ml-2">{{error}}</span>
             </div>
           </div>
           <div class="modal-footer">
-            <button v-if="!deleteC.isLoading" v-on:click="deleteNow" type="button" class="btn btn-danger">Proceed to delete!</button>
-            <button v-if="!deleteC.isLoading" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button v-if="!deleteC.isLoading" v-on:click="deleteNow" type="button" class="btn btn-danger">Proceed to
+              delete!</button>
+            <button v-if="!deleteC.isLoading" type="button" class="btn btn-secondary"
+              data-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>
     </div>
     <!-- Delete Modal -->
+
+    <!-- Edot profile Modal -->
+    <div id="editModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="form-box">
+
+        </div>
+      </div>
+    </div>
 
 
     <div class="content">
@@ -307,6 +317,7 @@
               <div class="name">Guest</div>
             </div>
             <div id="list-example" class="tabs">
+              <a id='edit-profile' class="my-upload">Edit Profile</a>
               <a class="my-upload" href="#list-item-1">My Uploads</a>
               <a class="my-add" href="#list-item-2">My Address</a>
               <a class="my-pay" href="#list-item-3">Payment</a>
@@ -319,6 +330,7 @@
               <h4>My Uploads</h4>
               <div class="main-news">
                 <div class="container">
+                  
                   <div class="row">
                     <div class="col-xl-3 col-lg-4 col-md-6 p-1">
                       <div class="card" style="align-self: center;  height: 250px;">
@@ -326,7 +338,169 @@
                           style="height: 100%;"> + Add</button>
                       </div>
                     </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents ">
+                    <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents.publishedC" >
+                      <div class="card">
+                        <div class="mn-img" :id="'dropdown-' + content.id" data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">
+                          <img :src="content.image360" />
+                          <div class="mn-title">
+                            <a href="">{{content.title}}</a>
+                            <div class="dropdown">
+                              <button class="btn text-light" type="button" :id="'dropdown-' + content.id"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i v-if="content.published" class="far fa-eye"></i>
+                                <i v-if="!content.private && !content.published" class="fas fa-unlock-alt"></i>
+                                <i v-if="content.private" class="fas fa-lock"></i>
+                                <i v-if="content.disabled" class="far fa-eye-slash"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="dropdown-menu" :aria-labelledby="'dropdown-' + content.id">
+                          <a v-if="!content.disabled" class="dropdown-item text-success"
+                            :href="PAGES.WEBXR + `?id=${content.id}`">
+                            <i class="far fa-eye"></i>
+                            <span class="ml-1">View</span>
+                          </a>
+                          <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
+                            class="dropdown-item text-accent">
+                            <i class="fas fa-link"></i>
+                            <span class="ml-1">Get shared link</span>
+                          </button>
+                          <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
+                            <i class="far fa-edit"></i>
+                            <span class="ml-1">Edit</span>
+                          </a>
+                          <button class="dropdown-item" v-on:click="infoContent(content)">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="ml-1">Info</span>
+                          </button>
+                          <button class="dropdown-item" v-on:click="deleteContent(content)">
+                            <i class="far fa-trash-alt"></i>
+                            <span class="ml-1">Delete</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <h4>Only people with link</h4>
+                    <div class="col-xl-3 col-lg-4 col-md-6 p-1">
+                      <div class="card" style="align-self: center;  height: 250px;">
+                        <button v-on:click="window.location.href = PAGES.UPLOAD" class="btn btn-cate"
+                          style="height: 100%;"> + Add</button>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents.linkC" >
+                      <div class="card">
+                        <div class="mn-img" :id="'dropdown-' + content.id" data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">
+                          <img :src="content.image360" />
+                          <div class="mn-title">
+                            <a href="">{{content.title}}</a>
+                            <div class="dropdown">
+                              <button class="btn text-light" type="button" :id="'dropdown-' + content.id"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i v-if="content.published" class="far fa-eye"></i>
+                                <i v-if="!content.private && !content.published" class="fas fa-unlock-alt"></i>
+                                <i v-if="content.private" class="fas fa-lock"></i>
+                                <i v-if="content.disabled" class="far fa-eye-slash"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="dropdown-menu" :aria-labelledby="'dropdown-' + content.id">
+                          <a v-if="!content.disabled" class="dropdown-item text-success"
+                            :href="PAGES.WEBXR + `?id=${content.id}`">
+                            <i class="far fa-eye"></i>
+                            <span class="ml-1">View</span>
+                          </a>
+                          <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
+                            class="dropdown-item text-accent">
+                            <i class="fas fa-link"></i>
+                            <span class="ml-1">Get shared link</span>
+                          </button>
+                          <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
+                            <i class="far fa-edit"></i>
+                            <span class="ml-1">Edit</span>
+                          </a>
+                          <button class="dropdown-item" v-on:click="infoContent(content)">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="ml-1">Info</span>
+                          </button>
+                          <button class="dropdown-item" v-on:click="deleteContent(content)">
+                            <i class="far fa-trash-alt"></i>
+                            <span class="ml-1">Delete</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <h4>Private</h4>
+                    <div class="col-xl-3 col-lg-4 col-md-6 p-1">
+                      <div class="card" style="align-self: center;  height: 250px;">
+                        <button v-on:click="window.location.href = PAGES.UPLOAD" class="btn btn-cate"
+                          style="height: 100%;"> + Add</button>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents.privateC" >
+                      <div class="card">
+                        <div class="mn-img" :id="'dropdown-' + content.id" data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">
+                          <img :src="content.image360" />
+                          <div class="mn-title">
+                            <a href="">{{content.title}}</a>
+                            <div class="dropdown">
+                              <button class="btn text-light" type="button" :id="'dropdown-' + content.id"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i v-if="content.published" class="far fa-eye"></i>
+                                <i v-if="!content.private && !content.published" class="fas fa-unlock-alt"></i>
+                                <i v-if="content.private" class="fas fa-lock"></i>
+                                <i v-if="content.disabled" class="far fa-eye-slash"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="dropdown-menu" :aria-labelledby="'dropdown-' + content.id">
+                          <a v-if="!content.disabled" class="dropdown-item text-success"
+                            :href="PAGES.WEBXR + `?id=${content.id}`">
+                            <i class="far fa-eye"></i>
+                            <span class="ml-1">View</span>
+                          </a>
+                          <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
+                            class="dropdown-item text-accent">
+                            <i class="fas fa-link"></i>
+                            <span class="ml-1">Get shared link</span>
+                          </button>
+                          <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
+                            <i class="far fa-edit"></i>
+                            <span class="ml-1">Edit</span>
+                          </a>
+                          <button class="dropdown-item" v-on:click="infoContent(content)">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="ml-1">Info</span>
+                          </button>
+                          <button class="dropdown-item" v-on:click="deleteContent(content)">
+                            <i class="far fa-trash-alt"></i>
+                            <span class="ml-1">Delete</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <h4>Waiting for re-subscription</h4>
+                    <div class="col-xl-3 col-lg-4 col-md-6 p-1">
+                      <div class="card" style="align-self: center;  height: 250px;">
+                        <button v-on:click="window.location.href = PAGES.UPLOAD" class="btn btn-cate"
+                          style="height: 100%;"> + Add</button>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents.disabledC" >
                       <div class="card">
                         <div class="mn-img" :id="'dropdown-' + content.id" data-toggle="dropdown" aria-haspopup="true"
                           aria-expanded="false">

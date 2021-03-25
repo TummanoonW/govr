@@ -25,7 +25,12 @@
 var app = new Vue({
   el: "#app",
   data: {
-    contents: [],
+    contents: {
+      publishedC: [],
+      privateC: [],
+      disabledC: [],
+      linkC: [],
+    },
     categories: [],
     name: "Hi from data",
     auth: {},
@@ -80,14 +85,14 @@ var app = new Vue({
       this.deleteC = content
       $('#deleteModal').modal()
     },
-    deleteNow: function(){
+    deleteNow: function () {
       this.deleteC.isLoading = true
       this.deleteC.isError = false
       apis.deleteContent(this.deleteC.id).then(() => {
         this.deleteC.isLoading = false
         this.deleteC.isError = false
         this.contents.forEach((item, index) => {
-          if(item.id === this.deleteC.id){
+          if (item.id === this.deleteC.id) {
             this.contents.splice(index, 1)
           }
         })
@@ -97,13 +102,13 @@ var app = new Vue({
         this.deleteC.error = error
       })
     },
-    displayPrivacy: function(info){
+    displayPrivacy: function (info) {
       let str = ''
-      if(info.published){
+      if (info.published) {
         str = 'Public'
-      }else if(!info.published && !info.private){
+      } else if (!info.published && !info.private) {
         str = 'Only people with link'
-      }else{
+      } else {
         str = 'Private'
       }
       return str
@@ -116,7 +121,7 @@ var app = new Vue({
 });
 
 init();
-async function init(){
+async function init() {
   //Get uer from local storage
   app.auth = await JSON.parse(localStorage.getItem(DB.AUTH));
   app.user = await JSON.parse(localStorage.getItem(DB.USER));
@@ -136,7 +141,7 @@ function initData() {
 
   apis.getContentsByUid(app.auth.uid).then(data => {
     console.log(data)
-    app.contents = data;
+    specifyContent(data)
     app.isLoading = false;
     app.isError = false;
   }).catch(error => {
@@ -146,9 +151,27 @@ function initData() {
   });
 }
 
-function copyToClipboard(str){
+function copyToClipboard(str) {
   var input = document.getElementById('link-url');
   input.select();
   var result = document.execCommand('copy');
   return result
+}
+
+function specifyContent(contents) {
+  for (let i = 0; i < contents.length; i++) {
+    if (!contents[i].disbaled) {
+      if (!contents[i].published & !contents[i].private) { //only with link
+        //onl with link
+        app.contents.linkC.push(contents[i])
+      } else if (contents[i].published) { //published
+        app.contents.publishedC.push(contents[i])
+      } else if (contents[i].private) { //private
+        app.contents.privateC.push(contents[i])
+      }
+    } else { //disbaled
+      app.contents.disabledC.push(contents[i])
+    }
+  }
+  console.log(app.contents)
 }

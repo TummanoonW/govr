@@ -6,30 +6,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload</title>
-
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <script src="vendor/jquery.min.js"></script>
-
     <link rel="stylesheet" href="css/upload.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
+    <!-- Nav Bar Start -->
+    <div class="nav-bar">
+        <div class="container">
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                <a href="#" class="navbar-brand">MENU</a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div class="navbar-nav mr-auto">
+                        <a href="index.html" class="nav-item nav-link">Home</a>
+
+                        <a href="my-profile.html" class="nav-item nav-link">My Profile</a>
+                    </div>
+                    <!-- <div class="social ml-auto">
+						<a href=""><i class="fab fa-twitter"></i></a>
+						<a href=""><i class="fab fa-facebook-f"></i></a>
+						<a href=""><i class="fab fa-linkedin-in"></i></a>
+						<a href=""><i class="fab fa-instagram"></i></a>
+						<a href=""><i class="fab fa-youtube"></i></a>
+					</div> -->
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Nav Bar End -->
     <div id="app">
-        <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
-            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden"></span>
-            </div>
-            <span class="text-primary">Loading...</span>
-        </div>
-
-        <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
-            <i class="far fa-times-circle"></i>
-            <span class="ml-2">{{error}}</span>
-        </div>
-
         <div class="img">
             <form action="/upload" class="dropzone needsclick dz-clickable" id="demo-upload">
                 <div class="dz-message needsclick">
@@ -37,45 +50,34 @@
                 </div>
             </form>
         </div>
-
         <div class="detail">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
-                <input v-model="content.title" type="text" class="form-control" id="title" name="title"
-                    placeholder="Untitled">
+                <input v-model="title" type="text" class="form-control" id="title" name="title" placeholder="Untitled">
             </div>
             <div class="mb-3">
-                <textarea v-model="content.description" class="form-control " id="description" name="description"
-                    rows="6" placeholder="Description"></textarea>
+                <textarea v-model="description" class="form-control " id="description" name="description" rows="6"
+                    placeholder="Description"></textarea>
             </div>
             <div class="mb-3">
-                <input v-model="content.category" class="form-control" list="datalistOptions" id="category"
-                    name="category" placeholder="Category">
+                <input v-model="category" class="form-control" list="datalistOptions" id="category" name="category"
+                    placeholder="Category">
                 <datalist id="datalistOptions">
-                    <option v-for="category in categories" :value=category.label>{{category.title}}</option>
+                    <option v-for="category in categories" :value=category.label>
                 </datalist>
             </div>
-
-
             <div class="btn-form">
                 <button v-on:click="toHome" type="button" class="btn btn-outline-primary">Cancle</button>
-
                 <button v-on:click="setContent(title,description,category)" id="myBtn" type="button"
                     class="btn btn-primary">Create</button>
                 <!-- v-on:click="create(title, description, category)" -->
             </div>
-
-
-
         </div>
         <!--เมื่อกด upload จะ pop up หน้าสำหรับใส่ location และสาามารถเพิ่ม scene ที่เป็น 360 เพิ่มได้-->
         <!--เมื่อ เพิ่มรูป ภาพพื้นหลังจะเปลี่ยนไปเป็นภาพที่โหลดขึ้นมา และสามารถลบได้-->
         <!--set location for image-->
-
-
         <!-- The Modal -->
         <div id="myModal" class="modal">
-
             <!-- Modal content -->
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -84,7 +86,8 @@
                         <form class="search d-flex">
                             <input id="loc" name="loc" class="form-control me-2" type="search" placeholder="Search"
                                 aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
+
+                            <button @click="getLocation" class="btn btn-outline-success" type="button">Search</button>
                         </form>
                     </div>
                 </nav>
@@ -92,17 +95,9 @@
                 <!-- Map -->
                 <div id="googleMap" style="width:100%;height:400px; background: #888;"></div>
 
-                <script>
-                    function myMap() {
-                        var mapProp = {
-                            center: new google.maps.LatLng(51.508742, -0.120850),
-                            zoom: 5,
-                        };
-                        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-                    }
-                </script>
-                <script
-                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdJYPHvhaFuT1i2DyAlnuNOdSWHZCcaj4&callback=myMap"></script>
+
+                latitude: {{ loc.latitude }}<br>
+                longitude: {{ loc.longitude }}
                 <!-- Map -->
                 <div class="control-container">
                     <div class="row">
@@ -110,20 +105,17 @@
                             <button type="button" id="back" class="back btn btn-outline-primary">back</button>
                         </div>
                         <div class="col-7">
-
                         </div>
                         <div class="col">
-                            <button @click="setLocation(content.loc)" type="button" id="continue"
+                            <button @click="setLocation(loc)" type="button" id="continue"
                                 class="continue btn btn-outline-primary">continue</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- The second Modal -->
         <div id="myModal2" class="modal2">
-
             <!-- Second modal content -->
             <div class="modal-content">
                 <span class="close2">&times;</span>
@@ -142,7 +134,7 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label for="inputState">Select content privacy</label>
-                        <select v-model="content.privacy" id="privacy" class="privacy form-control">
+                        <select v-model="privacy" id="privacy" class="privacy form-control">
                             <option selected>Choose...</option>
                             <option value="published">Public</option>
                             <option value="link">Only people with link</option>
@@ -150,24 +142,21 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="control-container">
                     <div class="row">
                         <div class="col">
                             <button type="button" id="back" class="back2 btn btn-outline-primary">back</button>
                         </div>
                         <div class="col-7">
-
                         </div>
                         <div class="col">
-                            <button @click="setThumbnail" type="button" id="continue"
+                            <button @click="setThumbnail(privacy)" type="button" id="continue"
                                 class="continue2 btn btn-outline-primary">continue</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- The Modal -->
         <div id="myModal3" class="modal3">
             <!-- Modal content -->
@@ -176,13 +165,10 @@
                     <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated"
                         role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-
             </div>
         </div>
-
     </div>
 </body>
-
 <script src="./dropzone-5.7.0/dropzone-5.7.0/dist/dropzone.js"></script>
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -204,8 +190,6 @@
 <script src="vendor/contents.js"></script>
 <script src="vendor/category.js"></script>
 <script src="vendor/firebase-config.js"></script>
-
-<script src="js/apis.js"></script>
 <script src="js/upload.js"></script>
 
 </html>
