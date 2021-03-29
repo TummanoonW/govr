@@ -5,89 +5,168 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Content</title>
+    <title id="tab">Edit {{title}}</title>
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <script src="vendor/jquery.min.js"></script>
 
     <link rel="stylesheet" href="css/edit.css">
     <link rel="stylesheet" href="css/main.css">
+    <link href="./assets/favicon.svg" rel="icon" />
+
 </head>
 
 <body>
-    <!-- Nav Bar Start -->
-	<div class="nav-bar">
-		<div class="container">
-			<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-				<a href="#" class="navbar-brand">MENU</a>
-				<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-					<span class="navbar-toggler-icon"></span>
-				</button>
+    <div id="app">
+        <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
+            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden"></span>
+            </div>
+            <span class="text-primary">{{lang.LOADING}}</span>
+        </div>
 
-				<div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-					<div class="navbar-nav mr-auto">
-						<a href="index.html" class="nav-item nav-link">Home</a>
+        <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
+            <i class="far fa-times-circle"></i>
+            <span class="ml-2">{{error}}</span>
+        </div>
+        <!-- Nav Bar Start -->
+        <div class="nav-bar">
+            <div class="container">
+                <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                    <a href="#" class="navbar-brand">{{lang.MENU}}</a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-						<a href="my-profile.html" class="nav-item nav-link">My Profile</a>
-					</div>
-					<!-- <div class="social ml-auto">
-						<a href=""><i class="fab fa-twitter"></i></a>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto">
+                            <a href="index.html" class="nav-item nav-link">{{lang.HOME}}</a>
+
+                            <a href="my-profile.html" class="nav-item nav-link">{{lang.MY_PROFILE}}</a>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fas fa-language text-light"></i>
+                            <select id="langOption" class="form-control form-select" v-model="lang.code"
+                                v-on:change="selectLang">
+                                <option value="en">English</option>
+                                <option value="th">ไทย</option>
+                            </select>
+                            <!-- <a href=""><i class="fab fa-twitter"></i></a>
 						<a href=""><i class="fab fa-facebook-f"></i></a>
 						<a href=""><i class="fab fa-linkedin-in"></i></a>
 						<a href=""><i class="fab fa-instagram"></i></a>
-						<a href=""><i class="fab fa-youtube"></i></a>
-					</div> -->
-				</div>
-			</nav>
-		</div>
-	</div>
-	<!-- Nav Bar End -->
-    <div id="app">
-        
-        <!-- for content thumbnail-->
-        <div class="img">
-        <img :src="content.image360">
+						<a href=""><i class="fab fa-youtube"></i></a> -->
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- Nav Bar End -->
+
+        <div class="container">
+            <div class="row1 row justify-content-md-center align-items-center">
+                <!-- for content thumbnail-->
+                <div class=" col-lg-6">
+                    <div class="img">
+                        <img :src="content.image360">
+                    </div>
+                </div>
+
+                <div class=" col-lg-6">
+                    <!-- content for edit-->
+                    <div class="detail">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">{{lang.TITLE}}</label>
+                            <input v-model="content.title" type="text" class="form-control" id="title" name="title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">{{lang.DESCRIPTION}}</label>
+                            <textarea v-model="content.description" class="form-control" id="description"
+                                name="description" rows="6"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="datalistOptions" class="form-label">{{lang.CATEGORY}}</label>
+                            <input v-model="content.category" class="form-control" list="datalistOptions" id="category"
+                                name="category" :placeholder="cat">
+                            <datalist id="datalistOptions">
+                                <option v-for="category in categories" :value=category.label>
+                            </datalist>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="loaction" class="form-label">{{lang.LOCATION}}</label>
+                            <input v-model="place.title" type="text" class="form-control" id="location" name="location"
+                                disabled>
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i
+                                    class="fas fa-map-marker-alt"></i>
+                                {{lang.CHANGE_LOCATION}} </button>
+
+                        </div>
+                        <div class="text-right">
+                            <button v-on:click="back" type="button" class="btn btn-outline-primary">{{lang.CANCEL}}</button>
+
+                            <button v-on:click="setContent(content.title,content.description,content.category)" id="myBtn" type="button"
+                                class="btn btn-primary"> {{lang.EDIT}} <i class="far fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- content for edit-->
-        <div class="detail">
-            <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input v-model="content.title" type="text" class="form-control" id="title" name="title" >
-            </div>
-            <div class="mb-3">
-                <textarea v-model="content.description" class="form-control" id="description" name="description" rows="6"></textarea>
-            </div>
-            <div class="mb-3">
-                <input v-model="content.category" class="form-control" list="datalistOptions" id="category" name="category"
-                    :placeholder="cat">
-                <datalist id="datalistOptions">
-                    <option v-for="category in categories" :value=category.label>
-                </datalist>
-            </div>
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <nav class="navbar navbar-light bg-light">
+                    <div class="container-fluid">
+                        <div class="search d-flex">
+                            <input v-on:keyup.enter="searchPlace(query)" v-model="query" id="loc" name="loc"
+                                class="form-control me-2" type="search" style="height: 50px" placeholder="Search"
+                                aria-label="Search">
+                            <button v-on:click="searchPlace(query)" class="ml-2 btn btn-outline-success"
+                                style="height: 50px" type="button">
+                                <i class="fas fa-search"></i>
+                                {{lang.SEARCH}}
+                            </button>
+                        </div>
+                    </div>
+                </nav>
 
+                <!-- Map -->
+                <div id="googleMap" style="width:100%;height:400px; background: #888;"></div>
+                <!-- Map -->
 
-            <div class="btn-form">
-                <button v-on:click="toHome" type="button" class="btn btn-outline-primary">Cancle</button>
-
-                <button v-on:click="setContent(title,description,category)" id="myBtn" type="button"
-                    class="btn btn-primary">  Edit  </button>
-  
+                <div class="control-container">
+                    <div class="row">
+                        <div class="col-3">
+                            <button type="button" id="back" class="back btn btn-outline-primary">{{lang.BACK}}</button>
+                        </div>
+                        <div class="col-4">
+                        </div>
+                        <div class="col-5">
+                            <button type="button" id="continue" class="continue btn btn-primary">
+                                <span class="mr-1">{{lang.CONTINUE}}</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
 
         <div id="myModal3" class="modal3">
             <!-- Modal content -->
             <div class="modal-content-progress">
                 <div class="progress">
-                    <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" ></div>
+                    <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated"
+                        role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-
             </div>
-        </div>        
+        </div>
 
     </div>
 </body>
@@ -111,8 +190,17 @@
 <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
 <!--REQUIRED SCRIPTS//-->
 
+<!-- //GOOGLE MAP & PLACE APIs -->
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdJYPHvhaFuT1i2DyAlnuNOdSWHZCcaj4&libraries=places&callback=initMap"
+    type="text/javascript"></script>
+<!-- GOOGLE MAP & PLACE APIs// -->
+
+
 <script src="vendor/firebase-config.js"></script>
 <script src="vendor/apis.js"></script>
+<script src="vendor/langs.js"></script>
+
 <script src="js/edit.js"></script>
 
 

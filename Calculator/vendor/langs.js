@@ -30,6 +30,7 @@ var langs = {
         WAIT_FOR_RE_SUBSCRIPTION: "Wait for re-subscription",
         TITLE: "Title",
         DROP_FILE_OR_CLICK_TO_UPLOAD: "Drop files or click to upload.",
+        ONLY_ALLOW_JPG: "only allow .jpg",
         UNTITLED: "Untitled",
         DESCRIPTION: "Description",
         CATEGORY: "Category",
@@ -58,7 +59,27 @@ var langs = {
         WEBXR: "Web XR",
         ENTER_EMAIL: "Enter email",
         ENTER_PASSWORD: "Enter password",
-        ENTER_USERNAME: "Enter username"
+        ENTER_USERNAME: "Enter username",
+        YOUR_LONK_FOR: "Your link for",
+        IS: "is :",
+        LOCATION: "Location",
+        CHANGE_LOCATION: "Change location",
+        ANYONE_WITH_LINK: "Anyone with link can see",
+        LINK_IS_COPPIED: "Link is copied!",
+        GETTING_LINK: "Getting link...",
+        CLOSE: "Close",
+        COPPY_LINK: "Copy Link",
+        INFO: "Info",
+        AUTHOR: "Author",
+        UPDATED: "Updated",
+        PRIVACY: "Privacy",
+        WARNING: "Warning!",
+        SURE_TO_DELETE: "Are you sure to delete this item?",
+        DELETING: "Deleting...",
+        DONE_DELETED: "Proceed to delete!",
+        DELETE : "Delete",
+        VIEW: "View",
+        GET_SHARED_LINK: "Get shared link"
     },
     th: {
         name: "ไทย",
@@ -78,6 +99,7 @@ var langs = {
         WAIT_FOR_RE_SUBSCRIPTION: "รอการชำระเงินค่าสมาชิก",
         TITLE: "ชื่อเรื่อง",
         DROP_FILE_OR_CLICK_TO_UPLOAD: "ลากไล์มาวางไว้ หรือคลิกบนพื้นที่นี้",
+        ONLY_ALLOW_JPG: "กรุณาใช้ไฟล์ jpg",
         UNTITLED: "ยังไม่มีชื่อเรื่อง",
         DESCRIPTION: "คำอธิบาย",
         CATEGORY: "หมวดหมู่",
@@ -106,6 +128,33 @@ var langs = {
         WEBXR: "Web XR",
         ENTER_EMAIL: "กรอกอีเมล",
         ENTER_PASSWORD: "กรอกรหัสผ่าน",
-        ENTER_USERNAME: "กรอกชื่อผู้ใช้"
+        ENTER_USERNAME: "กรอกชื่อผู้ใช้",
+        YOUR_LONK_FOR: "ลิ้งค์ของคุณสำหรับ",
+        IS: "คือ ",
+        LOCATION: "ตำแหน่ง",
+        CHANGE_LOCATION: "แก้ไขตำแหน่ง",
+        ANYONE_WITH_LINK: "ผู้ที่มีลิงค์สามารถเข้าชม",
+        LINK_IS_COPPIED: "คัดลอกลิ้งค์แล้ว!",
+        GETTING_LINK: "กำลังรับลิ้งค์...",
+        CLOSE: "ปิด",
+        COPPY_LINK: "คัดลอกลิ้งค์",
+        INFO: "รายละเอียด",
+        AUTHOR: "ผู้สร้าง",
+        UPDATED: "อัปเดต",
+        PRIVACY: "ความเป็นส่วนตัว",
+        WARNING: "คำเตือน!",
+        SURE_TO_DELETE: "คุณแน่ใจว่าจะลบใช่หรือไม่?",
+        DELETING: "กำลังลบ...",
+        DONE_DELETED: "การลบเสร็จสิ้น!",
+        DELETE : "ลบ",
+        VIEW: "เข้าชม",
+        GET_SHARED_LINK: "แชร์ลิ้งค์"
+
+
+
+
+
+
+
     }
 }

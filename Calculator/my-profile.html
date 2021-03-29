@@ -33,7 +33,7 @@
       <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
         <span class="visually-hidden"></span>
       </div>
-      <span class="text-primary">Loading...</span>
+      <span class="text-primary">{{lang.LOADING}}...</span>
     </div>
 
     <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
@@ -52,21 +52,26 @@
               </a>
             </div>
           </div>
-          <!--<div class="col-lg-6 col-md-3">
-            <div class="b-ads">
+          <div class="col-lg-7 col-md-4">
+            <!-- <div class="b-ads">
               <a href="https://htmlcodex.com">
                 <img src="../img/ads-1.jpg" alt="Ads">
               </a>
-            </div>
-          </div>-->
-          <div class="col-lg-9 col-md-7" id="social">
-            <div class="text-right">
+            </div> -->
+          </div>
+          <div class="col-lg-2 col-md-3">
+            <i class="fas fa-language"></i>
+            <select id="langOption" class="form-control form-select" v-model="lang.code" v-on:change="selectLang">
+              <option value="en">English</option>
+              <option value="th">ไทย</option>
+            </select>
+            <!-- <div class="text-right">
               <a v-bind:href="LINKS.TWITTER" class="ml-3"><i class="fab fa-twitter"></i></a>
               <a v-bind:href="LINKS.FACEBOOK" class="ml-3"><i class="fab fa-facebook-f"></i></a>
               <a v-bind:href="LINKS.LINKEDIN" class="ml-3"><i class="fab fa-linkedin-in"></i></a>
               <a v-bind:href="LINKS.INSTAGRAM" class="ml-3"><i class="fab fa-instagram"></i></a>
               <a v-bind:href="LINKS.YOUTUBE" class="ml-3"><i class="fab fa-youtube"></i></a>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -77,15 +82,15 @@
     <div class="nav-bar">
       <div class="container">
         <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-          <a href="#" class="navbar-brand">MENU</a>
+          <a href="#" class="navbar-brand">{{lang.MENU}}</a>
           <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
           </button>
 
           <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
             <div class="navbar-nav mr-auto">
-              <a v-bind:href="PAGES.INDEX" class="nav-item nav-link">Home</a>
-              <a v-bind:href="PAGES.MYPROFILE" class="nav-item nav-link active">My Profile</a>
+              <a v-bind:href="PAGES.INDEX" class="nav-item nav-link">{{lang.HOME}}</a>
+              <a v-bind:href="PAGES.MYPROFILE" class="nav-item nav-link active">{{lang.MY_PROFILE}}</a>
             </div>
             <div class="d-grid gap-2" v-if="user !== null">
               <div class="btn-group profile-h">
@@ -104,27 +109,26 @@
                   <li>
                     <a class="dropdown-item" type="button" :href="PAGES.UPLOAD">
                       <i class="fas fa-plus"></i>
-                      <span class="ml-1">Add Upload</span>
+                      <span class="ml-1">{{lang.ADD_UPLOAD}}</span>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item" type="button" :href="PAGES.MYPROFILE">
-                      My Profile
+                      {{lang.MY_PROFILE}}
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item" type="button" :href="PAGES.LOGOUT">
-                      Log Out
+                      {{lang.LOG_OUT}}
                     </a>
                   </li>
                 </ul>
               </div>
             </div>
             <div class="social ml-auto d-grid gap-2 d-md-block" v-else>
-              <button v-on:click="window.location.href = PAGES.LOGIN" class="btn btn-primary" type="button">Log
-                in</button>
+              <button v-on:click="window.location.href = PAGES.LOGIN" class="btn btn-primary" type="button">{{lang.LOG_IN}}</button>
               <button v-on:click="window.location.href = PAGES.REGISTER" class="btn btn-primary"
-                type="button">Register</button>
+                type="button">{{lang.REGISTER}}</button>
             </div>
           </div>
         </nav>
@@ -137,7 +141,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Anyone with link can see {{link.title}}</h5>
+            <h5 class="modal-title" id="exampleModalLabel">{{lang.ANYONE_WITH_LINK}} {{link.title}}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -145,26 +149,26 @@
           <div class="modal-body">
             <div v-if="!link.isLoading">
               <i class="fas fa-link"></i>
-              <span class="ml-1">Your link for '{{link.title}}' is: </span>
+              <span class="ml-1">{{lang.YOUR_LONK_FOR}} '{{link.title}}' {{lang.IS}} </span>
               <p>
                 <input id="link-url" :value="link.url" style="width: 100%;">
               </p>
               <p v-if="link.isCopied">
-                Link is copied!
+                {{lang.LINK_IS_COPPIED}}
               </p>
             </div>
             <div v-if="link.isLoading">
               <div class="spinner-grow text-accent" style="width: 3rem; height: 3rem;" role="status">
                 <span class="visually-hidden"></span>
               </div>
-              <span class="text-primary">Getting link...</span>
+              <span class="text-primary">{{lang.GETTING_LINK}}</span>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{lang.CLOSE}}</button>
             <button v-if="!link.isLoading" v-on:click="copyLink" type="button" class="btn btn-primary">
               <i class="far fa-clipboard"></i>
-              <span class="ml-1">Copy Link</span>
+              <span class="ml-1">{{lang.COPPY_LINK}}</span>
             </button>
           </div>
         </div>
@@ -180,7 +184,7 @@
           <div class="modal-header">
             <h5 class="modal-title text-info" id="exampleModalLabel">
               <i class="fas fa-info-circle"></i>
-              <span class="ml-1">{{info.title}}' Info</span>
+              <span class="ml-1">{{info.title}}' {{lang.INFO}}</span>
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -190,7 +194,7 @@
             <div class="container">
               <div class="row mb-4">
                 <div class="col-3 text-right text-secondary">
-                  Title
+                  {{lang.TITLE}}
                 </div>
                 <div class="col-9 text-left">
                   {{info.title}}
@@ -198,7 +202,7 @@
               </div>
               <div class="row mb-4">
                 <div class="col-3 text-right text-secondary">
-                  Author
+                  {{lang.AUTHOR}}
                 </div>
                 <div class="col-9 text-left">
                   {{info.author.displayName}}
@@ -206,7 +210,7 @@
               </div>
               <div class="row mb-4">
                 <div class="col-3 text-right text-secondary">
-                  Location
+                  {{lang.LOCATION}}
                 </div>
                 <div class="col-9 text-left">
                   <a target="_blank"
@@ -217,7 +221,7 @@
               </div>
               <div class="row mb-4">
                 <div class="col-3 text-right text-secondary">
-                  Category
+                  {{lang.CATEGORY}}
                 </div>
                 <div class="col-9 text-left">
                   {{info.category}}
@@ -225,7 +229,7 @@
               </div>
               <div class="row mb-4">
                 <div class="col-3 text-right text-secondary">
-                  Updated
+                  {{lang.UPDATED}}
                 </div>
                 <div class="col-9 text-left">
                   {{info.updated}}
@@ -233,7 +237,7 @@
               </div>
               <div class="row mb-4">
                 <div class="col-3 text-right text-secondary">
-                  Privacy
+                  {{lang.PRIVACY}}
                 </div>
                 <div class="col-9 text-left">
                   <span>{{displayPrivacy(info)}}</span>
@@ -245,7 +249,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{lang.CLOSE}}</button>
           </div>
         </div>
       </div>
@@ -260,19 +264,19 @@
           <div class="modal-header">
             <h5 class="modal-title text-danger" id="exampleModalLabel">
               <i class="fas fa-exclamation-triangle"></i>
-              <span class="ml-1">Warning!</span>
+              <span class="ml-1">{{lang.WARNING}}</span>
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <span v-if="!deleteC.isLoading">Are you sure to delete this item?</span>
+            <span v-if="!deleteC.isLoading">{{lang.SURE_TO_DELETE}}</span>
             <div v-if="deleteC.isLoading">
               <div class="spinner-grow text-danger" style="width: 3rem; height: 3rem;" role="status">
                 <span class="visually-hidden"></span>
               </div>
-              <span class="text-primary">Deleting...</span>
+              <span class="text-primary">{{lang.DELETING}}</span>
             </div>
             <div v-if="deleteC.isError" class="alert alert-danger alert-dismissible fade show" v-if="isError"
               role="alert">
@@ -281,10 +285,9 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button v-if="!deleteC.isLoading" v-on:click="deleteNow" type="button" class="btn btn-danger">Proceed to
-              delete!</button>
+            <button v-if="!deleteC.isLoading" v-on:click="deleteNow" type="button" class="btn btn-danger">{{lang.DONE_DELETED}}</button>
             <button v-if="!deleteC.isLoading" type="button" class="btn btn-secondary"
-              data-dismiss="modal">Cancel</button>
+              data-dismiss="modal">{{lang.CANCEL}}</button>
           </div>
         </div>
       </div>
@@ -317,17 +320,17 @@
               <div class="name">Guest</div>
             </div>
             <div id="list-example" class="tabs">
-              <a id='edit-profile' class="my-upload">Edit Profile</a>
-              <a class="my-upload" href="#list-item-1">My Uploads</a>
-              <a class="my-add" href="#list-item-2">My Address</a>
-              <a class="my-pay" href="#list-item-3">Payment</a>
+              <a id='edit-profile' class="my-upload">{{lang.EDIT_PROFILE}}</a>
+              <a class="my-upload" href="#list-item-1">{{lang.MY_UPLOADS}}</a>
+              <a class="my-add" href="#list-item-2">{{lang.MY_ADDRESSES}}</a>
+              <a class="my-pay" href="#list-item-3">{{lang.MY_PAYMENTS}}</a>
             </div>
           </div>
         </div>
         <div class="col-xl-10 col-lg-9 col-md-8">
           <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0" class="scrollspy-example">
             <div id="list-item-1" class="list-item col" data-bs-target=".my-upload">
-              <h4>My Uploads</h4>
+              <h4>{{lang.MY_UPLOADS}}</h4>
               <div class="main-news">
                 <div class="container">
                   
@@ -335,7 +338,7 @@
                     <div class="col-xl-3 col-lg-4 col-md-6 p-1">
                       <div class="card" style="align-self: center;  height: 250px;">
                         <button v-on:click="window.location.href = PAGES.UPLOAD" class="btn btn-cate"
-                          style="height: 100%;"> + Add</button>
+                          style="height: 100%;"> {{lang.ADD_UPLOAD}}</button>
                       </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents.publishedC" >
@@ -360,24 +363,24 @@
                           <a v-if="!content.disabled" class="dropdown-item text-success"
                             :href="PAGES.WEBXR + `?id=${content.id}`">
                             <i class="far fa-eye"></i>
-                            <span class="ml-1">View</span>
+                            <span class="ml-1">{{lang.VIEW}}</span>
                           </a>
                           <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
                             class="dropdown-item text-accent">
                             <i class="fas fa-link"></i>
-                            <span class="ml-1">Get shared link</span>
+                            <span class="ml-1">{{lang.GET_SHARED_LINK}}</span>
                           </button>
                           <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
                             <i class="far fa-edit"></i>
-                            <span class="ml-1">Edit</span>
+                            <span class="ml-1">{{lang.EDIT_CONTENT}}</span>
                           </a>
                           <button class="dropdown-item" v-on:click="infoContent(content)">
                             <i class="fas fa-info-circle"></i>
-                            <span class="ml-1">Info</span>
+                            <span class="ml-1">{{lang.INFO}}</span>
                           </button>
                           <button class="dropdown-item" v-on:click="deleteContent(content)">
                             <i class="far fa-trash-alt"></i>
-                            <span class="ml-1">Delete</span>
+                            <span class="ml-1">{{lang.DELETE}}</span>
                           </button>
                         </div>
                       </div>
@@ -385,13 +388,8 @@
                   </div>
                   
                   <div class="row">
-                    <h4>Only people with link</h4>
-                    <div class="col-xl-3 col-lg-4 col-md-6 p-1">
-                      <div class="card" style="align-self: center;  height: 250px;">
-                        <button v-on:click="window.location.href = PAGES.UPLOAD" class="btn btn-cate"
-                          style="height: 100%;"> + Add</button>
-                      </div>
-                    </div>
+                    <h4>{{lang.ONLY_PEOPLE_WITH_LINK}}</h4>
+                    
                     <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents.linkC" >
                       <div class="card">
                         <div class="mn-img" :id="'dropdown-' + content.id" data-toggle="dropdown" aria-haspopup="true"
@@ -414,24 +412,24 @@
                           <a v-if="!content.disabled" class="dropdown-item text-success"
                             :href="PAGES.WEBXR + `?id=${content.id}`">
                             <i class="far fa-eye"></i>
-                            <span class="ml-1">View</span>
+                            <span class="ml-1">{{lang.VIEW}}</span>
                           </a>
                           <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
                             class="dropdown-item text-accent">
                             <i class="fas fa-link"></i>
-                            <span class="ml-1">Get shared link</span>
+                            <span class="ml-1">{{lang.GET_SHARED_LINK}}</span>
                           </button>
                           <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
                             <i class="far fa-edit"></i>
-                            <span class="ml-1">Edit</span>
+                            <span class="ml-1">{{lang.EDIT_CONTENT}}</span>
                           </a>
                           <button class="dropdown-item" v-on:click="infoContent(content)">
                             <i class="fas fa-info-circle"></i>
-                            <span class="ml-1">Info</span>
+                            <span class="ml-1">{{lang.INFO}}</span>
                           </button>
                           <button class="dropdown-item" v-on:click="deleteContent(content)">
                             <i class="far fa-trash-alt"></i>
-                            <span class="ml-1">Delete</span>
+                            <span class="ml-1">{{lang.DELETE}}</span>
                           </button>
                         </div>
                       </div>
@@ -439,13 +437,8 @@
                   </div>
 
                   <div class="row">
-                    <h4>Private</h4>
-                    <div class="col-xl-3 col-lg-4 col-md-6 p-1">
-                      <div class="card" style="align-self: center;  height: 250px;">
-                        <button v-on:click="window.location.href = PAGES.UPLOAD" class="btn btn-cate"
-                          style="height: 100%;"> + Add</button>
-                      </div>
-                    </div>
+                    <h4>{{lang.PRIVATE}}</h4>
+                    
                     <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents.privateC" >
                       <div class="card">
                         <div class="mn-img" :id="'dropdown-' + content.id" data-toggle="dropdown" aria-haspopup="true"
@@ -468,24 +461,24 @@
                           <a v-if="!content.disabled" class="dropdown-item text-success"
                             :href="PAGES.WEBXR + `?id=${content.id}`">
                             <i class="far fa-eye"></i>
-                            <span class="ml-1">View</span>
+                            <span class="ml-1">{{lang.VIEW}}</span>
                           </a>
                           <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
                             class="dropdown-item text-accent">
                             <i class="fas fa-link"></i>
-                            <span class="ml-1">Get shared link</span>
+                            <span class="ml-1">{{lang.GET_SHARED_LINK}}</span>
                           </button>
                           <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
                             <i class="far fa-edit"></i>
-                            <span class="ml-1">Edit</span>
+                            <span class="ml-1">{{lang.EDIT_CONTENT}}</span>
                           </a>
                           <button class="dropdown-item" v-on:click="infoContent(content)">
                             <i class="fas fa-info-circle"></i>
-                            <span class="ml-1">Info</span>
+                            <span class="ml-1">{{lang.INFO}}</span>
                           </button>
                           <button class="dropdown-item" v-on:click="deleteContent(content)">
                             <i class="far fa-trash-alt"></i>
-                            <span class="ml-1">Delete</span>
+                            <span class="ml-1">{{lang.DELETE}}</span>
                           </button>
                         </div>
                       </div>
@@ -493,13 +486,8 @@
                   </div>
 
                   <div class="row">
-                    <h4>Waiting for re-subscription</h4>
-                    <div class="col-xl-3 col-lg-4 col-md-6 p-1">
-                      <div class="card" style="align-self: center;  height: 250px;">
-                        <button v-on:click="window.location.href = PAGES.UPLOAD" class="btn btn-cate"
-                          style="height: 100%;"> + Add</button>
-                      </div>
-                    </div>
+                    <h4>{{lang.WAIT_FOR_RE_SUBSCRIPTION}}</h4>
+                    
                     <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents.disabledC" >
                       <div class="card">
                         <div class="mn-img" :id="'dropdown-' + content.id" data-toggle="dropdown" aria-haspopup="true"
@@ -522,24 +510,24 @@
                           <a v-if="!content.disabled" class="dropdown-item text-success"
                             :href="PAGES.WEBXR + `?id=${content.id}`">
                             <i class="far fa-eye"></i>
-                            <span class="ml-1">View</span>
+                            <span class="ml-1">{{lang.VIEW}}</span>
                           </a>
                           <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
                             class="dropdown-item text-accent">
                             <i class="fas fa-link"></i>
-                            <span class="ml-1">Get shared link</span>
+                            <span class="ml-1">{{lang.GET_SHARED_LINK}}</span>
                           </button>
                           <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
                             <i class="far fa-edit"></i>
-                            <span class="ml-1">Edit</span>
+                            <span class="ml-1">{{lang.EDIT_CONTENT}}</span>
                           </a>
                           <button class="dropdown-item" v-on:click="infoContent(content)">
                             <i class="fas fa-info-circle"></i>
-                            <span class="ml-1">Info</span>
+                            <span class="ml-1">{{lang.INFO}}</span>
                           </button>
                           <button class="dropdown-item" v-on:click="deleteContent(content)">
                             <i class="far fa-trash-alt"></i>
-                            <span class="ml-1">Delete</span>
+                            <span class="ml-1">{{lang.DELETE}}</span>
                           </button>
                         </div>
                       </div>
@@ -549,7 +537,7 @@
               </div>
             </div>
             <div id="list-item-2" class="list-item col" data-bs-target=".my-add">
-              <h4>My address</h4>
+              <h4>{{lang.MY_ADDRESSES}}</h4>
               <p>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
                 illo incidunt consectetur, voluptas possimus dolor distinctio
@@ -569,7 +557,7 @@
               </p>
             </div>
             <div id="list-item-3" class="list-item col" data-bs-target=".my-pay">
-              <h4>Payment</h4>
+              <h4>{{lang.MY_PAYMENTS}}</h4>
               <p>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
                 illo incidunt consectetur, voluptas possimus dolor distinctio
@@ -721,6 +709,8 @@
   <script src="vendor/vue-router.js"></script>
   <script src="vendor/firebase-config.js"></script>
   <script src="vendor/apis.js"></script>
+  <script src="vendor/langs.js"></script>
+
 
   <!-- Template Javascript -->
   <script src="js/myprofile.js"></script>

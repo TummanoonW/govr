@@ -12,69 +12,101 @@
     <script src="vendor/jquery.min.js"></script>
     <link rel="stylesheet" href="css/upload.css">
     <link rel="stylesheet" href="css/main.css">
+    <link href="./assets/favicon.svg" rel="icon" />
+
 </head>
 
 <body>
-    <!-- Nav Bar Start -->
-    <div class="nav-bar">
-        <div class="container">
-            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-                <a href="#" class="navbar-brand">MENU</a>
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <div id="app">
+        <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
+            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden"></span>
+            </div>
+            <span class="text-primary">{{lang.LOADING}}</span>
+        </div>
 
-                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                    <div class="navbar-nav mr-auto">
-                        <a href="index.html" class="nav-item nav-link">Home</a>
+        <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
+            <i class="far fa-times-circle"></i>
+            <span class="ml-2">{{error}}</span>
+        </div>
+        <!-- Nav Bar Start -->
+        <div class="nav-bar">
+            <div class="container">
+                <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                    <a href="#" class="navbar-brand">{{lang.MENU}}</a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                        <a href="my-profile.html" class="nav-item nav-link">My Profile</a>
-                    </div>
-                    <!-- <div class="social ml-auto">
-						<a href=""><i class="fab fa-twitter"></i></a>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto">
+                            <a href="index.html" class="nav-item nav-link">{{lang.HOME}}</a>
+
+                            <a href="my-profile.html" class="nav-item nav-link">{{lang.MY_PROFILE}}</a>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fas fa-language text-light"></i>
+                            <select id="langOption" class="form-control form-select" v-model="lang.code"
+                                v-on:change="selectLang">
+                                <option value="en">English</option>
+                                <option value="th">ไทย</option>
+                            </select>
+                            <!-- <a href=""><i class="fab fa-twitter"></i></a>
 						<a href=""><i class="fab fa-facebook-f"></i></a>
 						<a href=""><i class="fab fa-linkedin-in"></i></a>
 						<a href=""><i class="fab fa-instagram"></i></a>
-						<a href=""><i class="fab fa-youtube"></i></a>
-					</div> -->
+						<a href=""><i class="fab fa-youtube"></i></a> -->
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- Nav Bar End -->
+
+        <div class="container">
+            <div class="row1 row justify-content-md-center align-items-center">
+                <div class=" col-lg-6">
+                    <div class="img">
+                        <form action="/upload" class="dropzone needsclick dz-clickable" id="demo-upload">
+                            <div class="dz-message needsclick">
+                                <button type="button" class="dz-button">{{ lang.DROP_FILE_OR_CLICK_TO_UPLOAD }}<br> {{lang.ONLY_ALLOW_JPG}}</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </nav>
-        </div>
-    </div>
-    <!-- Nav Bar End -->
-    <div id="app">
-        <div class="img">
-            <form action="/upload" class="dropzone needsclick dz-clickable" id="demo-upload">
-                <div class="dz-message needsclick">
-                    <button type="button" class="dz-button">Drop files or click to upload.</button>
+                <div class=" col-lg-6">
+                    <div class="detail">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">{{lang.TITLE}}</label>
+                            <input v-model="lang.UNTITLED" type="text" class="form-control" id="title" name="title"
+                                placeholder="Untitled">
+                        </div>
+                        <div class="mb-3">
+                            <textarea v-model="lang.DESCRIPTION" class="form-control " id="description" name="description"
+                                rows="6" placeholder="Description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <input v-model="lang.CATEGORY" class="form-control" list="datalistOptions" id="category"
+                                name="category" placeholder="Category">
+                            <datalist id="datalistOptions">
+                                <option v-for="category in categories" :value=category.label>
+                            </datalist>
+                        </div>
+                        <div class="text-right">
+                            <button v-on:click="back" type="button" class="btn btn-outline-primary">{{lang.CANCEL}}</button>
+                            <button v-on:click="setContent(title,description,category)" id="myBtn" type="button"
+                                class="btn btn-primary">
+                                <span class="mr-1">{{lang.CREATE}}</span>
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <!-- v-on:click="create(title, description, category)" -->
+                        </div>
+                    </div>
                 </div>
-            </form>
-        </div>
-        <div class="detail">
-            <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input v-model="title" type="text" class="form-control" id="title" name="title" placeholder="Untitled">
-            </div>
-            <div class="mb-3">
-                <textarea v-model="description" class="form-control " id="description" name="description" rows="6"
-                    placeholder="Description"></textarea>
-            </div>
-            <div class="mb-3">
-                <input v-model="category" class="form-control" list="datalistOptions" id="category" name="category"
-                    placeholder="Category">
-                <datalist id="datalistOptions">
-                    <option v-for="category in categories" :value=category.label>
-                </datalist>
-            </div>
-            <div class="text-right">
-                <button v-on:click="toHome" type="button" class="btn btn-outline-primary">Cancle</button>
-                <button v-on:click="setContent(title,description,category)" id="myBtn" type="button"class="btn btn-primary">
-                    <span class="mr-1">Create</span>
-                    <i class="fas fa-plus"></i>
-                </button>
-                <!-- v-on:click="create(title, description, category)" -->
             </div>
         </div>
+
+
         <!--เมื่อกด upload จะ pop up หน้าสำหรับใส่ location และสาามารถเพิ่ม scene ที่เป็น 360 เพิ่มได้-->
         <!--เมื่อ เพิ่มรูป ภาพพื้นหลังจะเปลี่ยนไปเป็นภาพที่โหลดขึ้นมา และสามารถลบได้-->
         <!--set location for image-->
@@ -86,31 +118,32 @@
                 <nav class="navbar navbar-light bg-light">
                     <div class="container-fluid">
                         <div class="search d-flex">
-                            <input v-on:keyup.enter="searchPlace(query)" v-model="query" id="loc" name="loc" class="form-control me-2" type="search" style="height: 50px" placeholder="Search" aria-label="Search">
-                            <button v-on:click="searchPlace(query)" class="ml-2 btn btn-outline-success" style="height: 50px" type="button">
+                            <input v-on:keyup.enter="searchPlace(query)" v-model="query" id="loc" name="loc"
+                                class="form-control me-2" type="search" style="height: 50px" placeholder="Search"
+                                aria-label="Search">
+                            <button v-on:click="searchPlace(query)" class="ml-2 btn btn-outline-success"
+                                style="height: 50px" type="button">
                                 <i class="fas fa-search"></i>
-                                Search
+                                {{lang.SEARCH}}
                             </button>
                         </div>
                     </div>
                 </nav>
-    
+
                 <!-- Map -->
-                <div id="googleMap" style="width:100%;height:400px; background: #888;"></div>
-                Latitude: {{ content.place.location.lat }}<br>
-                Longitude: {{ content.place.location.lng }}
+                <div id="googleMap" style="width:100%;height:500px; background: #888;"></div>
                 <!-- Map -->
-    
+
                 <div class="control-container">
                     <div class="row">
                         <div class="col-3">
-                            <button type="button" id="back" class="back btn btn-outline-primary">Back</button>
+                            <button type="button" id="back" class="back btn btn-outline-primary">{{lang.BACK}}</button>
                         </div>
                         <div class="col-4">
                         </div>
                         <div class="col-5">
                             <button type="button" id="continue" class="continue btn btn-primary">
-                                <span class="mr-1">Continue</span>
+                                <span class="mr-1">{{lang.CONTINUE}}</span>
                                 <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
@@ -118,52 +151,75 @@
                 </div>
             </div>
         </div>
+
         <!-- The second Modal -->
         <div id="myModal2" class="modal2">
             <!-- Second modal content -->
             <div class="modal-content">
-                <span class="close2">&times;</span>
-                <nav class="navbar navbar-light bg-light">
-                    <div class="container-fluid" style="justify-content: center;">
-                        <a>Plese select your thumbnail</a>
-                    </div>
-                </nav>
-                <div class="thumpnail">
-                    <div class="img2">
-                        <form action="/upload" class="dropzone needsclick dz-clickable" id="upload">
-                            <div class="dz-message needsclick">
-                                <button type="button" class="dz-button">Drop files or click to upload.</button>
+                <div class="container ">
+                    <div class="row align-items-start">
+                        <div class="col">
+                            <span class="close2">&times;</span>
+                            <div class="navbar navbar-light bg-light">
+                                <div class="container-fluid" style="justify-content: center; margin-bottom: 15px;">
+                                    <a>{{lang.PLEASE_SELECT_YOUR_THUMBNAIL}}</a>
+                                </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="inputState">Select content privacy</label>
-                        <select v-model="privacy" id="privacy" class="privacy form-control">
-                            <option selected>Choose...</option>
-                            <option value="public">Public</option>
-                            <option value="only-link">Only people with link</option>
-                            <option value="private">Private</option>
-                        </select>
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="tbn">
+                                <form action="/upload" class="dropzone needsclick dz-clickable" id="upload">
+                                    <div class="dz-message needsclick">
+                                        <button type="button" class="dz-button">{{lang.DROP_FILE_OR_CLICK_TO_UPLOAD}} <br> {{lang.ONLY_ALLOW_JPG}}</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="inputState">{{lang.SELECT_CONTENT_PRIVACY}}</label>
+                                <select v-model="privacy" class="privacy form-control" id="privacy">
+                                    <option value="public">{{lang.PUBLIC}}</option>
+                                    <option value="only-link">{{lang.ONLY_PEOPLE_WITH_LINK}}</option>
+                                    <option value="private">{{lang.PRIVATE}}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="control-container">
                     <div class="row">
-                        <div class="col-3">
-                            <button type="button" id="back" class="back2 btn btn-outline-primary">Back</button>
+                        <div class=" col">
+                            <div class="control-container">
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" id="back"
+                                            class="back2 btn btn-outline-primary">{{lang.BACK}}</button>
+                                    </div>
+
+                                    <div class="col">
+                                        <button v-if="privacy !== 'private'" @click="setThumbnail(privacy)"
+                                            type="button" id="continue" class="continue2 btn btn-primary">
+                                            <span class="mr-1">{{lang.SAVE_AND_SHARE}}</span>
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                        <button v-if="privacy === 'private'" @click="setThumbnail(privacy)"
+                                            type="button" id="continue" class="continue2 btn btn-primary">
+                                            <span>{{lang.SAVE}}</span>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-4">
-                        </div>
-                        <div class="col-5">
-                            <button v-if="privacy !== 'private'" @click="setThumbnail(privacy)" type="button" id="continue" class="continue2 btn btn-primary">
-                                <span class="mr-1">Save & Share</span>
-                                <i class="fas fa-share-alt"></i>
-                            </button>
-                            <button v-if="privacy === 'private'" @click="setThumbnail(privacy)" type="button" id="continue" class="continue3 btn btn-primary">
-                                <span>Save</span>
-                            </button>
-                        </div>
+
                     </div>
+
                 </div>
+
+
+
+
             </div>
         </div>
         <!-- The Modal -->
@@ -176,6 +232,18 @@
                 </div>
             </div>
         </div>
+
+        <!-- The Modal -->
+        <div id="myModal4" class="modal4">
+
+            <!-- Modal content -->
+            <div class="modal-content4">
+                <span class="close">&times;</span>
+                <p>{{lang.YOUR_LONK_FOR}} '{{ content.title }}' {{lang.IS}} <a :href='link'> {{ link.url }} </a></p>
+            </div>
+
+        </div>
+
     </div>
 </body>
 <script src="./dropzone-5.7.0/dropzone-5.7.0/dist/dropzone.js"></script>
@@ -198,13 +266,15 @@
 <!--REQUIRED SCRIPTS//-->
 
 <!-- //GOOGLE MAP & PLACE APIs -->
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdJYPHvhaFuT1i2DyAlnuNOdSWHZCcaj4&libraries=places&callback=initMap" type="text/javascript"></script>
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdJYPHvhaFuT1i2DyAlnuNOdSWHZCcaj4&libraries=places&callback=initMap"
+    type="text/javascript"></script>
 <!-- GOOGLE MAP & PLACE APIs// -->
 
-<script src="vendor/contents.js"></script>
-<script src="vendor/category.js"></script>
 <script src="vendor/firebase-config.js"></script>
 <script src="vendor/apis.js"></script>
+<script src="vendor/langs.js"></script>
+
 
 <script src="js/upload.js"></script>
 

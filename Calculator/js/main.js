@@ -32,24 +32,52 @@ var app = new Vue({
     auth: {},
     user: {},
     contentCat: [],
-    cont: '',
+    cont: "",
     isLoading: false,
     isError: false,
-    error: ""
+    error: "",
   },
   created: function () {
-    langs.getSelected()
-      .then(lang => {
-        this.lang = lang;
+    langs.getSelected().then((lang) => {
+      this.lang = lang;
+    });
+
+    //Get uer from local storage
+    this.auth = JSON.parse(localStorage.getItem(DB.AUTH));
+    this.user = JSON.parse(localStorage.getItem(DB.USER));
+    //Get category from local storage
+    this.category = localStorage.getItem(DB.CATEGORY);
+    this.isLoading = true;
+
+    apis
+      .allCategories()
+      .then((data) => {
+        this.categories = data;
+      })
+      .catch((error) => {
+        this.isError = true;
+        this.error = error;
+      });
+
+    apis
+      .getContentsNewest()
+      .then((data) => {
+        this.contents = data;
+        this.isLoading = false;
+        this.isError = false;
+      })
+      .catch((error) => {
+        this.isLoading = false;
+        this.isError = true;
+        this.error = error;
       });
   },
   methods: {
     selectLang: function () {
       langs.selectLanguage(this.lang.code);
-      langs.getSelected()
-        .then(lang => {
-          this.lang = lang;
-        });
+      langs.getSelected().then((lang) => {
+        this.lang = lang;
+      });
     },
     toLogin: function () {
       window.location.href = PAGES.LOGIN;
@@ -67,9 +95,8 @@ var app = new Vue({
       window.location.href = PAGES.UPLOAD;
     },
     toWebXR: function (content) {
-      localStorage.setItem(DB.CONTENT, JSON.stringify(content))
+      localStorage.setItem(DB.CONTENT, JSON.stringify(content));
       window.location.href = PAGES.WEBXR + `?id=${content.id}`;
-
     },
     logout: () => {
       firebase
@@ -88,40 +115,7 @@ var app = new Vue({
     },
     goToCat: (cat) => {
       window.location.href = PAGES.CATEGORY + `?label=${cat.label}`;
-    }
+    },
   },
 });
-
-init();
-async function init() {
-  //Get uer from local storage
-  app.auth = JSON.parse(localStorage.getItem(DB.AUTH));
-  app.user = JSON.parse(localStorage.getItem(DB.USER));
-  //Get category from local storage
-  app.category = localStorage.getItem(DB.CATEGORY);
-
-  initData();
-}
-
-function initData() {
-  app.isLoading = true;
-
-  apis.allCategories().then(data => {
-    app.categories = data;
-  }).catch(error => {
-    app.isError = true;
-    app.error = error
-  });
-
-  apis.getContentsNewest().then(data => {
-    app.contents = data
-    app.isLoading = false;
-    app.isError = false;
-  }).catch(error => {
-    app.isLoading = false;
-    app.isError = true;
-    app.error = error
-  });
-
-}
 

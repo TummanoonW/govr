@@ -5,19 +5,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>webxr</title>
+    <title id="tab">{{ title }}</title>
     <script src="https://aframe.io/releases/0.4.0/aframe.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/webxr.css" rel="stylesheet" />
+    <link href="./assets/favicon.svg" rel="icon" />
+
 </head>
 
 <body>
     <div>
         <div class="row">
             <div class="tes col-xl-9 col-lg-8 col-md-12">
+                <div id="menu" class="menu">
+                    <button type="button" class="btn btn-primary"><i class="fas fa-bars"></i></button>
+                </div>
                 <a-scene>
                     <a-sky id="img360" :src="content.image360"></a-sky>
                 </a-scene>
+
                 <div id="scene" class="row  align-items-end">
                     <div class="scene col-6 col-md-12">
                         <div id="scene" class="sceneTitle">
@@ -25,30 +31,106 @@
                         </div>
                     </div>
                 </div>
+                <div id="m" class="m">
+                    <div id="myModal" class="modal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <h5 style="text-align: center; background: #082c44; color: #fee6e2;">Info</h5>
+                            <div class="detail">
+                                <a>Title :</a>
+                                <h6> {{ content.title}} </h6>
+                            </div>
+                            <div class="detail">
+                                <a>Location :</a>
+                                <h6> {{ place.title}} </h6>
+                            </div>
+                            <div class="detail">
+                                <a> Description : </a>
+                                <h6> {{ content.description}} </h6>
+                            </div>
+                            <div class="detail">
+                                <a>Category :</a>
+                                <h6> {{ cate }} </h6>
+                            </div>
+                            <div class="detail">
+                                <a>Date :</a>
+                                <h6> {{ date }} </h6>
+                            </div>
+                            <div v-if="user.uid == content.uid" class="detail-btn">
+                                <button @click="getSharedLink" type="button"
+                                    class="btn btn-primary btn-lg btn-block">Shared link</button>
+                                <button @click="toEdit" type="button" class="btn btn-primary btn-lg btn-block">Edit
+                                    content </button>
+                                <button @click="toggle(2)" type="button"
+                                    class="btn btn-primary btn-lg btn-block">Back</button>
+                            </div>
+                            <div v-else="" class="detail-btn">
+                                <button @click="toggle(2)" type="button"
+                                    class="btn btn-primary btn-lg btn-block">Back</button>
+                            </div>
+
+                            <div id="myLink" class="link">
+
+                                <!-- Modal content -->
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+                                    <p>Your link for '{{ content.title }}' is :<br> <a :href='link'> {{link}} </a> </p>
+                                </div>
+            
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
             <div id="app" class="info col-xl-3 col-lg-4 col-md-12">
+
+                <!-- The Modal -->
+                <div id="myLink" class="link">
+
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <p>Your link for '{{ content.title }}' is : <a :href='link'> {{link}} </a> </p>
+                    </div>
+
+                </div>
                 <div class="tn">
                     <img id="thumbnail" :src='content.thumbnail' alt="thumbnail">
                 </div>
                 <div class="detail">
-                    <input type="text" name="title" :value=content.title>
+                    <i @click="getSharedLink" class="fas fa-link"></i>
+                    <i @click="toEdit" class="far fa-edit"></i>
+
                 </div>
                 <div class="detail">
-                    <input type="text" name="Locations" placeholder="content.location">
+                    <a>Title :</a>
+                    <h4> {{ content.title}} </h4>
                 </div>
                 <div class="detail">
-                    <label for="description">Description</label><br>
-                    <textarea name="description" id="description" rows="10":value=content.description></textarea>
+                    <a>Location :</a>
+                    <h4> {{ place.title}} </h4>
                 </div>
                 <div class="detail">
-                    <input v-model='cate' type="text" name="category" disabled>
+                    <a> Description : </a>
+                    <h4> {{ content.description}} </h4>
+
                 </div>
                 <div class="detail">
-                    <input v-model="date" type="text" name="date" disabled>
+                    <a>Category :</a>
+                    <h4> {{ cate}} </h4>
                 </div>
                 <div class="detail">
-                    <input type="text" name="link" value="contentLink" disabled>
+                    <a>Date :</a>
+                    <h4> {{ date }} </h4>
                 </div>
+
+
+
             </div>
         </div>
     </div>
@@ -66,12 +148,12 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
     <!--REQUIRED SCRIPTS//-->
-    
+
     <script src="vendor/fontawesome.js"></script>
     <script src="vendor/vue.js"></script>
     <script src="vendor/vue-router.js"></script>
     <script src="vendor/firebase-config.js"></script>
-	<script src="vendor/apis.js"></script>
+    <script src="vendor/apis.js"></script>
 
     <script src="js/webxr.js"></script>
 </body>
