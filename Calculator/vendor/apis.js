@@ -3,7 +3,7 @@ var apis = {
   registerUser: function (user, userInfo) {
     return new Promise((resolve, reject) => {
       const body = {
-        data: JSON.parse({ u: user, uinfo: userInfo })
+        data: JSON.stringify({ u: user, uinfo: userInfo })
       }
       $.post(
         "https://us-central1-govr-42c7d.cloudfunctions.net/api/users/register",
@@ -94,7 +94,7 @@ var apis = {
   createContent: function (content) {
     return new Promise((resolve, reject) => {
       const body = {
-        data: JSON.parse(content)
+        data: JSON.stringify(content)
       }
       $.post(
         `https://us-central1-govr-42c7d.cloudfunctions.net/api/contents/create`,
@@ -110,7 +110,7 @@ var apis = {
   updateContent: function (content) {
     return new Promise((resolve, reject) => {
       const body = {
-        data: JSON.parse(content)
+        data: JSON.stringify(content)
       }
       $.ajax({
         method: "PUT",
