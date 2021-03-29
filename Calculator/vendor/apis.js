@@ -2,9 +2,12 @@ var apis = {
   // <USER CMS FUNCTIONS>
   registerUser: function (user, userInfo) {
     return new Promise((resolve, reject) => {
+      const body = {
+        data: JSON.parse({ u: user, uinfo: userInfo })
+      }
       $.post(
         "https://us-central1-govr-42c7d.cloudfunctions.net/api/users/register",
-        { u: user, uinfo: userInfo },
+        body,
         function (data) {
           resolve(data);
         }
@@ -90,9 +93,12 @@ var apis = {
   },
   createContent: function (content) {
     return new Promise((resolve, reject) => {
+      const body = {
+        data: JSON.parse(content)
+      }
       $.post(
         `https://us-central1-govr-42c7d.cloudfunctions.net/api/contents/create`,
-        content,
+        body,
         function (data) {
           resolve(data);
         }
@@ -103,10 +109,13 @@ var apis = {
   },
   updateContent: function (content) {
     return new Promise((resolve, reject) => {
+      const body = {
+        data: JSON.parse(content)
+      }
       $.ajax({
         method: "PUT",
         url: `https://us-central1-govr-42c7d.cloudfunctions.net/api/contents/update`,
-        data: content,
+        data: body,
       }).done(function (data) {
         resolve(data);
       });
