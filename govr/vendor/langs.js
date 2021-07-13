@@ -79,7 +79,8 @@ var langs = {
         DONE_DELETED: "Proceed to delete!",
         DELETE : "Delete",
         VIEW: "View",
-        GET_SHARED_LINK: "Get shared link"
+        GET_SHARED_LINK: "Get shared link",
+        CART: 'Cart'
     },
     th: {
         name: "ไทย",
@@ -148,7 +149,8 @@ var langs = {
         DONE_DELETED: "การลบเสร็จสิ้น!",
         DELETE : "ลบ",
         VIEW: "เข้าชม",
-        GET_SHARED_LINK: "แชร์ลิ้งค์"
+        GET_SHARED_LINK: "แชร์ลิ้งค์",
+        CART: "ตะกร้าสินค้า"
 
 
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout</title>
+  <link href="./assets/favicon.svg" rel="icon" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div id="app">
+    <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
+      <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden"></span>
+      </div>
+      <span class="text-primary">Loading...</span>
+    </div>
+
+    <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
+      <i class="far fa-times-circle"></i>
+      <span class="ml-2">{{error}}</span>
+    </div>
+  </div>
+  
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
+  <!--REQUIRED SCRIPTS//-->
+  <script src="vendor/vue.js"></script>
+  <script src="vendor/vue-router.js"></script>
+  <script src="vendor/firebase-config.js"></script>
+  <script src="vendor/apis.js"></script>
+ 
+
+  <script src="js/checkout.js"></script>
+</body>
+
+</html>

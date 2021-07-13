@@ -1,6 +1,3 @@
-// Able to update thumbnail
-// Able to change location
-
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const id = urlParams.get("id");
@@ -26,6 +23,8 @@ var app = new Vue({
     isLoading: false,
     isError: false,
     error: "",
+    location:{},
+    stored: {}
   },
   created: async function () {
     langs.getSelected().then((lang) => {
@@ -34,9 +33,12 @@ var app = new Vue({
 
     this.isLoading = true;
     const auth = await JSON.parse(localStorage.getItem(DB.AUTH));
-    this.auth = auth;
+    console.log(auth)
+    if (auth == null) {
+      window.location.href = PAGES.INDEX
+    }
 
-    ContentById(id);
+    await ContentById(auth,id);
 
     apis.allCategories().then((data) => {
       this.categories = data;
@@ -59,6 +61,23 @@ var app = new Vue({
         console.log(err.message);
       }
     },
+    openMap: (num) => {
+      var map = document.getElementById('myModal')
+      
+      if(num == 1){
+        map.style.display = 'block';
+      }
+      else{
+        map.style.display = 'none';
+      }
+    },
+    updateLocation: ()=> {
+      app.content.place = app.stored
+      app.place = app.stored
+
+      var map = document.getElementById('myModal')
+      map.style.display = 'none'
+    }
   },
 });
 
@@ -86,6 +105,15 @@ function initMap() {
 function searchPlace(query) {
   service = new google.maps.places.PlacesService(map);
 
+  const example = {
+    title: "Dhurakij Pundit University",
+    location: { lat: 13.8707137, lng: 100.5484985 },
+  };
+  map = new google.maps.Map(document.getElementById("googleMap"), {
+    center: example.location,
+    zoom: 15,
+  });
+
   const request = {
     query: query,
     fields: ["name", "geometry"],
@@ -98,7 +126,7 @@ function searchPlace(query) {
           title: results[i].name,
           location: results[i].geometry.location,
         };
-        console.log(place);
+        console.log(JSON.stringify(place));
         createMarker(place);
       }
       map.setCenter(results[0].geometry.location);
@@ -107,8 +135,8 @@ function searchPlace(query) {
 }
 
 function createMarker(place) {
-  app.query = place.title;
-  app.content.place = place;
+  app.stored = place;
+  console.log(app.stored)
   const marker = new google.maps.Marker({
     position: place.location,
     title: place.title,
@@ -137,18 +165,24 @@ async function uploadContent() {
   }
 }
 
-function ContentById(id) {
+function ContentById(auth,id) {
   this.isLoading = true;
   apis
     .getContent(id)
     .then((con) => {
-      app.isLoading = false;
-      app.isError = false;
-      console.log(con);
-      app.content = con;
-      app.cat = con.category;
-      tab.title = con.title;
-      app.place = con.place;
+      if (auth.uid !== con.uid) {
+        window.location.href = PAGES.INDEX
+      }else{
+        app.isLoading = false;
+        app.isError = false;
+        console.log(con);
+        app.content = con;
+        app.cat = con.category;
+        tab.title = con.title;
+        app.place = con.place;
+        app.location = con.place['location']
+      }
+      
     })
     .catch((error) => {
       app.isLoading = false;

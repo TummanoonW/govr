@@ -21,6 +21,8 @@ const userInfoRef = db.collection("UserInfo");
 const contentsRef = db.collection("Contents");
 const linksRef = db.collection("Links");
 const categoryRef = db.collection("Category");
+const billRef = db.collection("Bills");
+const subscriptionRef = db.collection("Subscriptions");
 
 //firebase storage
 const imgRef = storage.ref().child('360');
@@ -46,7 +48,9 @@ const PAGES = {
   CATEGORY: "category.html",
   UPLOAD: "upload.html",
   WEBXR: "webxr.html",
-  EDIT: "edit.html"
+  EDIT: "edit.html",
+  CART: "cart.html",
+  CHECKOUT: "checkout.html"
 };
 
 const LINKS = {

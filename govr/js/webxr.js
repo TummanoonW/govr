@@ -19,6 +19,7 @@ var app = new Vue({
     error: "",
     place: "",
     link: {},
+    location: {}
   },
   methods: {
     toEdit: () => {
@@ -52,7 +53,8 @@ var menu = new Vue({
     date: "",
     cate: "",
     user: {},
-    link:{}
+    link:{},
+    location: {}
   },
   methods: {
     toEdit: () => {
@@ -145,12 +147,14 @@ function ContentById(id) {
       scene.content = data;
       app.cate = data.cat.title;
       menu.cate = data.cat.title;
-      app.date = new Date(data.date["_seconds"] * 1000);
-      menu.date = new Date(data.date["_seconds"] * 1000);
+      app.date = data.date;
+      menu.date = data.date;
       app.place = data.place;
+      app.location = data.place.location;
       tab.title = data.title;
       menu.content = data;
       menu.place = data.place;
+      menu.location = data.place.location;
       var storage = firebase.storage();
       const img360 = storage.refFromURL(data.image360);
       intialApp(img360);

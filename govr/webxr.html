@@ -42,7 +42,7 @@
                             </div>
                             <div class="detail">
                                 <a>Location :</a>
-                                <h6> {{ place.title}} </h6>
+                                <h6> <a target="_blank" :href="`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`">{{place.title}}</a> </h6>
                             </div>
                             <div class="detail">
                                 <a> Description : </a>
@@ -113,7 +113,7 @@
                 </div>
                 <div class="detail">
                     <a>Location :</a>
-                    <h4> {{ place.title}} </h4>
+                    <h4> <a target="_blank" :href="`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`">{{place.title}}</a></h4>
                 </div>
                 <div class="detail">
                     <a> Description : </a>
