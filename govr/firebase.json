@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "govr-360",
     "public": "./",
     "ignore": [
       "firebase.json",

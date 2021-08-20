@@ -11,17 +11,7 @@
 
 <body>
   <div id="app">
-    <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
-      <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="visually-hidden"></span>
-      </div>
-      <span class="text-primary">Loading...</span>
-    </div>
-
-    <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
-      <i class="far fa-times-circle"></i>
-      <span class="ml-2">{{error}}</span>
-    </div>
+    <div id="loading-layout"></div>
   </div>
   
   <!-- JavaScript Libraries -->
@@ -42,7 +32,8 @@
   <script src="vendor/vue-router.js"></script>
   <script src="vendor/firebase-config.js"></script>
   <script src="vendor/apis.js"></script>
- 
+  <script src="vendor/layout.js"></script>
+
 
   <script src="js/checkout.js"></script>
 </body>

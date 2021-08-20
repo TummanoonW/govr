@@ -21,50 +21,9 @@
 
 <body>
     <div id="app">
-        <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
-            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden"></span>
-            </div>
-            <span class="text-primary">{{lang.LOADING}}</span>
-        </div>
+        <div id="loading-layout"></div>
 
-        <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
-            <i class="far fa-times-circle"></i>
-            <span class="ml-2">{{error}}</span>
-        </div>
-        <!-- Nav Bar Start -->
-        <div class="nav-bar">
-            <div class="container">
-                <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-                    <a href="#" class="navbar-brand">{{lang.MENU}}</a>
-                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        <div class="navbar-nav mr-auto">
-                            <a href="index.html" class="nav-item nav-link">{{lang.HOME}}</a>
-
-                            <a href="my-profile.html" class="nav-item nav-link">{{lang.MY_PROFILE}}</a>
-                        </div>
-                        <div class="ml-auto">
-                            <i class="fas fa-language text-light"></i>
-                            <select id="langOption" class="form-control form-select" v-model="lang.code"
-                                v-on:change="selectLang">
-                                <option value="en">English</option>
-                                <option value="th">ไทย</option>
-                            </select>
-                            <!-- <a href=""><i class="fab fa-twitter"></i></a>
-						<a href=""><i class="fab fa-facebook-f"></i></a>
-						<a href=""><i class="fab fa-linkedin-in"></i></a>
-						<a href=""><i class="fab fa-instagram"></i></a>
-						<a href=""><i class="fab fa-youtube"></i></a> -->
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div>
-        <!-- Nav Bar End -->
+        <div id="navbar-layout2"></div>
 
         <div class="container">
             <div class="row1 row justify-content-md-center align-items-center">
@@ -89,11 +48,10 @@
                         </div>
                         <div class="mb-3">
                             <label for="datalistOptions" class="form-label">{{lang.CATEGORY}}</label>
-                            <input v-model="content.category" class="form-control" list="datalistOptions" id="category"
-                                name="category" :placeholder="cat">
-                            <datalist id="datalistOptions">
-                                <option v-for="category in categories" :value=category.label>
-                            </datalist>
+                            <select v-model="category" class="form-control" id="category"
+                                name="category" placeholder="Category">
+                                <option v-for="category in categories" :value="category.label">{{category.title}}</option>              
+                            </select>
 
                         </div>
                         <div class="mb-3">
@@ -201,6 +159,8 @@
 <script src="vendor/firebase-config.js"></script>
 <script src="vendor/apis.js"></script>
 <script src="vendor/langs.js"></script>
+<script src="vendor/layout.js"></script>
+
 
 <script src="js/edit.js"></script>
 

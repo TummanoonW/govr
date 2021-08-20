@@ -36,21 +36,29 @@ var app = new Vue({
   el: "#app",
   data: {
     lang: { name: "", code: "" },
+    auth: null,
+    user: null,
+    userinfo: null,
+    isLoading: false,
+    isError: false,
+    error: "",
+    categories: [],
     contents: {
       publishedC: [],
       privateC: [],
       disabledC: [],
       linkC: [],
     },
-    categories: [],
-    name: "Hi from data",
-    auth: {},
-    user: {},
     contentCat: [],
     cont: "",
     deleteC: {
       isLoading: false,
       isError: false,
+    },
+    updateU:{
+      isLoading: false,
+      isError: false,
+      error: null
     },
     info: {
       author: {},
@@ -61,12 +69,13 @@ var app = new Vue({
       isLoading: false,
       isCopied: false,
     },
-    isLoading: false,
-    isError: false,
-    error: "",
     place: {},
+    userInfoFilled: false,
+    orders: null
   },
   created: async function () {
+    document.querySelector("#tabProfile").setAttribute('class', 'nav-item nav-link active')
+
     langs.getSelected().then((lang) => {
       this.lang = lang;
     });
@@ -76,59 +85,49 @@ var app = new Vue({
     this.user = await JSON.parse(localStorage.getItem(DB.USER));
     this.isLoading = true;
     // Use API to get user's subscription
-    let sub = (await subscriptionRef.where('uid', '==', this.auth.uid).get()).docs[0].data()
+    //let sub = (await subscriptionRef.where('uid', '==', this.auth.uid).get()).docs[0].data()
+    let sub = null //USE RESFUL APIs instead
 
+    try {
+      if (this.auth != null) {
+        //calling user info
+        this.userinfo = await apis.getUserInfo(this.auth.uid)
+        this.userInfoFilled = await this.validateAddress(this.userinfo)
 
+        //calling category
+        this.categories = await apis.allCategories()
 
-    //calling category
-    await apis
-      .allCategories()
-      .then((data) => {
-        this.categories = data;
-      })
-      .catch((error) => {
-        this.isError = true;
-        this.error = error;
-      });
+        //calling user's contents
+        this.cont = await apis.getContentsByUid(this.auth.uid)
 
-    //calling user's contents
-    await apis
-      .getContentsByUid(this.auth.uid)
-      .then(async (data) => {
-        // console.log(data);
-        this.cont = data;
-        await specifyContent(data);
-        this.isLoading = false;
-        this.isError = false;
-      })
-      .catch((error) => {
-        this.isLoading = false;
-        this.isError = true;
-        this.error = error;
-      });
+        await specifyContent(this.cont);
 
-    if (this.auth == null) {
-      window.location.href = PAGES.LOGIN;
-    } else {
-      if (sub == null) {
+        this.isLoading = false
 
-        console.log('free user')
-
-      } else {
-        // checking expriration calling API
-        // console.log(sub)
-        let now = new Date().getTime()
-        let ex = new Date(sub.expiredDate).getTime()
-
-        if (now >= ex) {
-          console.log(now)
-          console.log(ex)
+        if (sub == null) {
+          console.log('free user')
         } else {
-          countContents(this.contents)
+          // checking expriration calling API
+          // console.log(sub)
+          let now = new Date().getTime()
+          let ex = new Date(sub.expiredDate).getTime()
+
+          if (now >= ex) {
+            console.log(now)
+            console.log(ex)
+          } else {
+            countContents(this.contents)
+          }
         }
 
-      }
+        this.orders = await apis.getBillsbyUid(this.auth.uid)
+        
 
+      } else {
+        this.isLoading = false
+      }
+    } catch (error) {
+      console.log(error)
     }
   },
   methods: {
@@ -206,12 +205,123 @@ var app = new Vue({
       }
       return str;
     },
-    getCat: (cat) => {
-      localStorage.setItem(DB.CATEGORY, cat);
-      window.location.href = PAGES.CATEGORY;
+    validateAddress: function (ui) {
+      return ui.fname != '' && ui.lname != '' && ui.address && ui.town != '' && ui.province != '' && ui.country != '' && ui.postal_code != '' && ui.phone != ''
     },
+    editProfile: function () {
+      $("#editProfileModal").modal();
+    },
+    editAddress: function () {
+      $("#addressModal").modal();
+    },
+    changeAddress: async function () {
+      await apis.updateUserInfo(this.auth.uid, this.userinfo)
+    },
+    shareToFB: function () {
+      const w = window.open(`https://www.facebook.com/sharer/sharer.php?u=${this.link.url}`, "fb", 'height=500, width=600')
+      if (window.focus) { w.focus() }
+    },
+    shareToTW: function () {
+      const w = window.open(`http://twitter.com/share?url=${this.link.url}`, "tw", 'height=500, width=600')
+      if (window.focus) { w.focus() }
+    },
+    shareToLK: function () {
+      const w = window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${this.link.url}`, "gp", 'height=500, width=600')
+      if (window.focus) { w.focus() }
+    },
+    previewImage: function (event) {
+      var file = event.target.files[0];
+      console.log(file)
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async function () {
+        document.querySelector('#imgProfile').src = await resizedataURL(reader.result, 128, 128)
+      };
+      reader.onerror = function (error) {
+        console.log('Error: ', error);
+      };
+    },
+    saveProfile: async function () {
+      if (this.user.displayName != '') {
+        try {
+          app.updateU.isLoading = true
+          const src = document.querySelector('#imgProfile').src
+          const x = src.split('base64')
+          if (x.length > 1) {
+            let ref = profileRef.child(this.user.uid + ".jpg");
+            await urlToBlob(src).then(async (blob) => {
+              await ref.put(blob).then(async function (snapshot) {
+                await snapshot.ref.getDownloadURL().then((url) => {
+                  app.updateU.isLoading = false
+                  app.user.photoURL = url;
+                  localStorage.setItem(DB.USER, JSON.stringify(app.user))
+                  $('#editProfileModal').modal('hide')
+                });
+              });
+            });
+          }
+          await apis.updateUser(this.auth.uid, this.user)
+        } catch (error) {
+          console.error(error)
+          app.updateU.isLoading = false
+          app.updateU.isError = true
+          app.updateU.error = error
+        }
+      } else {
+        window.alert('Please set your intelligible username')
+      }
+    }
   },
 });
+
+function urlToBlob(url) {
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.onerror = reject;
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        resolve(xhr.response);
+      }
+    };
+    xhr.open("GET", url);
+    xhr.responseType = "blob"; // convert type
+    xhr.send();
+  });
+}
+
+function resizedataURL(datas, wantedWidth, wantedHeight) {
+  return new Promise((resolve, reject) => {
+    // We create an image to receive the Data URI
+    var img = document.createElement('img');
+
+    // When the event "onload" is triggered we can resize the image.
+    img.onload = function () {
+      // We create a canvas and get its context.
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d');
+
+      // We set the dimensions at the wanted size.
+      canvas.width = wantedWidth;
+      canvas.height = wantedHeight;
+
+      // We resize the image with the canvas method drawImage();
+      ctx.drawImage(this, 0, 0, wantedWidth, wantedHeight);
+
+      resolve(canvas.toDataURL('image/jpeg', 1.0))
+
+      /////////////////////////////////////////
+      // Use and treat your Data URI here !! //
+      /////////////////////////////////////////
+    };
+
+    img.onerror = function (err) {
+      reject(err)
+    }
+
+    // We put the Data URI in the image's src attribute
+    img.src = datas;
+  })
+}
 
 function copyToClipboard(str) {
   var input = document.getElementById("link-url");
@@ -275,12 +385,12 @@ async function disableContents() {
 
 }
 
-function countContents(content){
+function countContents(content) {
   let count = content['publishedC'].length + content['privateC'].length + content['linkC'].length
   if (count <= 5) {
     return
   }
-  else{
+  else {
     console.log("User's subscription is expried")
     let modal = document.getElementById('myModal-ex').style;
     modal.display = 'block'
@@ -289,17 +399,4 @@ function countContents(content){
   }
 
 }
-
-// Get the modal
-var modal = document.getElementById("myModal-ex");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-  modal.style.display = "none";
-}
-
 

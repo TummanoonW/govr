@@ -1,0 +1,15 @@
+table{
+    width: 100%;
+}
+
+thead tr{
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: lightgray;
+}
+
+.bottom-line{
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: lightgray;
+}

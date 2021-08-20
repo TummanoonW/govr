@@ -26,15 +26,17 @@ const subscriptionRef = db.collection("Subscriptions");
 
 //firebase storage
 const imgRef = storage.ref().child('360');
-const thumpRef = storage.ref().child('thumpnail');
-
+const thumbRef = storage.ref().child('thumbnails');
+const thumb720Ref = storage.ref().child('thumbnails720');
+const profileRef = storage.ref().child('profiles')
 
 const DB = {
   USER: 'USER',
   AUTH: 'AUTH',
   USERINFO: 'UESRINFO',
   CONTENT: 'CONTENT',
-  CATEGORY: 'CATEGORY'
+  CATEGORY: 'CATEGORY',
+  COOKIES: 'COOKIES'
 };
 
 const PAGES = {
@@ -50,7 +52,13 @@ const PAGES = {
   WEBXR: "webxr.html",
   EDIT: "edit.html",
   CART: "cart.html",
-  CHECKOUT: "checkout.html"
+  CHECKOUT: "checkout.html",
+  TERMS_AGREEMENT: "terms-agreement.html",
+  PRIVACY_POLICY: "privacy-policy.html",
+  COOKIES: "cookies.html",
+  ABOUTS_CONTACTS: "abouts-contacts.html",
+  USER: "user.html",
+  ORDER_DETAILS: "order-details.html"
 };
 
 const LINKS = {

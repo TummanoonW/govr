@@ -1,3 +1,11 @@
+.btn-side{
+  font-size: 24px;
+}
+.btn-social{
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+}
 .row {
   height: 85vh;
 }
@@ -43,8 +51,7 @@
 
 .detail {
   width: 85%;
-  margin-top: 30px;
-
+  margin-top: 16px;
 }
 /* h4{
     border: 2px solid #aaaaaa;
@@ -167,7 +174,7 @@ i:hover {
   .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 9999; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
@@ -212,7 +219,7 @@ i:hover {
   .link {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 9999; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
@@ -223,4 +230,8 @@ i:hover {
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
   }
 
+}
+
+.modal{
+  z-index: 9999;
 }

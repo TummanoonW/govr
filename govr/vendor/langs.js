@@ -23,8 +23,20 @@ var langs = {
         MY_PROFILE: "My Profile",
         MY_UPLOADS: "My Uploads",
         MY_ADDRESSES: "My Addresses",
-        MY_PAYMENTS: "My Payments",
+        MY_ORDERS: "My Orders",
         EDIT_PROFILE: "Edit Profile",
+        EDIT_ADDRESS: "Edit Address",
+        FIRST_NAME: "First Name",
+        LAST_NAME: "Last Name",
+        TEL_MOBILE_PHONE: "Tel/Mobile Phone",
+        ADDRESS: "Address",
+        ADDRESS2: "Address 2 (Optional)",
+        TOWN_CITY: "Town/City",
+        PROVINCE_STATE: "Province/State",
+        COUNTRY: "Country",
+        POSTAL_CODE: "Postal Code",
+        CLOSE: "Close",
+        SAVE_CHANGES: "Save Changes",
         ONLY_PEOPLE_WITH_LINK: "Only people with link",
         PRIVATE: "Private",
         WAIT_FOR_RE_SUBSCRIPTION: "Wait for re-subscription",
@@ -80,7 +92,16 @@ var langs = {
         DELETE : "Delete",
         VIEW: "View",
         GET_SHARED_LINK: "Get shared link",
-        CART: 'Cart'
+        CART: 'Cart',
+        EDIT: "Edit",
+        PRIVACY_POLICY: "Privacy Policy",
+        TERMS_AGREEMENT: "Terms & Agreement",
+        COOKIES: "Cookies",
+        ABOUTS_CONTACTS: "Abouts & Contacts",
+        UPLOADS: "Uploads",
+        PROFILE_PICTURE: "Profile Picture",
+        PRINT: "Print",
+        BILL: "Bill"
     },
     th: {
         name: "ไทย",
@@ -93,8 +114,20 @@ var langs = {
         MY_PROFILE: "โปรไฟล์ของฉัน",
         MY_UPLOADS: "การอัพโหลดของฉัน",
         MY_ADDRESSES: "ที่อยู่ของฉัน",
-        MY_PAYMENTS: "การชำระเงินของฉัน",
+        MY_ORDERS: "การชำระเงินของฉัน",
         EDIT_PROFILE: "การแก้ไขไปรไฟล์",
+        EDIT_ADDRESS: "แก้ไขที่อยู่",
+        FIRST_NAME: "ชื่อจริง",
+        LAST_NAME: "นามสกุล",
+        TEL_MOBILE_PHONE: "เบอร์โทรศัพท์/มือถือ",
+        ADDRESS: "ที่อยู่",
+        ADDRESS2: "ที่อยู่ 2 (กรอกหรือไม่ก็ได้)",
+        TOWN_CITY: "อำเภอ/เขต",
+        PROVINCE_STATE: "จังหวัด/รัฐ",
+        COUNTRY: "ประเทศ",
+        POSTAL_CODE: "รหัสไปรษณีย์",
+        CLOSE: "ปิด",
+        SAVE_CHANGES: "บันทึกการเปลี่ยนแปลง",
         ONLY_PEOPLE_WITH_LINK: "เฉพาะคนที่มีลิงค์",
         PRIVATE: "ส่วนตัว",
         WAIT_FOR_RE_SUBSCRIPTION: "รอการชำระเงินค่าสมาชิก",
@@ -150,13 +183,15 @@ var langs = {
         DELETE : "ลบ",
         VIEW: "เข้าชม",
         GET_SHARED_LINK: "แชร์ลิ้งค์",
-        CART: "ตะกร้าสินค้า"
-
-
-
-
-
-
-
+        CART: "ตะกร้าสินค้า",
+        EDIT: "แก้ไข",
+        PRIVACY_POLICY: "นโยบายข้อมูลส่วนบุคคล",
+        TERMS_AGREEMENT: "เงื่อนไขและข้อตกลงการใช้งาน",
+        COOKIES: "คุกกี้",
+        ABOUTS_CONTACTS: "เกี่ยวกับเราและช่องทางติดต่อ",
+        UPLOADS: "การอัพโหลด",
+        PROFILE_PICTURE: "ภาพโปรไฟล์",
+        PRINT: "พิมพ์เอกสาร",
+        BILL: "ใบเสร็จ"
     }
 }

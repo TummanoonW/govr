@@ -60,7 +60,7 @@ var app = new Vue({
                         fname: '',
                         lname: '',
                         type: '',
-                        limitUploads: 5
+                        limitUploads: 10 //fixed from 5 to 10
                     }
 
                     apis.registerUser(user, userInfo).then(data => {
@@ -92,7 +92,6 @@ var app = new Vue({
         },
     },
 });
-
 
 
 

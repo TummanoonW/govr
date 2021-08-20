@@ -16,6 +16,7 @@ let files = {
   name: "",
   i360: "",
   iThumbnail: "",
+  iThumbnail720: ""
 };
 
 var app = new Vue({
@@ -43,6 +44,7 @@ var app = new Vue({
       published: false,
       disabled: false,
       thumbnail: "",
+      thumbnail720: ""
     },
     link: {},
     isLoading: false,
@@ -87,7 +89,7 @@ var app = new Vue({
         var message = i.files[0].dataURL;
         let name = fileName(app.content.uid);
         files.name = name;
-        files.i360 = message;
+        files.i360 = await resizedataURL(message, 4096, 2048)
       } catch (err) {
         console.log(err.message);
       }
@@ -98,7 +100,8 @@ var app = new Vue({
 
       let i = Dropzone.forElement("#upload");
       var message = i.files[0].dataURL;
-      files.iThumbnail = message;
+      files.iThumbnail = await resizedataURL(message, 640, 480)
+      files.iThumbnail720 = await resizedataURL(message, 1280, 720)
 
       switch (privacy) {
         case "public":
@@ -203,7 +206,8 @@ let pg = document.getElementById("progress");
 
 async function uploadContent() {
   let ref = imgRef.child(files.name);
-  let thRef = thumpRef.child(files.name);
+  let thRef = thumbRef.child(files.name);
+  let th720Ref = thumb720Ref.child(files.name);
 
   pg.setAttribute("style", "width:0%");
   console.log("uploading ...");
@@ -220,11 +224,21 @@ async function uploadContent() {
   await urlToBlob(files.iThumbnail).then(async (blob) => {
     await thRef.put(blob).then(async function (snapshot) {
       await snapshot.ref.getDownloadURL().then((url) => {
-        pg.setAttribute("style", "width: 60%");
+        pg.setAttribute("style", "width: 45%");
         app.content.thumbnail = url;
       });
     });
   });
+
+  await urlToBlob(files.iThumbnail720).then(async (blob) => {
+    await th720Ref.put(blob).then(async function (snapshot) {
+      await snapshot.ref.getDownloadURL().then((url) => {
+        pg.setAttribute("style", "width: 60%");
+        app.content.thumbnail720 = url;
+      });
+    });
+  });
+
 
   await apis.createContent(app.content).then((data) => {
 
@@ -326,3 +340,55 @@ window.onclick = function (event) {
     window.location.href = PAGES.MYPROFILE
   }
 };
+
+function imageToDataUri(img, width, height) {
+  var image = new Image();
+  image.src = `${img}`
+  // create an off-screen canvas
+  var canvas = document.createElement('canvas'),
+    ctx = canvas.getContext('2d');
+
+  // set its dimension to target size
+  canvas.width = width;
+  canvas.height = height;
+
+  // draw source image into the off-screen canvas:
+  ctx.drawImage(image, 0, 0, width, height);
+
+  // encode image to data-uri with base64 version of compressed image
+  return canvas.toDataURL('image/jpeg', 1.0)
+}
+
+function resizedataURL(datas, wantedWidth, wantedHeight) {
+  return new Promise((resolve, reject) => {
+    // We create an image to receive the Data URI
+    var img = document.createElement('img');
+
+    // When the event "onload" is triggered we can resize the image.
+    img.onload = function () {
+      // We create a canvas and get its context.
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d');
+
+      // We set the dimensions at the wanted size.
+      canvas.width = wantedWidth;
+      canvas.height = wantedHeight;
+
+      // We resize the image with the canvas method drawImage();
+      ctx.drawImage(this, 0, 0, wantedWidth, wantedHeight);
+
+      resolve(canvas.toDataURL('image/jpeg', 1.0))
+
+      /////////////////////////////////////////
+      // Use and treat your Data URI here !! //
+      /////////////////////////////////////////
+    };
+
+    img.onerror = function (err) {
+      reject(err)
+    }
+
+    // We put the Data URI in the image's src attribute
+    img.src = datas;
+  })
+}

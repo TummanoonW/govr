@@ -38,6 +38,8 @@ var app = new Vue({
     error: "",
   },
   created: function () {
+    document.querySelector("#tabHome").setAttribute('class', 'nav-item nav-link active')
+
     langs.getSelected().then((lang) => {
       this.lang = lang;
     });
@@ -60,7 +62,7 @@ var app = new Vue({
       });
 
     apis
-      .getContentsNewest()
+      .getContentsNewest(20)
       .then((data) => {
         this.contents = data;
         this.isLoading = false;

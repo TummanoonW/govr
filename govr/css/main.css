@@ -725,3 +725,11 @@ h6 {
 .bg-primary{
   background-color: #082c44 !important;
 }
+
+#cookies-popup{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background-color: whitesmoke;
+  padding: 16px;
+}

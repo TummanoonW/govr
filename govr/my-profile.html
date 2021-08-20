@@ -30,113 +30,9 @@
 
 <body>
   <div id="app">
-    <div v-if="isLoading" class="modal-dialog modal-dialog-centered">
-      <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="visually-hidden"></span>
-      </div>
-      <span class="text-primary">{{lang.LOADING}}...</span>
-    </div>
+    <div id="loading-layout"></div>
 
-    <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
-      <i class="far fa-times-circle"></i>
-      <span class="ml-2">{{error}}</span>
-    </div>
-
-    <!-- Brand Start -->
-    <div class="brand">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-3 col-md-5">
-            <div class="b-logo">
-              <a v-bind:href="PAGES.INDEX">
-                <img v-bind:src="ASSETS.LOGO512" alt="Logo">
-              </a>
-            </div>
-          </div>
-          <div class="col-lg-7 col-md-4">
-            <!-- <div class="b-ads">
-              <a href="https://htmlcodex.com">
-                <img src="../img/ads-1.jpg" alt="Ads">
-              </a>
-            </div> -->
-          </div>
-          <div class="col-lg-2 col-md-3">
-            <i class="fas fa-language"></i>
-            <select id="langOption" class="form-control form-select" v-model="lang.code" v-on:change="selectLang">
-              <option value="en">English</option>
-              <option value="th">ไทย</option>
-            </select>
-            <!-- <div class="text-right">
-              <a v-bind:href="LINKS.TWITTER" class="ml-3"><i class="fab fa-twitter"></i></a>
-              <a v-bind:href="LINKS.FACEBOOK" class="ml-3"><i class="fab fa-facebook-f"></i></a>
-              <a v-bind:href="LINKS.LINKEDIN" class="ml-3"><i class="fab fa-linkedin-in"></i></a>
-              <a v-bind:href="LINKS.INSTAGRAM" class="ml-3"><i class="fab fa-instagram"></i></a>
-              <a v-bind:href="LINKS.YOUTUBE" class="ml-3"><i class="fab fa-youtube"></i></a>
-            </div> -->
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Brand End -->
-
-    <!-- Nav Bar Start -->
-    <div class="nav-bar">
-      <div class="container">
-        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-          <a href="#" class="navbar-brand">{{lang.MENU}}</a>
-          <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-            <div class="navbar-nav mr-auto">
-              <a v-bind:href="PAGES.INDEX" class="nav-item nav-link">{{lang.HOME}}</a>
-              <a v-bind:href="PAGES.MYPROFILE" class="nav-item nav-link active">{{lang.MY_PROFILE}}</a>
-            </div>
-            <div class="d-grid gap-2" v-if="user !== null">
-              <div class="btn-group profile-h">
-                <a class="btn btn-primary profile-w" type="button" :href="PAGES.MYPROFILE">
-                  <div>
-                    <img v-if="user.photoURL == null || user.photoURL == ''" src="assets/images/user.svg"
-                      class="profile-r" />
-                    <img v-else :src="user.photoURL" class="profile-r" />
-                  </div>
-                </a>
-
-                <button type="button" class="btn btn-primary dropdown-toggle " data-toggle="dropdown"
-                  aria-expanded="false">
-                </button>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a class="dropdown-item" type="button" :href="PAGES.UPLOAD">
-                      <i class="fas fa-plus"></i>
-                      <span class="ml-1">{{lang.ADD_UPLOAD}}</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" type="button" :href="PAGES.MYPROFILE">
-                      {{lang.MY_PROFILE}}
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" type="button" :href="PAGES.LOGOUT">
-                      {{lang.LOG_OUT}}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="social ml-auto d-grid gap-2 d-md-block" v-else>
-              <button v-on:click="window.location.href = PAGES.LOGIN" class="btn btn-primary"
-                type="button">{{lang.LOG_IN}}</button>
-              <button v-on:click="window.location.href = PAGES.REGISTER" class="btn btn-primary"
-                type="button">{{lang.REGISTER}}</button>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
-    <!-- Nav Bar End -->
+    <div id="navbar-layout"></div>
 
     <!-- Get Link Modal -->
     <div class="modal fade" id="linkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -158,6 +54,12 @@
               <p v-if="link.isCopied">
                 {{lang.LINK_IS_COPPIED}}
               </p>
+              <div>
+                <img v-on:click="copyLink" class="btn-social mr-1" src="assets/icons/copy.png">
+                <img v-on:click="shareToFB" class="btn-social mr-1" src="assets/icons/facebook.png">
+                <img v-on:click="shareToTW" class="btn-social mr-1" src="assets/icons/twitter.png">
+                <img v-on:click="shareToLK" class="btn-social" src="assets/icons/linkedin.png">
+              </div>
             </div>
             <div v-if="link.isLoading">
               <div class="spinner-grow text-accent" style="width: 3rem; height: 3rem;" role="status">
@@ -184,11 +86,15 @@
       <!-- Modal content -->
       <div class="modal-content">
         <h3>Warning!!</h3>
-        <div style="width: 100%; padding: 10px;"><h5>Your subscription is expried please re-subscription or disable some of your contents.</h5></div>
-        <button @click="disableContents(contents)" class="btn btn-primary btn-lg btn-block" type="button" id="disabledContentModal" >Next</button>
-        <a :href="PAGES.CART + `?id=${auth.uid}`" class="btn btn-primary btn-lg btn-block" type="button" id="disabledContentModal" >Re-subscription</a>
+        <div style="width: 100%; padding: 10px;">
+          <h5>Your subscription is expried please re-subscription or disable some of your contents.</h5>
+        </div>
+        <button @click="disableContents(contents)" class="btn btn-primary btn-lg btn-block" type="button"
+          id="disabledContentModal">Next</button>
+        <a :href="PAGES.CART" class="btn btn-primary btn-lg btn-block" type="button"
+          id="disabledContentModal">Re-subscription</a>
       </div>
-      
+
 
     </div>
     <!-- expriration warning Modal-->
@@ -312,21 +218,163 @@
     </div>
     <!-- Delete Modal -->
 
-    <!-- Edot profile Modal -->
-    <div id="editModal" class="modal">
-
-      <!-- Modal content -->
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="form-box">
-
+    <!-- Edit Profile Modal -->
+    <div v-if="user" class="modal fade" id="editProfileModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div v-if="!updateU.isLoading && !updateU.isError" class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{lang.EDIT_PROFILE}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <img id="imgProfile" :src="user.photoURL" onerror="javascript:this.src='assets/images/user.svg'"
+              class="profile-pic mb-3">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">{{lang.PROFILE_PICTURE}}</span>
+              </div>
+              <div class="custom-file">
+                <input v-on:change="previewImage" accept="image/*" type="file" class="custom-file-input"
+                  id="inputGroupFile01">
+                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">{{lang.USERNAME}}</span>
+              </div>
+              <input v-model="user.displayName" type="text" class="form-control" placeholder="{{lang.USERNAME}}"
+                aria-label="{{lang.USERNAME}}" aria-describedby="basic-addon1">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{lang.CLOSE}}</button>
+            <button v-on:click="saveProfile" type="button" class="btn btn-primary">{{lang.SAVE_CHANGES}}</button>
+          </div>
+        </div>
+        <div v-if="updateU.isLoading" class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{lang.EDIT_PROFILE}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+              <span class="visually-hidden"></span>
+            </div>
+            <span class="text-primary">{{lang.LOADING}}...</span>
+          </div>
+        </div>
+        <div v-if="updateU.isError" class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{lang.EDIT_PROFILE}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <div class="alert alert-danger alert-dismissible fade show" v-if="isError" role="alert">
+              <i class="far fa-times-circle"></i>
+              <span class="ml-2">{{error}}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Address Modal -->
+    <div v-if="userinfo" class="modal fade" id="addressModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{lang.EDIT_ADDRESS}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">{{lang.FIRST_NAME}}</span>
+              </div>
+              <input v-model="userinfo.fname" type="text" class="form-control" placeholder="{{lang.FIRST_NAME}}"
+                aria-label="{{lang.FIRST_NAME}}" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">{{lang.LAST_NAME}}</span>
+              </div>
+              <input v-model="userinfo.lname" type="text" class="form-control" placeholder="{{lang.LAST_NAME}}"
+                aria-label="{{lang.LAST_NAME}}" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">{{lang.TEL_MOBILE_PHONE}}</span>
+              </div>
+              <input v-model="userinfo.phone" type="text" class="form-control" placeholder="{{lang.TEL_MOBILE_PHONE}}"
+                aria-label="{{lang.TEL_MOBILE_PHONE}}" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">{{lang.ADDRESS}}</span>
+              </div>
+              <input v-model="userinfo.address" type="text" class="form-control" placeholder="{{lang.ADDRESS}}"
+                aria-label="{{lang.ADDRESS}}" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">{{lang.ADDRESS2}}</span>
+              </div>
+              <input v-model="userinfo.address2" type="text" class="form-control" placeholder="{{lang.ADDRESS2}}"
+                aria-label="{{lang.ADDRESS2}}" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="selectCity">{{lang.TOWN_CITY}}</label>
+              </div>
+              <input v-model="userinfo.town" type="text" class="form-control" placeholder="{{lang.TOWN_CITY}}"
+                aria-label="{{lang.TOWN_CITY}}" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="selectState">{{lang.PROVINCE_STATE}}</label>
+              </div>
+              <input v-model="userinfo.province" type="text" class="form-control" placeholder="{{lang.PROVINCE_STATE}}"
+                aria-label="{{lang.PROVINCE_STATE}}" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="selectCountry">{{lang.COUNTRY}}</label>
+              </div>
+              <select v-model="userinfo.country" class="custom-select" id="selectCountry">
+                <option>Choose...</option>
+                <option v-for="c in country.list" :value="c.code">{{c.name}}</option>
+              </select>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">{{lang.POSTAL_CODE}}</span>
+              </div>
+              <input v-model="userinfo.postal_code" type="text" class="form-control" placeholder="{{lang.POSTAL_CODE}}"
+                aria-label="{{lang.POSTAL_CODE}}" aria-describedby="basic-addon1">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{lang.CLOSE}}</button>
+            <button v-on:click="changeAddress" type="button" class="btn btn-primary"
+              data-dismiss="modal">{{lang.SAVE_CHANGES}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="content">
-      <div v-if="user !== null" class="row px-4 bg-primary">
+      <div v-if="user" class="row px-4 bg-primary">
         <div class="col-xl-2 col-lg-3 col-md-4">
           <div class="">
             <div class="detail">
@@ -335,13 +383,14 @@
                   class="profile-r" />
                 <img v-else :src="user.photoURL" class="profile-r" />
               </div>
-              <div class="name">Guest</div>
+              <div class="name mt-4">{{user.displayName}}</div>
+              <div class="name mt-1 text-muted"><small>{{user.email}}</small></div>
             </div>
-            <div id="list-example" class="tabs">
-              <a id='edit-profile' class="my-upload">{{lang.EDIT_PROFILE}}</a>
+            <div id="list-example" class="tabs mt-4">
+              <a id='edit-profile' v-on:click="editProfile" class="my-upload">{{lang.EDIT_PROFILE}}</a>
               <a class="my-upload" href="#list-item-1">{{lang.MY_UPLOADS}}</a>
               <a class="my-add" href="#list-item-2">{{lang.MY_ADDRESSES}}</a>
-              <a class="my-pay" href="#list-item-3">{{lang.MY_PAYMENTS}}</a>
+              <a class="my-pay" href="#list-item-3">{{lang.MY_ORDERS}}</a>
             </div>
           </div>
         </div>
@@ -513,7 +562,7 @@
                       <input type="submit" id="checkout-button-alt" value="Pay with credit card">
                     </form> -->
 
-                    
+
 
                     <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents.disabledC">
                       <div class="card">
@@ -559,163 +608,76 @@
                         </div>
                       </div>
                     </div>
-                    <a :href="PAGES.CART + `?id=${auth.uid}`" type="button"
-                      class="btn btn-primary btn-lg btn-block">Buy subscription</a>
+                    <a :href="PAGES.CART + `?id=${auth.uid}`" type="button" class="btn btn-primary btn-lg btn-block">Buy
+                      subscription</a>
                   </div>
                 </div>
               </div>
             </div>
             <div id="list-item-2" class="list-item col" data-bs-target=".my-add">
               <h4>{{lang.MY_ADDRESSES}}</h4>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
-                illo incidunt consectetur, voluptas possimus dolor distinctio
-                aliquid itaque fuga. Fugiat adipisci velit quod praesentium
-                est, amet obcaecati earum deserunt soluta? Lorem ipsum dolor
-                sit amet consectetur adipisicing elit. Quas molestiae officia
-                praesentium vel numquam culpa, odit voluptatibus? Ab quos
-                aliquam aut est nesciunt autem repudiandae, harum amet, odit
-                voluptatibus ut? Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit. Iste perferendis sequi neque veniam sed aut
-                quas voluptates nemo sit impedit repellat dignissimos, atque
-                similique labore officia adipisci autem, ab rem. Lorem ipsum
-                dolor sit amet consectetur adipisicing elit. Provident,
-                sapiente consectetur? Adipisci quia delectus dolores nesciunt,
-                dolorum ea voluptatum atque deleniti totam sunt commodi.
-                Corrupti fuga excepturi facilis aperiam laboriosam?
-              </p>
+              <div v-if="!userInfoFilled" class="alert alert-warning" role="alert">
+                Please fill up your address information.
+              </div>
+              <ul class="list-group mt-2" v-if="userinfo">
+                <li class="list-group-item">
+                  <h5><i class="far fa-address-book mr-2"></i> {{`${userinfo.fname} ${userinfo.lname}`}}</h5>
+                  <p>
+                    {{`${userinfo.address} (${userinfo.address2}), ${userinfo.town}, ${userinfo.province},
+                    ${country.getByCode(userinfo.country).name}.`}}
+                  </p>
+                  <p>
+                    <label class="mr-2"><i class="fas fa-mail-bulk"></i> {{userinfo.postal_code}}</label>
+                    <label class="mr-2"><i class="fas fa-phone-alt"></i> {{userinfo.phone}}</label>
+                  </p>
+                  <p class="text-right">
+                    <button class="btn btn-primary" v-on:click="editAddress">
+                      <i class="far fa-edit"></i>
+                      {{lang.EDIT}}
+                    </button>
+                  </p>
+                </li>
+              </ul>
             </div>
             <div id="list-item-3" class="list-item col" data-bs-target=".my-pay">
-              <h4>{{lang.MY_PAYMENTS}}</h4>
+              <h4>{{lang.MY_ORDERS}}</h4>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
-                illo incidunt consectetur, voluptas possimus dolor distinctio
-                aliquid itaque fuga. Fugiat adipisci velit quod praesentium
-                est, amet obcaecati earum deserunt soluta? Lorem ipsum dolor
-                sit amet consectetur adipisicing elit. Quas molestiae officia
-                praesentium vel numquam culpa, odit voluptatibus? Ab quos
-                aliquam aut est nesciunt autem repudiandae, harum amet, odit
-                voluptatibus ut? Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit. Iste perferendis sequi neque veniam sed aut
-                quas voluptates nemo sit impedit repellat dignissimos, atque
-                similique labore officia adipisci autem, ab rem. Lorem ipsum
-                dolor sit amet consectetur adipisicing elit. Provident,
-                sapiente consectetur? Adipisci quia delectus dolores nesciunt,
-                dolorum ea voluptatum atque deleniti totam sunt commodi.
-                Corrupti fuga excepturi facilis aperiam laboriosam?
+              <ul class="list-group list-group-numbered">
+                <li v-for="ord in orders" class="list-group-item d-flex justify-content-between align-items-start">
+                  <div class="ms-2 me-auto">
+                    <div class="fw-bold">
+                      <a :href="PAGES.ORDER_DETAILS + '?id=' + ord.id">OID: {{ord.id}}</a>
+                    </div>
+                    {{new Date(ord.startDate).toLocaleString()}}
+                  </div>
+                  <span v-if="ord.method == 'credit/debit'" class="badge bg-primary rounded-pill">Credit/Debit</span>
+                  <span v-if="ord.method == 'paypal'" class="badge bg-primary rounded-pill">Paypal</span>
+                  <span v-else class="badge bg-secondary rounded-pill">Others</span>
+                </li>
+              </ul>
               </p>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Footer Start -->
-    <div class="footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-widget">
-              <h3 class="title">Get in Touch</h3>
-              <div class="contact-info">
-                <p>
-                  <i class="fa fa-map-marker"></i>123 News Street, NY, USA
-                </p>
-                <p><i class="fa fa-envelope"></i>info@example.com</p>
-                <p><i class="fa fa-phone"></i>+123-456-7890</p>
-                <div class="social">
-                  <a href=""><i class="fab fa-twitter"></i></a>
-                  <a href=""><i class="fab fa-facebook-f"></i></a>
-                  <a href=""><i class="fab fa-linkedin-in"></i></a>
-                  <a href=""><i class="fab fa-instagram"></i></a>
-                  <a href=""><i class="fab fa-youtube"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-widget">
-              <h3 class="title">Useful Links</h3>
-              <ul>
-                <li><a href="#">Lorem ipsum</a></li>
-                <li><a href="#">Pellentesque</a></li>
-                <li><a href="#">Aenean vulputate</a></li>
-                <li><a href="#">Vestibulum sit amet</a></li>
-                <li><a href="#">Nam dignissim</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-widget">
-              <h3 class="title">Quick Links</h3>
-              <ul>
-                <li><a href="#">Lorem ipsum</a></li>
-                <li><a href="#">Pellentesque</a></li>
-                <li><a href="#">Aenean vulputate</a></li>
-                <li><a href="#">Vestibulum sit amet</a></li>
-                <li><a href="#">Nam dignissim</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-widget">
-              <h3 class="title">Newsletter</h3>
-              <div class="newsletter">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Vivamus sed porta dui. Class aptent taciti sociosqu
-                </p>
-                <form>
-                  <input class="form-control" type="email" placeholder="Your email here" />
-                  <button class="btn">Submit</button>
-                </form>
-              </div>
-            </div>
+      <div v-else class="row px-4 bg-primary">
+        <div class="jumbotron mx-auto my-4 w-75">
+          <h3>Looks like you haven't logged in yet!!!</h3>
+          <p class="text-secondary">If you haven't had an account, click "Register". If you have it, click "Log In".</p>
+          <hr class="my-4">
+          <div class="text-center">
+            <a :href="PAGES.REGISTER" class="btn btn-primary">
+              Register
+            </a>
+            <a :href="PAGES.LOGIN" class="btn btn-outline-primary">
+              Log In
+            </a>
           </div>
         </div>
       </div>
     </div>
-    <!-- Footer End -->
 
-    <!-- Footer Menu Start -->
-    <div class="footer-menu">
-      <div class="container">
-        <div class="f-menu">
-          <a href="">Terms of use</a>
-          <a href="">Privacy policy</a>
-          <a href="">Cookies</a>
-          <a href="">Accessibility help</a>
-          <a href="">Advertise with us</a>
-          <a href="">Contact us</a>
-        </div>
-      </div>
-    </div>
-    <!-- Footer Menu End -->
-
-    <!-- Footer Bottom Start -->
-    <div class="footer-bottom">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 copyright">
-            <p>
-              Copyright &copy; <a href="https://htmlcodex.com">HTML Codex</a>.
-              All Rights Reserved
-            </p>
-          </div>
-
-          <div class="col-md-6 template-by">
-            <p>Template By <a href="https://htmlcodex.com">HTML Codex</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Footer Bottom End -->
-
-    <!-- Back to Top -->
-    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+    <div id="footer-layout"></div>
   </div>
 
   <!-- JavaScript Libraries -->
@@ -739,7 +701,8 @@
   <script src="vendor/firebase-config.js"></script>
   <script src="vendor/apis.js"></script>
   <script src="vendor/langs.js"></script>
-
+  <script src="vendor/country.js"></script>
+  <script src="vendor/layout.js"></script>
 
 
 

@@ -10,6 +10,7 @@ var app = new Vue({
   data: {
     auth: {},
     user: {},
+    author: {},
     content: {},
     date: "",
     cate: "",
@@ -26,8 +27,7 @@ var app = new Vue({
       window.location.href = PAGES.EDIT + `?id=${id}`;
     },
     getSharedLink: function (content) {
-      const md = document.getElementById("myLink");
-      md.style.display = "block";
+      $('#myLinkModal').modal('show')
       apis
         .getLink(content.id)
         .then((data) => {
@@ -36,11 +36,6 @@ var app = new Vue({
         .catch((error) => {
           this.link.isLoading = false;
         });
-      window.onclick = function (event) {
-        if (event.target == md) {
-          md.style.display = "none";
-        }
-      };
     },
   },
 });
@@ -49,20 +44,22 @@ var menu = new Vue({
   el: "#m",
   data: {
     content: {},
+    author: {},
     place: {},
     date: "",
     cate: "",
     user: {},
-    link:{},
-    location: {}
+    link: {},
+    location: {},
+  },
+  created: async function () {
+    await this.getSharedLink(this.content)
   },
   methods: {
     toEdit: () => {
       window.location.href = PAGES.EDIT + `?id=${id}`;
     },
     getSharedLink: function (content) {
-      const md = document.getElementById("myLink");
-      md.style.display = "block";
       apis
         .getLink(content.id)
         .then((data) => {
@@ -71,15 +68,10 @@ var menu = new Vue({
         .catch((error) => {
           this.link.isLoading = false;
         });
-      window.onclick = function (event) {
-        if (event.target == md) {
-          md.style.display = "none";
-        }
-      };
     },
     toggle: (condition) => {
       const md = document.getElementById("myModal");
-      if (condition == 1) {      
+      if (condition == 1) {
         md.style.display = "block";
       } else {
         md.style.display = "none";
@@ -104,12 +96,39 @@ var tab = new Vue({
 
 init();
 async function init() {
-  //Get uer from local storage
-  app.auth = await JSON.parse(localStorage.getItem(DB.AUTH));
-  app.user = await JSON.parse(localStorage.getItem(DB.USER));
-  menu.user = await JSON.parse(localStorage.getItem(DB.USER));
+  try {
+    this.isLoading = true;
 
-  ContentById(id);
+    //Get uer from local storage
+    app.auth = await JSON.parse(localStorage.getItem(DB.AUTH));
+    app.user = await JSON.parse(localStorage.getItem(DB.USER));
+    menu.user = await JSON.parse(localStorage.getItem(DB.USER));
+
+    const c = await apis.getContent(id)
+    app.content = c;
+    scene.content = c;
+    app.cate = c.cat.title;
+    menu.cate = c.cat.title;
+    app.date = c.date;
+    menu.date = c.date;
+    app.place = c.place;
+    app.location = c.place.location;
+    tab.title = c.title;
+    menu.content = c;
+    menu.place = c.place;
+    menu.location = c.place.location;
+    var storage = firebase.storage();
+    const img360 = storage.refFromURL(c.image360);
+    intialApp(img360);
+
+    const a = await apis.getUser(app.content.uid)
+    app.author = a
+    menu.author = a
+  } catch (error) {
+    this.isLoading = false;
+    this.isError = true;
+    this.error = error;
+  }
 }
 
 function intialApp(img360) {
@@ -135,45 +154,46 @@ function intialApp(img360) {
     });
 }
 
-function ContentById(id) {
-  this.isLoading = true;
-  apis
-    .getContent(id)
-    .then((data) => {
-      this.isLoading = false;
-      this.isError = false;
-
-      app.content = data;
-      scene.content = data;
-      app.cate = data.cat.title;
-      menu.cate = data.cat.title;
-      app.date = data.date;
-      menu.date = data.date;
-      app.place = data.place;
-      app.location = data.place.location;
-      tab.title = data.title;
-      menu.content = data;
-      menu.place = data.place;
-      menu.location = data.place.location;
-      var storage = firebase.storage();
-      const img360 = storage.refFromURL(data.image360);
-      intialApp(img360);
-    })
-    .catch((error) => {
-      this.isLoading = false;
-      this.isError = true;
-      this.error = error;
-    });
-}
 
 var modal = document.getElementById("myModal");
 var btn = document.getElementById('menu')
-btn.onclick= function () {
-  modal.style.display = "block";
+btn.onclick = function () {
+  $('#myModal').modal('show')
+  //modal.style.display = "block";
 }
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
 };
+
+function copyLink() {
+  /* Get the text field */
+  var copyText = document.getElementById("linkInput");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  alert("Copied the text: " + copyText.value);
+}
+
+function shareToFB() {
+  const w = window.open(`https://www.facebook.com/sharer/sharer.php?u=${menu.link}`, "fb", 'height=500, width=600')
+  if (window.focus) { w.focus() }
+}
+
+function shareToTW() {
+  const w = window.open(`http://twitter.com/share?url=${menu.link}`, "tw", 'height=500, width=600')
+  if (window.focus) { w.focus() }
+}
+
+function shareToLK() {
+  const w = window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${menu.link}`, "gp", 'height=500, width=600')
+  if (window.focus) { w.focus() }
+}
 

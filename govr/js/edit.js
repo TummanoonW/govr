@@ -6,10 +6,10 @@ var app = new Vue({
   el: "#app",
   data: {
     lang: { name: "", code: "" },
-    update:{
+    update: {
       title: "",
-    description: "",
-    category: ""
+      description: "",
+      category: ""
     },
     title: "",
     description: "",
@@ -23,7 +23,7 @@ var app = new Vue({
     isLoading: false,
     isError: false,
     error: "",
-    location:{},
+    location: {},
     stored: {}
   },
   created: async function () {
@@ -38,7 +38,7 @@ var app = new Vue({
       window.location.href = PAGES.INDEX
     }
 
-    await ContentById(auth,id);
+    await ContentById(auth, id);
 
     apis.allCategories().then((data) => {
       this.categories = data;
@@ -63,15 +63,15 @@ var app = new Vue({
     },
     openMap: (num) => {
       var map = document.getElementById('myModal')
-      
-      if(num == 1){
+
+      if (num == 1) {
         map.style.display = 'block';
       }
-      else{
+      else {
         map.style.display = 'none';
       }
     },
-    updateLocation: ()=> {
+    updateLocation: () => {
       app.content.place = app.stored
       app.place = app.stored
 
@@ -165,14 +165,14 @@ async function uploadContent() {
   }
 }
 
-function ContentById(auth,id) {
+function ContentById(auth, id) {
   this.isLoading = true;
   apis
     .getContent(id)
     .then((con) => {
       if (auth.uid !== con.uid) {
         window.location.href = PAGES.INDEX
-      }else{
+      } else {
         app.isLoading = false;
         app.isError = false;
         console.log(con);
@@ -182,7 +182,7 @@ function ContentById(auth,id) {
         app.place = con.place;
         app.location = con.place['location']
       }
-      
+
     })
     .catch((error) => {
       app.isLoading = false;
@@ -194,10 +194,28 @@ function ContentById(auth,id) {
 var modal = document.getElementById("myModal3");
 var btn = document.getElementById("myBtn");
 btn.onclick = function () {
-    modal.style.display = "block";
+  modal.style.display = "block";
 };
 window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  };
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
+
+function imageToDataUri(img, width, height) {
+  var image = new Image();
+  image.src = img
+  // create an off-screen canvas
+  var canvas = document.createElement('canvas'),
+    ctx = canvas.getContext('2d');
+
+  // set its dimension to target size
+  canvas.width = width;
+  canvas.height = height;
+
+  // draw source image into the off-screen canvas:
+  ctx.drawImage(image, 0, 0, width, height);
+
+  // encode image to data-uri with base64 version of compressed image
+  return canvas.toDataURL();
+}

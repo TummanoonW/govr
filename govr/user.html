@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>User Profile</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="Bootstrap News Template - Free HTML Templates" name="keywords" />
+    <meta content="Bootstrap News Template - Free HTML Templates" name="description" />
+
+    <!-- Favicon -->
+    <link href="./assets/favicon.svg" rel="icon" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet" />
+
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.omise.co/omise.js"></script>
+    <!-- Template Stylesheet -->
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/profile.css" rel="stylesheet" />
+    <!-- Additional CSS Files -->
+
+
+</head>
+
+<body>
+    <div id="app">
+        <div id="loading-layout"></div>
+
+        <div id="navbar-layout"></div>
+
+        <!-- Get Link Modal -->
+        <div class="modal fade" id="linkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{lang.ANYONE_WITH_LINK}} {{link.title}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-if="!link.isLoading">
+                            <i class="fas fa-link"></i>
+                            <span class="ml-1">{{lang.YOUR_LONK_FOR}} '{{link.title}}' {{lang.IS}} </span>
+                            <p>
+                                <input id="link-url" :value="link.url" style="width: 100%;">
+                            </p>
+                            <p v-if="link.isCopied">
+                                {{lang.LINK_IS_COPPIED}}
+                            </p>
+                            <div>
+                                <img v-on:click="copyLink" class="btn-social mr-1" src="assets/icons/copy.png">
+                                <img v-on:click="shareToFB" class="btn-social mr-1" src="assets/icons/facebook.png">
+                                <img v-on:click="shareToTW" class="btn-social mr-1" src="assets/icons/twitter.png">
+                                <img v-on:click="shareToLK" class="btn-social" src="assets/icons/linkedin.png">
+                            </div>
+                        </div>
+                        <div v-if="link.isLoading">
+                            <div class="spinner-grow text-accent" style="width: 3rem; height: 3rem;" role="status">
+                                <span class="visually-hidden"></span>
+                            </div>
+                            <span class="text-primary">{{lang.GETTING_LINK}}</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{lang.CLOSE}}</button>
+                        <button v-if="!link.isLoading" v-on:click="copyLink" type="button" class="btn btn-primary">
+                            <i class="far fa-clipboard"></i>
+                            <span class="ml-1">{{lang.COPPY_LINK}}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Get Link Modal-->
+
+        <!-- Info Modal -->
+        <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-info" id="exampleModalLabel">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="ml-1">{{info.title}}' {{lang.INFO}}</span>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row mb-4">
+                                <div class="col-3 text-right text-secondary">
+                                    {{lang.TITLE}}
+                                </div>
+                                <div class="col-9 text-left">
+                                    {{info.title}}
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-3 text-right text-secondary">
+                                    {{lang.AUTHOR}}
+                                </div>
+                                <div class="col-9 text-left">
+                                    {{info.author.displayName}}
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-3 text-right text-secondary">
+                                    {{lang.LOCATION}}
+                                </div>
+                                <div class="col-9 text-left">
+                                    <a target="_blank"
+                                        :href="`https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}`">
+                                        @{{place.lat}},{{place.lng}}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-3 text-right text-secondary">
+                                    {{lang.CATEGORY}}
+                                </div>
+                                <div class="col-9 text-left">
+                                    {{info.category}}
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-3 text-right text-secondary">
+                                    {{lang.UPDATED}}
+                                </div>
+                                <div class="col-9 text-left">
+                                    {{info.updated}}
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-3 text-right text-secondary">
+                                    {{lang.PRIVACY}}
+                                </div>
+                                <div class="col-9 text-left">
+                                    <span>{{displayPrivacy(info)}}</span>
+                                    <span v-if="info.published">( <i class="far fa-eye"></i> )</span>
+                                    <span v-if="!info.published && !info.private">( <i class="fas fa-unlock-alt"></i>
+                                        )</span>
+                                    <span v-if="info.private">( <i class="fas fa-lock"></i> )</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{lang.CLOSE}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Info Modal -->
+
+        <div class="content">
+            <div class="row px-4 bg-primary">
+                <div class="col-xl-2 col-lg-3 col-md-4">
+                    <div class="">
+                        <div class="detail">
+                            <div class="pic">
+                                <img v-if="user.photoURL == null || user.photoURL == ''" src="assets/images/user.svg"
+                                    class="profile-r" />
+                                <img v-else :src="user.photoURL" class="profile-r" />
+                            </div>
+                            <div class="name mt-4">{{user.displayName}}</div>
+                            <div class="name mt-1 text-muted"><small>{{user.email}}</small></div>
+                        </div>
+                        <div id="list-example" class="tabs mt-4">
+                            <a class="my-upload" href="#list-item-1">{{lang.UPLOADS}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-10 col-lg-9 col-md-8">
+                    <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0"
+                        class="scrollspy-example">
+                        <div id="list-item-1" class="list-item col" data-bs-target=".my-upload">
+                            <h4>{{lang.UPLOADS}}</h4>
+                            <div class="main-news">
+                                <div class="container">
+
+                                    <div class="row">
+                                        <div class="col-xl-3 col-lg-4 col-md-6 p-1"
+                                            v-for="content in contents.publishedC">
+                                            <div class="card">
+                                                <div class="mn-img" :id="'dropdown-' + content.id"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <img :src="content.image360" />
+                                                    <div class="mn-title">
+                                                        <a href="">{{content.title}}</a>
+                                                        <div class="dropdown">
+                                                            <button class="btn text-light" type="button"
+                                                                :id="'dropdown-' + content.id" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                                <i v-if="content.published" class="far fa-eye"></i>
+                                                                <i v-if="!content.private && !content.published"
+                                                                    class="fas fa-unlock-alt"></i>
+                                                                <i v-if="content.private" class="fas fa-lock"></i>
+                                                                <i v-if="content.disabled" class="far fa-eye-slash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-menu" :aria-labelledby="'dropdown-' + content.id">
+                                                    <a v-if="!content.disabled" class="dropdown-item text-success"
+                                                        :href="PAGES.WEBXR + `?id=${content.id}`">
+                                                        <i class="far fa-eye"></i>
+                                                        <span class="ml-1">{{lang.VIEW}}</span>
+                                                    </a>
+                                                    <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
+                                                        class="dropdown-item text-accent">
+                                                        <i class="fas fa-link"></i>
+                                                        <span class="ml-1">{{lang.GET_SHARED_LINK}}</span>
+                                                    </button>
+                                                    <button class="dropdown-item" v-on:click="infoContent(content)">
+                                                        <i class="fas fa-info-circle"></i>
+                                                        <span class="ml-1">{{lang.INFO}}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" v-if="contents.linkC.length > 0">
+                                        <h4>{{lang.ONLY_PEOPLE_WITH_LINK}}</h4>
+
+                                        <div class="col-xl-3 col-lg-4 col-md-6 p-1" v-for="content in contents.linkC">
+                                            <div class="card">
+                                                <div class="mn-img" :id="'dropdown-' + content.id"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <img :src="content.image360" />
+                                                    <div class="mn-title">
+                                                        <a href="">{{content.title}}</a>
+                                                        <div class="dropdown">
+                                                            <button class="btn text-light" type="button"
+                                                                :id="'dropdown-' + content.id" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                                <i v-if="content.published" class="far fa-eye"></i>
+                                                                <i v-if="!content.private && !content.published"
+                                                                    class="fas fa-unlock-alt"></i>
+                                                                <i v-if="content.private" class="fas fa-lock"></i>
+                                                                <i v-if="content.disabled" class="far fa-eye-slash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-menu" :aria-labelledby="'dropdown-' + content.id">
+                                                    <a v-if="!content.disabled" class="dropdown-item text-success"
+                                                        :href="PAGES.WEBXR + `?id=${content.id}`">
+                                                        <i class="far fa-eye"></i>
+                                                        <span class="ml-1">{{lang.VIEW}}</span>
+                                                    </a>
+                                                    <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
+                                                        class="dropdown-item text-accent">
+                                                        <i class="fas fa-link"></i>
+                                                        <span class="ml-1">{{lang.GET_SHARED_LINK}}</span>
+                                                    </button>
+                                                    <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
+                                                        <i class="far fa-edit"></i>
+                                                        <span class="ml-1">{{lang.EDIT_CONTENT}}</span>
+                                                    </a>
+                                                    <button class="dropdown-item" v-on:click="infoContent(content)">
+                                                        <i class="fas fa-info-circle"></i>
+                                                        <span class="ml-1">{{lang.INFO}}</span>
+                                                    </button>
+                                                    <button class="dropdown-item" v-on:click="deleteContent(content)">
+                                                        <i class="far fa-trash-alt"></i>
+                                                        <span class="ml-1">{{lang.DELETE}}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" v-if="contents.privateC.length >= 1">
+                                        <h4>{{lang.PRIVATE}}</h4>
+
+                                        <div class="col-xl-3 col-lg-4 col-md-6 p-1"
+                                            v-for="content in contents.privateC">
+                                            <div class="card">
+                                                <div class="mn-img" :id="'dropdown-' + content.id"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <img :src="content.image360" />
+                                                    <div class="mn-title">
+                                                        <a href="">{{content.title}}</a>
+                                                        <div class="dropdown">
+                                                            <button class="btn text-light" type="button"
+                                                                :id="'dropdown-' + content.id" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                                <i v-if="content.published" class="far fa-eye"></i>
+                                                                <i v-if="!content.private && !content.published"
+                                                                    class="fas fa-unlock-alt"></i>
+                                                                <i v-if="content.private" class="fas fa-lock"></i>
+                                                                <i v-if="content.disabled" class="far fa-eye-slash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-menu" :aria-labelledby="'dropdown-' + content.id">
+                                                    <a v-if="!content.disabled" class="dropdown-item text-success"
+                                                        :href="PAGES.WEBXR + `?id=${content.id}`">
+                                                        <i class="far fa-eye"></i>
+                                                        <span class="ml-1">{{lang.VIEW}}</span>
+                                                    </a>
+                                                    <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
+                                                        class="dropdown-item text-accent">
+                                                        <i class="fas fa-link"></i>
+                                                        <span class="ml-1">{{lang.GET_SHARED_LINK}}</span>
+                                                    </button>
+                                                    <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
+                                                        <i class="far fa-edit"></i>
+                                                        <span class="ml-1">{{lang.EDIT_CONTENT}}</span>
+                                                    </a>
+                                                    <button class="dropdown-item" v-on:click="infoContent(content)">
+                                                        <i class="fas fa-info-circle"></i>
+                                                        <span class="ml-1">{{lang.INFO}}</span>
+                                                    </button>
+                                                    <button class="dropdown-item" v-on:click="deleteContent(content)">
+                                                        <i class="far fa-trash-alt"></i>
+                                                        <span class="ml-1">{{lang.DELETE}}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <!-- </div><form action="checkout.php" method="POST">
+                      <input type="submit" id="checkout-button" value="Pay with internet banking">
+                    </form>
+                    <form action="checkout.php" method="POST">
+                      <input type="submit" id="checkout-button-alt" value="Pay with credit card">
+                    </form> -->
+
+
+                                        <div class="col-xl-3 col-lg-4 col-md-6 p-1"
+                                            v-for="content in contents.disabledC">
+                                            <div class="card">
+                                                <div class="mn-img" :id="'dropdown-' + content.id"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <img :src="content.image360" />
+                                                    <div class="mn-title">
+                                                        <a href="">{{content.title}}</a>
+                                                        <div class="dropdown">
+                                                            <button class="btn text-light" type="button"
+                                                                :id="'dropdown-' + content.id" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                                <i v-if="content.published" class="far fa-eye"></i>
+                                                                <i v-if="!content.private && !content.published"
+                                                                    class="fas fa-unlock-alt"></i>
+                                                                <i v-if="content.private" class="fas fa-lock"></i>
+                                                                <i v-if="content.disabled" class="far fa-eye-slash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-menu" :aria-labelledby="'dropdown-' + content.id">
+                                                    <a v-if="!content.disabled" class="dropdown-item text-success"
+                                                        :href="PAGES.WEBXR + `?id=${content.id}`">
+                                                        <i class="far fa-eye"></i>
+                                                        <span class="ml-1">{{lang.VIEW}}</span>
+                                                    </a>
+                                                    <button v-if="!content.disabled" v-on:click="getSharedLink(content)"
+                                                        class="dropdown-item text-accent">
+                                                        <i class="fas fa-link"></i>
+                                                        <span class="ml-1">{{lang.GET_SHARED_LINK}}</span>
+                                                    </button>
+                                                    <a class="dropdown-item" :href="PAGES.EDIT + `?id=${content.id}`">
+                                                        <i class="far fa-edit"></i>
+                                                        <span class="ml-1">{{lang.EDIT_CONTENT}}</span>
+                                                    </a>
+                                                    <button class="dropdown-item" v-on:click="infoContent(content)">
+                                                        <i class="fas fa-info-circle"></i>
+                                                        <span class="ml-1">{{lang.INFO}}</span>
+                                                    </button>
+                                                    <button class="dropdown-item" v-on:click="deleteContent(content)">
+                                                        <i class="far fa-trash-alt"></i>
+                                                        <span class="ml-1">{{lang.DELETE}}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer-layout"></div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <!--//REQUIRED SCRIPTS-->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+   https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
+    <!--REQUIRED SCRIPTS//-->
+
+    <script src="vendor/fontawesome.js"></script>
+    <script src="vendor/vue.js"></script>
+    <script src="vendor/vue-router.js"></script>
+    <script src="vendor/firebase-config.js"></script>
+    <script src="vendor/apis.js"></script>
+    <script src="vendor/langs.js"></script>
+    <script src="vendor/country.js"></script>
+    <script src="vendor/layout.js"></script>
+
+
+
+    <!-- Template Javascript -->
+    <script src="js/user.js"></script>
+</body>
+
+</html>

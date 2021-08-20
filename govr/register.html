@@ -24,33 +24,7 @@
 
 <body scroll="no" style="overflow: hidden">
 	<div id="app">
-		<!-- Nav Bar Start -->
-		<div class="nav-bar">
-			<div class="container">
-				<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-					<a href="#" class="navbar-brand text-uppercase">{lang.MENU}}</a>
-					<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-
-					<div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-						<div class="navbar-nav mr-auto">
-							<a href="index.html" class="nav-item nav-link">{{lang.HOME}}</a>
-
-							<a href="my-profile.html" class="nav-item nav-link">{{lang.MY_PROFILE}}</a>
-						</div>
-						<div class="ml-auto">
-							<i class="fas fa-language text-light"></i>
-							<select id="langOption" class="form-control form-select" v-model="lang.code" v-on:change="selectLang">
-							  <option value="en">English</option>
-							  <option value="th">ไทย</option>
-							</select>
-						</div>
-					</div>
-				</nav>
-			</div>
-		</div>
-		<!-- Nav Bar End -->
+		<div id="navbar-layout2"></div>
 
 		<div class="limiter">
 			<div class="container-login100">
@@ -130,6 +104,7 @@
 	<script src="vendor/vue-router.js"></script>
 	<script src="vendor/apis.js"></script>
 	<script src="vendor/langs.js"></script>
+	<script src="vendor/layout.js"></script>
 
 	<script src="js/register.js"></script>
 

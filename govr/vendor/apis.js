@@ -1,4 +1,5 @@
 var apis = {
+  apiURL: 'https://us-central1-govr-42c7d.cloudfunctions.net/api',
   // <USER CMS FUNCTIONS>
   registerUser: function (user, userInfo) {
     return new Promise((resolve, reject) => {
@@ -6,7 +7,7 @@ var apis = {
         data: JSON.stringify({ u: user, uinfo: userInfo })
       }
       $.post(
-        "https://us-central1-govr-42c7d.cloudfunctions.net/api/users/register",
+        `${this.apiURL}/users/register`,
         body,
         function (data) {
           resolve(data);
@@ -19,7 +20,7 @@ var apis = {
   getUserInfo: function (uid) {
     return new Promise((resolve, reject) => {
       $.get(
-        `https://us-central1-govr-42c7d.cloudfunctions.net/api/userinfo?uid=${uid}`,
+        `${this.apiURL}/userinfo?uid=${uid}`,
         function (data) {
           resolve(data);
         }
@@ -31,7 +32,31 @@ var apis = {
   getUser: function (uid) {
     return new Promise((resolve, reject) => {
       $.get(
-        `https://us-central1-govr-42c7d.cloudfunctions.net/api/users?uid=${uid}`,
+        `${this.apiURL}/users?uid=${uid}`,
+        function (data) {
+          resolve(data);
+        }
+      ).fail(function (error) {
+        reject(error);
+      });
+    });
+  },
+  updateUser: function(uid, u){
+    return new Promise((resolve, reject) => {
+      $.post(`${this.apiURL}/users/update?uid=${uid}`,
+        u,
+        function (data) {
+          resolve(data);
+        }
+      ).fail(function (error) {
+        reject(error);
+      });
+    });
+  },
+  updateUserInfo: function(uid, uinfo){
+    return new Promise((resolve, reject) => {
+      $.post(`${this.apiURL}/userinfo/update?uid=${uid}`,
+        uinfo,
         function (data) {
           resolve(data);
         }
@@ -43,10 +68,10 @@ var apis = {
   // </USER CMS FUNCTIONS>
 
   // <CONTENT CMS FUNCTIONS>
-  getContentsNewest: function () {
+  getContentsNewest: function (limit) {
     return new Promise((resolve, reject) => {
       $.get(
-        "https://us-central1-govr-42c7d.cloudfunctions.net/api/contents/newest?lim=20&desc=true",
+        `${this.apiURL}/contents/newest?lim=${limit}&desc=true`,
         function (data) {
           resolve(data);
         }
@@ -58,7 +83,7 @@ var apis = {
   getContentsByCategory: function (category) {
     return new Promise((resolve, reject) => {
       $.get(
-        `https://us-central1-govr-42c7d.cloudfunctions.net/api/contents/bycategory?lim=20&desc=true&cat=${category}`,
+        `${this.apiURL}/contents/bycategory?lim=20&desc=true&cat=${category}`,
         function (data) {
           resolve(data);
         }
@@ -70,7 +95,7 @@ var apis = {
   getContentsByUid: function (uid) {
     return new Promise((resolve, reject) => {
       $.get(
-        `https://us-central1-govr-42c7d.cloudfunctions.net/api/contents/byuid?uid=${uid}`,
+        `${this.apiURL}/contents/byuid?uid=${uid}`,
         function (data) {
           resolve(data);
         }
@@ -82,7 +107,7 @@ var apis = {
   getContent: function (id) {
     return new Promise((resolve, reject) => {
       $.get(
-        `https://us-central1-govr-42c7d.cloudfunctions.net/api/contents?id=${id}`,
+        `${this.apiURL}/contents?id=${id}`,
         function (data) {
           resolve(data);
         }
@@ -97,7 +122,7 @@ var apis = {
         data: JSON.stringify(content)
       }
       $.post(
-        `https://us-central1-govr-42c7d.cloudfunctions.net/api/contents/create`,
+        `${this.apiURL}/contents/create`,
         body,
         function (data) {
           resolve(data);
@@ -113,8 +138,8 @@ var apis = {
         data: JSON.stringify(content)
       }
       $.ajax({
-        method: "PUT",
-        url: `https://us-central1-govr-42c7d.cloudfunctions.net/api/contents/update`,
+        method: `PUT`,
+        url: `${this.apiURL}/contents/update`,
         data: body,
       }).done(function (data) {
         resolve(data);
@@ -124,8 +149,8 @@ var apis = {
   deleteContent: function (id) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        method: "DELETE",
-        url: `https://us-central1-govr-42c7d.cloudfunctions.net/api/contents/delete?id=${id}`,
+        method: `DELETE`,
+        url: `${this.apiURL}/contents/delete?id=${id}`,
       }).done(function (data) {
         resolve(data);
       });
@@ -137,7 +162,7 @@ var apis = {
   allCategories: function () {
     return new Promise((resolve, reject) => {
       $.get(
-        "https://us-central1-govr-42c7d.cloudfunctions.net/api/categories/all",
+        `${this.apiURL}/categories/all`,
         function (data) {
           resolve(data);
         }
@@ -149,7 +174,7 @@ var apis = {
   getCategoryByLabel: function (label) {
     return new Promise((resolve, reject) => {
       $.get(
-        `https://us-central1-govr-42c7d.cloudfunctions.net/api/categories/bylabel?label=${label}`,
+        `${this.apiURL}/categories/bylabel?label=${label}`,
         function (data) {
           resolve(data);
         }
@@ -164,7 +189,7 @@ var apis = {
   getLink: function (contentId) {
     return new Promise((resolve, reject) => {
       $.get(
-        `https://us-central1-govr-42c7d.cloudfunctions.net/api/links/get?contentId=${contentId}`,
+        `${this.apiURL}/links/get?contentId=${contentId}`,
         function (data) {
           resolve(data);
         }
@@ -176,7 +201,7 @@ var apis = {
   generateLink: function (contentId) {
     return new Promise((resolve, reject) => {
       $.get(
-        `https://us-central1-govr-42c7d.cloudfunctions.net/api/links/gen?contentId=${contentId}`,
+        `${this.apiURL}/links/gen?contentId=${contentId}`,
         function (data) {
           resolve(data);
         }
@@ -186,4 +211,29 @@ var apis = {
     });
   },
   // </LINK CMS FUNCTIONS>
+    // <BILLS AND ORDERS>
+    getBillsbyUid: function(uid){
+      return new Promise((resolve, reject) => {
+        $.get(
+          `${this.apiURL}/bills/byuid?uid=${uid}`,
+          function (data) {
+            resolve(data);
+          }
+        ).fail(function (error) {
+          reject(error);
+        });
+      })
+    },
+    getBill: function(id){
+      return new Promise((resolve, reject) => {
+        $.get(
+          `${this.apiURL}/bills?id=${id}`,
+          function (data) {
+            resolve(data);
+          }
+        ).fail(function (error) {
+          reject(error);
+        });
+      })
+    }
 };

@@ -18,104 +18,81 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/login.css">
 	<link href="css/main.css" rel="stylesheet" />
-    <link href="./assets/favicon.svg" rel="icon" />
+	<link href="./assets/favicon.svg" rel="icon" />
 
 </head>
 
 <body scroll="no" style="overflow: hidden">
 	<div id="app">
-		<!-- Nav Bar Start -->
-	<div class="nav-bar">
-		<div class="container">
-			<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-				<a href="#" class="navbar-brand text-uppercase">{{lang.MENU}}</a>
-				<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-					<span class="navbar-toggler-icon"></span>
-				</button>
 
-				<div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-					<div class="navbar-nav mr-auto">
-						<a href="index.html" class="nav-item nav-link">{{lang.HOME}}</a>
+		<div id="navbar-layout2"></div>
 
-						<a href="my-profile.html" class="nav-item nav-link">{{lang.MY_PROFILE}}</a>
-					</div>
-					<div class="ml-auto">
-						<i class="fas fa-language text-light"></i>
-						<select id="langOption" class="form-control form-select" v-model="lang.code" v-on:change="selectLang">
-						  <option value="en">English</option>
-						  <option value="th">ไทย</option>
-						</select>
-					</div>
-				</div>
-			</nav>
-		</div>
-	</div>
-	<!-- Nav Bar End -->
-
-	<div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100">
-				<div class="login100-form-title">
-					<span class="login100-form-title-1">
-						{{lang.LOG_IN}}
-					</span>
-				</div>
-
-				<form class="login100-form ">
-					<div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="isError">
-						<i class="far fa-times-circle"></i>
-						<span class="ml-2">{{error}}</span>
+		<div class="limiter">
+			<div class="container-login100">
+				<div class="wrap-login100">
+					<div class="login100-form-title">
+						<span class="login100-form-title-1">
+							{{lang.LOG_IN}}
+						</span>
 					</div>
 
-					<div class="wrap-input100  m-b-26">
-						<span class="label-input100">{{lang.EMAIL}}</span>
-						<input v-model="email" class="input100" type="email" name="email" :placeholder="lang.ENTER_EMAIL" required>
-						<span class="focus-input100"></span>
-					</div>
+					<form class="login100-form ">
+						<div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="isError">
+							<i class="far fa-times-circle"></i>
+							<span class="ml-2">{{error}}</span>
+						</div>
 
-					<div class="wrap-input100  m-b-18" required>
-						<span class="label-input100">{{lang.PASSWORD}}</span>
-						<input v-model="password" class="input100" type="password" name="pass" :placeholder="lang.ENTER_PASSWORD" required>
-						<span class="focus-input100"></span>
-					</div>
+						<div class="wrap-input100  m-b-26">
+							<span class="label-input100">{{lang.EMAIL}}</span>
+							<input v-model="email" class="input100" type="email" name="email"
+								:placeholder="lang.ENTER_EMAIL" required>
+							<span class="focus-input100"></span>
+						</div>
 
-					<div class="flex-sb-m w-full p-b-30">
-						<div class="contact100-form-checkbox">
-							<div class="text-primary" v-if="isLoading">
-								<div class="spinner-grow" role="status"></div>
-								<span class="visually-hidden">{{lang.LOADING}}...</span>
-							</div>
-							<!--<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+						<div class="wrap-input100  m-b-18" required>
+							<span class="label-input100">{{lang.PASSWORD}}</span>
+							<input v-model="password" class="input100" type="password" name="pass"
+								:placeholder="lang.ENTER_PASSWORD" required>
+							<span class="focus-input100"></span>
+						</div>
+
+						<div class="flex-sb-m w-full p-b-30">
+							<div class="contact100-form-checkbox">
+								<div class="text-primary" v-if="isLoading">
+									<div class="spinner-grow" role="status"></div>
+									<span class="visually-hidden">{{lang.LOADING}}...</span>
+								</div>
+								<!--<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
 							<label class="label-checkbox100" for="ckb1">
 								Remember me
 							</label>-->
+							</div>
+
+							<div>
+								<a v-bind:href="PAGES.REGISTER" class="txt1">
+									{{lang.CREATE_ACCOUNT}}?
+								</a>
+							</div>
 						</div>
 
-						<div>
-							<a v-bind:href="PAGES.REGISTER" class="txt1">
-								{{lang.CREATE_ACCOUNT}}?
-							</a>
+						<div class="container-login100-form-btn">
+							<button v-on:click="login" class="btn login-btn" type="button">{{lang.LOG_IN}}</button>
 						</div>
-					</div>
-
-					<div class="container-login100-form-btn">
-						<button v-on:click="login" class="btn login-btn" type="button">{{lang.LOG_IN}}</button>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
-	</div>
-	
+
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
-    <!-- TODO: Add SDKs for Firebase products that you want to use
+	<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+	<!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
-    <!-- Add Firebase products that you want to use -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+	<!-- Add Firebase products that you want to use -->
+	<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
 
 	<!--//REQUIRED SCRIPTS-->
@@ -125,6 +102,7 @@
 	<script src="vendor/firebase-config.js"></script>
 	<script src="vendor/apis.js"></script>
 	<script src="vendor/langs.js"></script>
+	<script src="vendor/layout.js"></script>
 
 	<script src="js/login.js"></script>
 
